@@ -270,7 +270,6 @@ class CGPAData {
     );
   }
 }
-
 class AppUser {
   final String name;
   final DateTime createdAt;

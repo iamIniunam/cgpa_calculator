@@ -28,77 +28,82 @@ class SemesterDetailsPage extends StatelessWidget {
             data?.selectedScale ?? GradingScale.scale43);
         final gpa = viewModel.getSemesterGPA(semesterNumber);
 
-        return Scaffold(
-          appBar: AppBar(
-            title: Text('${AppStrings.semester} $semesterNumber'),
-            bottom: const Divider(height: 2).asPreferredSize(height: 1),
-          ),
-          body: Column(
-            children: [
-              GPADisplay(gpa: gpa, maxGrade: maxGrade),
-              const SizedBox(height: 8),
-              Expanded(
-                child: courses.isEmpty
-                    ? const EmptyState()
-                    : Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.only(
-                                left: 16, top: 8, right: 16),
-                            child: Text(AppStrings.courses,
-                                style: Theme.of(context).textTheme.titleLarge),
-                          ),
-                          Expanded(
-                            child: ListView.builder(
-                              padding: const EdgeInsets.all(16),
-                              itemCount: courses.length,
-                              itemBuilder: (context, index) {
-                                final course = courses[index];
-                                return CourseCard(
-                                  courseName: course.name,
-                                  creditHours: course.creditHours,
-                                  grade: course.grade,
-                                  gradeOptions: gradeOptions,
-                                  onDelete: () {
-                                    viewModel.removeCourseFromSemester(
-                                      semesterNumber,
-                                      index,
-                                    );
-                                  },
-                                  onNameChanged: (value) {
-                                    viewModel.updateCourse(
-                                      semesterNumber,
-                                      index,
-                                      name: value,
-                                    );
-                                  },
-                                  onCreditHoursChanged: (value) {
-                                    viewModel.updateCourse(
-                                      semesterNumber,
-                                      index,
-                                      creditHours: value ?? 3,
-                                    );
-                                  },
-                                  onGradeChanged: (value) {
-                                    viewModel.updateCourse(
-                                      semesterNumber,
-                                      index,
-                                      grade: value ?? maxGrade,
-                                    );
-                                  },
-                                );
-                              },
+        return GestureDetector(
+          onTap: () {
+            FocusScope.of(context).unfocus();
+          },
+          child: Scaffold(
+            appBar: AppBar(
+              title: Text('${AppStrings.semester} $semesterNumber'),
+              bottom: const Divider(height: 2).asPreferredSize(height: 1),
+            ),
+            body: Column(
+              children: [
+                GPADisplay(gpa: gpa, maxGrade: maxGrade),
+                const SizedBox(height: 8),
+                Expanded(
+                  child: courses.isEmpty
+                      ? const EmptyState()
+                      : Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.only(
+                                  left: 16, top: 8, right: 16),
+                              child: Text(AppStrings.courses,
+                                  style: Theme.of(context).textTheme.titleLarge),
                             ),
-                          ),
-                        ],
-                      ),
-              ),
-            ],
-          ),
-          floatingActionButton: FloatingActionButton(
-            onPressed: () => viewModel.addCourseToSemester(semesterNumber),
-            child: const Icon(Icons.add_rounded),
+                            Expanded(
+                              child: ListView.builder(
+                                padding: const EdgeInsets.all(16),
+                                itemCount: courses.length,
+                                itemBuilder: (context, index) {
+                                  final course = courses[index];
+                                  return CourseCard(
+                                    courseName: course.name,
+                                    creditHours: course.creditHours,
+                                    grade: course.grade,
+                                    gradeOptions: gradeOptions,
+                                    onDelete: () {
+                                      viewModel.removeCourseFromSemester(
+                                        semesterNumber,
+                                        index,
+                                      );
+                                    },
+                                    onNameChanged: (value) {
+                                      viewModel.updateCourse(
+                                        semesterNumber,
+                                        index,
+                                        name: value,
+                                      );
+                                    },
+                                    onCreditHoursChanged: (value) {
+                                      viewModel.updateCourse(
+                                        semesterNumber,
+                                        index,
+                                        creditHours: value ?? 3,
+                                      );
+                                    },
+                                    onGradeChanged: (value) {
+                                      viewModel.updateCourse(
+                                        semesterNumber,
+                                        index,
+                                        grade: value ?? maxGrade,
+                                      );
+                                    },
+                                  );
+                                },
+                              ),
+                            ),
+                          ],
+                        ),
+                ),
+              ],
+            ),
+            floatingActionButton: FloatingActionButton(
+              onPressed: () => viewModel.addCourseToSemester(semesterNumber),
+              child: const Icon(Icons.add_rounded),
+            ),
           ),
         );
       },

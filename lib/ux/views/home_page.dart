@@ -136,7 +136,12 @@ class _HomePageState extends State<HomePage> {
                       ),
                       Expanded(
                         child: ListView.builder(
-                          padding: const EdgeInsets.all(16),
+                          padding: const EdgeInsets.only(
+                            left: 16,
+                            top: 8,
+                            right: 16,
+                            bottom: 16,
+                          ),
                           itemCount: data.selectedDuration.semesterCount,
                           itemBuilder: (context, index) {
                             final semesterNumber = index + 1;
@@ -145,6 +150,9 @@ class _HomePageState extends State<HomePage> {
                             return SemesterCard(
                               semesterNumber: semesterNumber,
                               gpa: gpa,
+                              isFirst: index == 0,
+                              isLast: index ==
+                                  data.selectedDuration.semesterCount - 1,
                             );
                           },
                         ),

@@ -49,11 +49,9 @@ class _CourseCardState extends State<CourseCard> {
     super.didUpdateWidget(oldWidget);
     if (oldWidget.courseName != widget.courseName) {
       courseCodeController.text = widget.courseName;
-      final wasLocked = isLocked;
-      isLocked = widget.courseName.trim().isNotEmpty;
-      if (wasLocked && !isLocked) {
-        Future.delayed(const Duration(milliseconds: 100), () {
-          if (mounted) nameFocusNode.requestFocus();
+      if (widget.courseName.trim().isEmpty) {
+        setState(() {
+          isLocked = false;
         });
       }
     }
@@ -131,7 +129,6 @@ class _CourseCardState extends State<CourseCard> {
               children: [
                 Expanded(
                   child: PrimaryTextFormField(
-                    autofocus: true,
                     labelText: AppStrings.courseCode,
                     hintText: AppStrings.courseCodeHintText,
                     controller: courseCodeController,

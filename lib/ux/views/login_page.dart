@@ -80,22 +80,25 @@ class _LoginPageState extends State<LoginPage> {
                       style: Theme.of(context).textTheme.headlineSmall,
                     ),
                     const SizedBox(height: 24),
-                    PrimaryTextFormField(
-                      hintText: AppStrings.nameHintText,
-                      controller: nameController,
-                      keyboardType: TextInputType.name,
-                      textInputAction: TextInputAction.done,
-                      textCapitalization: TextCapitalization.words,
-                      onChanged: (value) {
-                        setState(() {});
-                      },
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 24),
+                      child: PrimaryTextFormField(
+                        hintText: AppStrings.nameHintText,
+                        controller: nameController,
+                        keyboardType: TextInputType.name,
+                        textInputAction: TextInputAction.done,
+                        textCapitalization: TextCapitalization.words,
+                        onChanged: (value) {
+                          setState(() {});
+                        },
+                      ),
                     ),
                   ],
                 ),
               ),
             ),
             Padding(
-              padding: const EdgeInsets.all(16),
+              padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
               child: PrimaryButton(
                 enabled: nameController.text.isNotEmpty,
                 onTap: handleLogin,

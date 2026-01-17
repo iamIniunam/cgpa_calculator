@@ -12,12 +12,13 @@ class AppTheme {
     primarySwatch: Colors.blue,
     primaryColor: Colors.black,
     brightness: Brightness.dark,
+    scaffoldBackgroundColor: AppColors.black,
     pageTransitionsTheme: const PageTransitionsTheme(builders: {
       TargetPlatform.android: CupertinoPageTransitionsBuilder(),
       TargetPlatform.iOS: CupertinoPageTransitionsBuilder(),
     }),
     appBarTheme: const AppBarTheme(
-      backgroundColor: AppColors.scaffoldBackground,
+      backgroundColor: AppColors.black,
       centerTitle: true,
       elevation: 0,
       titleTextStyle: TextStyle(
@@ -51,6 +52,13 @@ class AppTheme {
           Radius.circular(12),
         ),
       ),
+    ),
+    listTileTheme: ListTileThemeData(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(12),
+      ),
+      tileColor: Colors.transparent,
+      contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 0),
     ),
   );
 }

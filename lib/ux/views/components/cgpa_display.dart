@@ -20,7 +20,7 @@ class CGPADisplay extends StatelessWidget {
         padding: const EdgeInsets.all(24),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(12),
-          border: Border.all(color: Colors.grey.shade800, width: 2),
+          border: Border.all(color: Colors.grey.shade900, width: 0.5),
         ),
         child: Column(
           children: [
@@ -73,11 +73,11 @@ class GPADisplay extends StatelessWidget {
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(12),
-          border: Border.all(color: Colors.grey.shade800, width: 2),
+          border: Border.all(color: Colors.grey.shade800, width: 0.5),
         ),
         child: Row(
           children: [
-             Expanded(
+            Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
