@@ -1,6 +1,7 @@
 import 'package:cgpa_calculator/ux/navigation/navigation.dart';
 import 'package:cgpa_calculator/ux/shared/resources/app_colors.dart';
 import 'package:cgpa_calculator/ux/shared/resources/app_dialogs.dart';
+import 'package:cgpa_calculator/ux/shared/resources/app_images.dart';
 import 'package:cgpa_calculator/ux/shared/resources/app_strings.dart';
 import 'package:cgpa_calculator/ux/shared/resources/app_theme.dart';
 import 'package:cgpa_calculator/ux/shared/utils/utils.dart';
@@ -68,16 +69,27 @@ class _LoginPageState extends State<LoginPage> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Container(
+                      height: 110,
+                      width: 110,
+                      padding: const EdgeInsets.all(10),
                       decoration: BoxDecoration(
                         color: AppColors.greyInputBorder,
                         borderRadius: BorderRadius.circular(18),
                       ),
-                      child: const FlutterLogo(size: 100),
+                      child: Image(
+                        image: AppImages.appLogo,
+                        fit: BoxFit.cover,
+                      ),
                     ),
                     const SizedBox(height: 48),
                     Text(
-                      AppStrings.whatShouldWeCallYou,
+                      'Hello! 👋',
                       style: Theme.of(context).textTheme.headlineSmall,
+                    ),
+                    const SizedBox(height: 2),
+                    Text(
+                      AppStrings.whatShouldWeCallYou,
+                      style: Theme.of(context).textTheme.bodyLarge,
                     ),
                     const SizedBox(height: 24),
                     Padding(
