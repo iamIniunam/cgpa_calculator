@@ -1,8 +1,10 @@
-import 'package:cgpa_calculator/models/ui_models.dart';
-import 'package:cgpa_calculator/views/components/cgpa_display.dart';
-import 'package:cgpa_calculator/views/components/course_card.dart';
-import 'package:cgpa_calculator/views/components/empty_state.dart';
-import 'package:cgpa_calculator/views/view_models/cgpa_view_model.dart';
+import 'package:cgpa_calculator/ux/shared/extensions/extensions.dart';
+import 'package:cgpa_calculator/ux/shared/models/ui_models.dart';
+import 'package:cgpa_calculator/ux/shared/resources/app_strings.dart';
+import 'package:cgpa_calculator/ux/views/components/cgpa_display.dart';
+import 'package:cgpa_calculator/ux/views/components/course_card.dart';
+import 'package:cgpa_calculator/ux/shared/components/empty_state.dart';
+import 'package:cgpa_calculator/ux/shared/view_models/cgpa_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -28,8 +30,8 @@ class SemesterDetailsPage extends StatelessWidget {
 
         return Scaffold(
           appBar: AppBar(
-            centerTitle: true,
-            title: Text('Semester $semesterNumber'),
+            title: Text('${AppStrings.semester} $semesterNumber'),
+            bottom: const Divider(height: 2).asPreferredSize(height: 1),
           ),
           body: Column(
             children: [
@@ -44,7 +46,7 @@ class SemesterDetailsPage extends StatelessWidget {
                           Padding(
                             padding: const EdgeInsets.only(
                                 left: 16, top: 8, right: 16),
-                            child: Text('Courses',
+                            child: Text(AppStrings.courses,
                                 style: Theme.of(context).textTheme.titleLarge),
                           ),
                           Expanded(

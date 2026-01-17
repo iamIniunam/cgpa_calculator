@@ -22,6 +22,7 @@ class CustomRadioListTile<T> extends StatelessWidget {
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(8),
       ),
+      activeColor: Colors.blue.shade500,
       title: Text(title),
       subtitle: (subtitle ?? '').isNotEmpty ? Text(subtitle ?? '') : null,
       value: value,

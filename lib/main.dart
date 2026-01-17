@@ -1,5 +1,5 @@
-import 'package:cgpa_calculator/views/home_screen.dart';
-import 'package:cgpa_calculator/views/view_models/cgpa_view_model.dart';
+import 'package:cgpa_calculator/app.dart';
+import 'package:cgpa_calculator/ux/shared/view_models/cgpa_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -14,17 +14,7 @@ class CGPACalculatorApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
       create: (_) => CGPAViewModel(),
-      child: MaterialApp(
-        debugShowCheckedModeBanner: false,
-        title: 'MyCGPA',
-        theme: ThemeData(
-          primarySwatch: Colors.blueGrey,
-          primaryColor: Colors.black,
-          brightness: Brightness.dark,
-          useMaterial3: true,
-        ),
-        home: const CGPACalculatorScreen(),
-      ),
+      child: const MyCGPAApp(),
     );
   }
 }

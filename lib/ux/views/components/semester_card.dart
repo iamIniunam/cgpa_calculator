@@ -1,4 +1,5 @@
-import 'package:cgpa_calculator/views/semester_details_page.dart';
+import 'package:cgpa_calculator/ux/shared/resources/app_strings.dart';
+import 'package:cgpa_calculator/ux/views/semester_details_page.dart';
 import 'package:flutter/material.dart';
 
 class SemesterCard extends StatelessWidget {
@@ -17,11 +18,13 @@ class SemesterCard extends StatelessWidget {
       color: Colors.grey.shade900,
       margin: const EdgeInsets.only(bottom: 12),
       child: ListTile(
-        title: Text('Semester $semesterNumber'),
-        subtitle: gpa > 0 ? Text('GPA: ${gpa.toStringAsFixed(2)}') : null,
+        title: Text('${AppStrings.semester} $semesterNumber'),
+        subtitle: gpa > 0
+            ? Text('${AppStrings.gpa}: ${gpa.toStringAsFixed(2)}')
+            : null,
         trailing: const Icon(Icons.chevron_right_rounded, size: 25),
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(8),
+          borderRadius: BorderRadius.circular(12),
         ),
         onTap: () {
           Navigator.push(

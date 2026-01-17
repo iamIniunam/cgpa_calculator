@@ -1,19 +1,21 @@
-import 'package:cgpa_calculator/models/ui_models.dart';
-import 'package:cgpa_calculator/views/components/cgpa_display.dart';
-import 'package:cgpa_calculator/views/components/app_dialogs.dart';
-import 'package:cgpa_calculator/views/components/semester_card.dart';
-import 'package:cgpa_calculator/views/view_models/cgpa_view_model.dart';
+import 'package:cgpa_calculator/ux/shared/extensions/extensions.dart';
+import 'package:cgpa_calculator/ux/shared/models/ui_models.dart';
+import 'package:cgpa_calculator/ux/shared/resources/app_strings.dart';
+import 'package:cgpa_calculator/ux/views/components/cgpa_display.dart';
+import 'package:cgpa_calculator/ux/shared/components/app_dialogs.dart';
+import 'package:cgpa_calculator/ux/views/components/semester_card.dart';
+import 'package:cgpa_calculator/ux/shared/view_models/cgpa_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class CGPACalculatorScreen extends StatefulWidget {
-  const CGPACalculatorScreen({Key? key}) : super(key: key);
+class HomePage extends StatefulWidget {
+  const HomePage({Key? key}) : super(key: key);
 
   @override
-  State<CGPACalculatorScreen> createState() => _CGPACalculatorScreenState();
+  State<HomePage> createState() => _HomePageState();
 }
 
-class _CGPACalculatorScreenState extends State<CGPACalculatorScreen> {
+class _HomePageState extends State<HomePage> {
   void _showGradingScaleDialog(BuildContext context, CGPAViewModel viewModel) {
     final data = viewModel.cgpaDataResult.value.data;
     showDialog(
@@ -66,7 +68,8 @@ class _CGPACalculatorScreenState extends State<CGPACalculatorScreen> {
         return Scaffold(
           appBar: AppBar(
             title: const Text('MyCGPA'),
-            elevation: 2,
+            centerTitle: false,
+            bottom: const Divider(height: 2).asPreferredSize(height: 1),
             actions: [
               Padding(
                 padding: const EdgeInsets.only(right: 8),
@@ -76,7 +79,7 @@ class _CGPACalculatorScreenState extends State<CGPACalculatorScreen> {
                       _showGradingScaleDialog(context, viewModel);
                     },
                     icon: const Icon(Icons.settings, size: 18),
-                    label: Text('$scaleText Scale'),
+                    label: Text('$scaleText ${AppStrings.scale}'),
                     style: TextButton.styleFrom(
                       foregroundColor: Colors.white,
                       shape: RoundedRectangleBorder(
@@ -102,7 +105,7 @@ class _CGPACalculatorScreenState extends State<CGPACalculatorScreen> {
                         child: Row(
                           children: [
                             Expanded(
-                              child: Text('Semesters',
+                              child: Text(AppStrings.semesters,
                                   style:
                                       Theme.of(context).textTheme.titleLarge),
                             ),
@@ -116,7 +119,7 @@ class _CGPACalculatorScreenState extends State<CGPACalculatorScreen> {
                                   },
                                   icon: const Icon(Icons.settings, size: 18),
                                   label: Text(
-                                      '${data.selectedDuration.yearsText} Years'),
+                                      '${data.selectedDuration.yearsText} ${AppStrings.years}'),
                                   style: TextButton.styleFrom(
                                     foregroundColor: Colors.white,
                                     shape: RoundedRectangleBorder(

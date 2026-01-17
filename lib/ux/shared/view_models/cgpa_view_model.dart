@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:cgpa_calculator/models/ui_models.dart';
+import 'package:cgpa_calculator/ux/shared/models/ui_models.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 

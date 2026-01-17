@@ -1,3 +1,4 @@
+import 'package:cgpa_calculator/ux/shared/resources/app_strings.dart';
 import 'package:flutter/material.dart';
 
 class CGPADisplay extends StatelessWidget {
@@ -24,7 +25,7 @@ class CGPADisplay extends StatelessWidget {
         child: Column(
           children: [
             const Text(
-              'Your CGPA',
+              AppStrings.yourCgpa,
               style: TextStyle(
                 fontSize: 18,
                 fontWeight: FontWeight.w500,
@@ -81,7 +82,7 @@ class GPADisplay extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   const Text(
-                    'GPA',
+                    AppStrings.gpa,
                     style: TextStyle(
                       fontSize: 20,
                       fontWeight: FontWeight.w500,

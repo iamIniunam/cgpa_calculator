@@ -1,3 +1,4 @@
+import 'package:cgpa_calculator/ux/shared/resources/app_strings.dart';
 import 'package:flutter/material.dart';
 
 class EmptyState extends StatelessWidget {
@@ -16,7 +17,7 @@ class EmptyState extends StatelessWidget {
           ),
           const SizedBox(height: 16),
           Text(
-            'No courses added yet',
+            AppStrings.noCoursesAddedYet,
             style: TextStyle(
               fontSize: 16,
               color: Colors.grey.shade600,
@@ -24,7 +25,7 @@ class EmptyState extends StatelessWidget {
           ),
           const SizedBox(height: 8),
           Text(
-            'Tap the + button to add a course',
+            AppStrings.tapThePlusButtonToAddACourse,
             style: TextStyle(
               fontSize: 14,
               color: Colors.grey.shade500,

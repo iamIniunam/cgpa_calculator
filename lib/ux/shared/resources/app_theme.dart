@@ -1,0 +1,48 @@
+import 'package:cgpa_calculator/ux/shared/resources/app_colors.dart';
+import 'package:flutter/material.dart';
+
+class AppTheme {
+  AppTheme._();
+
+  static const fontFamily = 'Nunito';
+
+  static ThemeData appTheme = ThemeData(
+    fontFamily: fontFamily,
+    useMaterial3: false,
+    primarySwatch: Colors.blueGrey,
+    primaryColor: Colors.black,
+    brightness: Brightness.dark,
+    pageTransitionsTheme: const PageTransitionsTheme(builders: {
+      TargetPlatform.android: CupertinoPageTransitionsBuilder(),
+      TargetPlatform.iOS: CupertinoPageTransitionsBuilder(),
+    }),
+    appBarTheme: const AppBarTheme(
+      // backgroundColor: ThemeData.dark().canvasColor,
+      backgroundColor: AppColors.scaffoldBackground,
+      centerTitle: true,
+      elevation: 0,
+      titleTextStyle: TextStyle(
+        fontSize: 20,
+        fontWeight: FontWeight.w600,
+        color: Colors.white,
+      ),
+      iconTheme: IconThemeData(
+        color: Colors.white,
+      ),
+    ),
+    cardTheme: CardTheme(
+      color: Colors.grey[900],
+      margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+      elevation: 2,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(12),
+      ),
+    ),
+    dialogTheme: DialogTheme(
+      // backgroundColor: Colors.grey.shade900,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(24),
+      ),
+    ),
+  );
+}

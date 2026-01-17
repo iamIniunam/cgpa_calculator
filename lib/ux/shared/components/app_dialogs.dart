@@ -1,5 +1,5 @@
-import 'package:cgpa_calculator/models/ui_models.dart';
-import 'package:cgpa_calculator/views/components/radio_list_tile.dart';
+import 'package:cgpa_calculator/ux/shared/models/ui_models.dart';
+import 'package:cgpa_calculator/ux/shared/components/radio_list_tile.dart';
 import 'package:flutter/material.dart';
 
 class GradingScaleDialog extends StatelessWidget {

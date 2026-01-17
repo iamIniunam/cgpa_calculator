@@ -1,4 +1,5 @@
-import 'package:cgpa_calculator/models/ui_models.dart';
+import 'package:cgpa_calculator/ux/shared/models/ui_models.dart';
+import 'package:cgpa_calculator/ux/shared/resources/app_strings.dart';
 import 'package:flutter/material.dart';
 
 class CourseCard extends StatefulWidget {
@@ -71,16 +72,16 @@ class _CourseCardState extends State<CourseCard> {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('Delete Course'),
+        title: const Text(AppStrings.deleteCourse),
         content: Text(
           widget.courseName.isEmpty
-              ? 'Delete this course?'
-              : 'Delete ${widget.courseName}?',
+              ? AppStrings.deleteCourse
+              : '${AppStrings.delete} ${widget.courseName}?',
         ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
-            child: const Text('Cancel'),
+            child: const Text(AppStrings.cancel),
           ),
           TextButton(
             onPressed: () {
@@ -88,7 +89,7 @@ class _CourseCardState extends State<CourseCard> {
               widget.onDelete();
             },
             style: TextButton.styleFrom(foregroundColor: Colors.red),
-            child: const Text('Delete'),
+            child: const Text(AppStrings.delete),
           ),
         ],
       ),
@@ -131,13 +132,13 @@ class _CourseCardState extends State<CourseCard> {
                       color: isLocked ? Colors.white : Colors.blue.shade100,
                     ),
                     decoration: InputDecoration(
-                      labelText: 'Course Name',
+                      labelText: AppStrings.courseCode,
                       labelStyle: TextStyle(
                         color: isLocked
                             ? Colors.grey.shade500
                             : Colors.blue.shade300,
                       ),
-                      hintText: 'e.g., MATH 101',
+                      hintText: AppStrings.courseCodeHintText,
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(8),
                       ),
@@ -191,7 +192,8 @@ class _CourseCardState extends State<CourseCard> {
                         size: 20,
                       ),
                       color: isLocked ? Colors.grey.shade400 : Colors.white,
-                      tooltip: isLocked ? 'Unlock to edit' : 'Lock',
+                      tooltip:
+                          isLocked ? AppStrings.unlockToEdit : AppStrings.lock,
                       onPressed: toggleLock,
                     ),
                   ),
@@ -205,7 +207,7 @@ class _CourseCardState extends State<CourseCard> {
                   child: IconButton(
                     icon: const Icon(Icons.delete_outline, size: 20),
                     color: Colors.red.shade300,
-                    tooltip: 'Delete course',
+                    tooltip: AppStrings.deleteCourse,
                     onPressed: handleDelete,
                   ),
                 ),
@@ -220,7 +222,7 @@ class _CourseCardState extends State<CourseCard> {
                   child: DropdownButtonFormField<int>(
                     value: widget.creditHours,
                     decoration: InputDecoration(
-                      labelText: 'Credit Hours',
+                      labelText: AppStrings.creditHours,
                       labelStyle: TextStyle(
                         color: isLocked
                             ? Colors.grey.shade500
@@ -276,7 +278,7 @@ class _CourseCardState extends State<CourseCard> {
                   child: DropdownButtonFormField<double>(
                     value: widget.grade,
                     decoration: InputDecoration(
-                      labelText: 'Grade',
+                      labelText: AppStrings.grade,
                       labelStyle: TextStyle(
                         color: isLocked
                             ? Colors.grey.shade500
@@ -340,7 +342,7 @@ class _CourseCardState extends State<CourseCard> {
                     ),
                     const SizedBox(width: 6),
                     Text(
-                      'Course locked. Click the lock icon to edit.',
+                      AppStrings.courseLockedClickTheLockIconToEdit,
                       style: TextStyle(
                         fontSize: 12,
                         color: Colors.grey.shade600,
