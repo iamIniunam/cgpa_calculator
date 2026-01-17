@@ -97,9 +97,8 @@ class SemesterDetailsPage extends StatelessWidget {
             ],
           ),
           floatingActionButton: FloatingActionButton(
-            backgroundColor: Colors.blue.shade800,
             onPressed: () => viewModel.addCourseToSemester(semesterNumber),
-            child: const Icon(Icons.add),
+            child: const Icon(Icons.add_rounded),
           ),
         );
       },

@@ -11,7 +11,7 @@ class EmptyState extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Icon(
-            Icons.school_outlined,
+            Icons.school_sharp,
             size: 64,
             color: Colors.grey.shade400,
           ),

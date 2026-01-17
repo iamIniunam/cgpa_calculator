@@ -1,4 +1,8 @@
+import 'package:cgpa_calculator/ux/shared/components/app_dropdown_field.dart';
+import 'package:cgpa_calculator/ux/shared/components/app_form_fields.dart';
+import 'package:cgpa_calculator/ux/shared/components/app_material.dart';
 import 'package:cgpa_calculator/ux/shared/models/ui_models.dart';
+import 'package:cgpa_calculator/ux/shared/resources/app_colors.dart';
 import 'package:cgpa_calculator/ux/shared/resources/app_strings.dart';
 import 'package:flutter/material.dart';
 
@@ -29,15 +33,14 @@ class CourseCard extends StatefulWidget {
 }
 
 class _CourseCardState extends State<CourseCard> {
-  late TextEditingController nameController = TextEditingController();
+  late TextEditingController courseCodeController = TextEditingController();
   bool isLocked = false;
   final FocusNode nameFocusNode = FocusNode();
 
   @override
   void initState() {
     super.initState();
-    nameController = TextEditingController(text: widget.courseName);
-    // Auto-lock if course has a name
+    courseCodeController = TextEditingController(text: widget.courseName);
     isLocked = widget.courseName.trim().isNotEmpty;
   }
 
@@ -45,13 +48,20 @@ class _CourseCardState extends State<CourseCard> {
   void didUpdateWidget(CourseCard oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (oldWidget.courseName != widget.courseName) {
-      nameController.text = widget.courseName;
+      courseCodeController.text = widget.courseName;
+      final wasLocked = isLocked;
+      isLocked = widget.courseName.trim().isNotEmpty;
+      if (wasLocked && !isLocked) {
+        Future.delayed(const Duration(milliseconds: 100), () {
+          if (mounted) nameFocusNode.requestFocus();
+        });
+      }
     }
   }
 
   @override
   void dispose() {
-    nameController.dispose();
+    courseCodeController.dispose();
     nameFocusNode.dispose();
     super.dispose();
   }
@@ -60,7 +70,6 @@ class _CourseCardState extends State<CourseCard> {
     setState(() {
       isLocked = !isLocked;
       if (!isLocked) {
-        // Focus on name field when unlocking
         Future.delayed(const Duration(milliseconds: 100), () {
           nameFocusNode.requestFocus();
         });
@@ -99,17 +108,16 @@ class _CourseCardState extends State<CourseCard> {
   @override
   Widget build(BuildContext context) {
     final isEmptyCourse = widget.courseName.trim().isEmpty;
-
     return Card(
       color: isLocked
           ? Colors.grey.shade900
-          : Colors.blue.shade900.withOpacity(0.3),
+          : AppColors.primaryColor.withOpacity(0.2),
       elevation: isLocked ? 1 : 3,
-      margin: const EdgeInsets.only(bottom: 16),
+      margin: const EdgeInsets.only(bottom: 12),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(12),
         side: BorderSide(
-          color: isLocked ? Colors.transparent : Colors.blue.shade700,
+          color: isLocked ? Colors.transparent : AppColors.primaryColor,
           width: isLocked ? 0 : 1,
         ),
       ),
@@ -118,218 +126,104 @@ class _CourseCardState extends State<CourseCard> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Course Name Row
             Row(
+              crossAxisAlignment: CrossAxisAlignment.end,
               children: [
                 Expanded(
-                  child: TextField(
-                    controller: nameController,
-                    focusNode: nameFocusNode,
+                  child: PrimaryTextFormField(
+                    autofocus: true,
+                    labelText: AppStrings.courseCode,
+                    hintText: AppStrings.courseCodeHintText,
+                    controller: courseCodeController,
                     enabled: !isLocked,
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w600,
-                      color: isLocked ? Colors.white : Colors.blue.shade100,
+                    focusNode: nameFocusNode,
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(8),
                     ),
-                    decoration: InputDecoration(
-                      labelText: AppStrings.courseCode,
-                      labelStyle: TextStyle(
-                        color: isLocked
-                            ? Colors.grey.shade500
-                            : Colors.blue.shade300,
-                      ),
-                      hintText: AppStrings.courseCodeHintText,
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                      enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(8),
-                        borderSide: BorderSide(color: Colors.blue.shade700),
-                      ),
-                      disabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(8),
-                        borderSide: BorderSide(color: Colors.grey.shade700),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(8),
-                        borderSide:
-                            BorderSide(color: Colors.blue.shade400, width: 2),
-                      ),
-                      isDense: true,
-                      filled: true,
-                      fillColor: isLocked
-                          ? Colors.grey.shade800.withOpacity(0.5)
-                          : Colors.blue.shade900.withOpacity(0.2),
-                      prefixIcon: Icon(
-                        Icons.book_outlined,
-                        color: isLocked
-                            ? Colors.grey.shade500
-                            : Colors.blue.shade300,
-                        size: 20,
-                      ),
+                    enabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(8),
+                      borderSide:
+                          const BorderSide(color: AppColors.primaryColor),
+                    ),
+                    disabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(8),
+                      borderSide:
+                          const BorderSide(color: AppColors.disabledBorder),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(8),
+                      borderSide:
+                          BorderSide(color: Colors.blue.shade400, width: 2),
                     ),
                     onChanged: (value) {
                       widget.onNameChanged(value);
                     },
                     keyboardType: TextInputType.visiblePassword,
                     textCapitalization: TextCapitalization.characters,
+                    hasBottomPadding: false,
                   ),
                 ),
                 const SizedBox(width: 8),
                 if (!isEmptyCourse) ...[
-                  Container(
-                    decoration: BoxDecoration(
-                      color: isLocked
-                          ? Colors.grey.shade800
-                          : Colors.blue.shade700,
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                    child: IconButton(
-                      icon: Icon(
-                        isLocked
-                            ? Icons.lock_outline_rounded
-                            : Icons.lock_open_rounded,
-                        size: 20,
-                      ),
-                      color: isLocked ? Colors.grey.shade400 : Colors.white,
-                      tooltip:
-                          isLocked ? AppStrings.unlockToEdit : AppStrings.lock,
-                      onPressed: toggleLock,
-                    ),
+                  iconBox(
+                    color:
+                        isLocked ? Colors.grey.shade800 : Colors.blue.shade700,
+                    icon: isLocked
+                        ? Icons.lock_outline_rounded
+                        : Icons.lock_open_rounded,
+                    iconColor: isLocked ? Colors.grey.shade400 : Colors.white,
+                    onTap: toggleLock,
                   ),
                   const SizedBox(width: 8),
                 ],
-                Container(
-                  decoration: BoxDecoration(
-                    color: Colors.red.shade900.withOpacity(0.3),
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                  child: IconButton(
-                    icon: const Icon(Icons.delete_outline, size: 20),
-                    color: Colors.red.shade300,
-                    tooltip: AppStrings.deleteCourse,
-                    onPressed: handleDelete,
-                  ),
+                iconBox(
+                  color: Colors.red.shade900.withOpacity(0.3),
+                  icon: Icons.delete_outline_rounded,
+                  iconColor: Colors.red.shade200,
+                  onTap: handleDelete,
                 ),
               ],
             ),
-
             const SizedBox(height: 16),
-
             Row(
               children: [
                 Expanded(
-                  child: DropdownButtonFormField<int>(
-                    value: widget.creditHours,
-                    decoration: InputDecoration(
-                      labelText: AppStrings.creditHours,
-                      labelStyle: TextStyle(
-                        color: isLocked
-                            ? Colors.grey.shade500
-                            : Colors.blue.shade300,
-                      ),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                      enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(8),
-                        borderSide: BorderSide(
-                          color: isLocked
-                              ? Colors.grey.shade700
-                              : Colors.blue.shade700,
-                        ),
-                      ),
-                      disabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(8),
-                        borderSide: BorderSide(color: Colors.grey.shade700),
-                      ),
-                      isDense: true,
-                      filled: true,
-                      fillColor: isLocked
-                          ? Colors.grey.shade800.withOpacity(0.5)
-                          : Colors.blue.shade900.withOpacity(0.2),
-                      prefixIcon: Icon(
-                        Icons.schedule_outlined,
-                        color: isLocked
-                            ? Colors.grey.shade500
-                            : Colors.blue.shade300,
-                        size: 20,
-                      ),
-                    ),
-                    dropdownColor: Colors.grey.shade900,
-                    style: TextStyle(
-                      color: isLocked ? Colors.grey.shade400 : Colors.white,
-                      fontSize: 14,
-                    ),
-                    items: [0, 1, 2, 3]
+                  child: AppDropdownField(
+                    valueHolder: widget.creditHours,
+                    labelText: AppStrings.creditHours,
+                    enabled: !isLocked,
+                    stringItems: false,
+                    dropdownItems: [0, 1, 2, 3]
                         .map((credits) => DropdownMenuItem(
                               value: credits,
                               child: Text('$credits CH'),
                             ))
                         .toList(),
-                    onChanged: isLocked ? null : widget.onCreditHoursChanged,
+                    onChanged: !isLocked
+                        ? (value) => widget.onCreditHoursChanged(value as int?)
+                        : null,
                   ),
                 ),
-
                 const SizedBox(width: 12),
-
-                // Grade
                 Expanded(
-                  child: DropdownButtonFormField<double>(
-                    value: widget.grade,
-                    decoration: InputDecoration(
-                      labelText: AppStrings.grade,
-                      labelStyle: TextStyle(
-                        color: isLocked
-                            ? Colors.grey.shade500
-                            : Colors.blue.shade300,
-                      ),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                      enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(8),
-                        borderSide: BorderSide(
-                          color: isLocked
-                              ? Colors.grey.shade700
-                              : Colors.blue.shade700,
-                        ),
-                      ),
-                      disabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(8),
-                        borderSide: BorderSide(color: Colors.grey.shade700),
-                      ),
-                      isDense: true,
-                      filled: true,
-                      fillColor: isLocked
-                          ? Colors.grey.shade800.withOpacity(0.5)
-                          : Colors.blue.shade900.withOpacity(0.2),
-                      prefixIcon: Icon(
-                        Icons.grade_outlined,
-                        color: isLocked
-                            ? Colors.grey.shade500
-                            : Colors.blue.shade300,
-                        size: 20,
-                      ),
-                    ),
-                    dropdownColor: Colors.grey.shade900,
-                    style: TextStyle(
-                      color: isLocked ? Colors.grey.shade400 : Colors.white,
-                      fontSize: 14,
-                    ),
-                    items: widget.gradeOptions
+                  child: AppDropdownField(
+                    valueHolder: widget.grade,
+                    labelText: AppStrings.grade,
+                    enabled: !isLocked,
+                    stringItems: false,
+                    dropdownItems: widget.gradeOptions
                         .map((grade) => DropdownMenuItem(
                               value: grade.value,
                               child: Text(grade.label),
                             ))
                         .toList(),
-                    onChanged: isLocked ? null : widget.onGradeChanged,
+                    onChanged: !isLocked
+                        ? (value) => widget.onGradeChanged(value as double?)
+                        : null,
                   ),
                 ),
               ],
             ),
-
-            // Lock status indicator
             if (isLocked && !isEmptyCourse)
               Padding(
                 padding: const EdgeInsets.only(top: 12),
@@ -353,6 +247,28 @@ class _CourseCardState extends State<CourseCard> {
                 ),
               ),
           ],
+        ),
+      ),
+    );
+  }
+
+  AppMaterial iconBox({
+    required Color color,
+    required IconData icon,
+    required Color iconColor,
+    required VoidCallback onTap,
+  }) {
+    return AppMaterial(
+      color: color,
+      borderRadius: BorderRadius.circular(8),
+      onTap: onTap,
+      inkwellBorderRadius: BorderRadius.circular(8),
+      child: Container(
+        padding: const EdgeInsets.all(11),
+        child: Icon(
+          icon,
+          size: 25,
+          color: iconColor,
         ),
       ),
     );

@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:cgpa_calculator/ux/shared/models/ui_models.dart';
+import 'package:cgpa_calculator/ux/shared/resources/app_constants.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -52,7 +53,8 @@ class CGPAViewModel extends ChangeNotifier {
         courses: [Course(name: '', creditHours: 3, grade: maxGrade)],
       ));
     } else {
-      semesters[semesterIndex].courses.add(
+      semesters[semesterIndex].courses.insert(
+            0,
             Course(name: '', creditHours: 3, grade: maxGrade),
           );
     }
@@ -154,10 +156,12 @@ class CGPAViewModel extends ChangeNotifier {
 
     final semestersJson =
         _data.semesters.map((s) => jsonEncode(s.toMap())).toList();
-    await prefs.setStringList('semesters', semestersJson);
-    await prefs.setInt('selectedScale', _data.selectedScale.index);
-    await prefs.setInt('selectedDuration', _data.selectedDuration.index);
-    await prefs.setDouble('cgpa', _data.cgpa);
+    await prefs.setStringList(AppConstants.semestersKey, semestersJson);
+    await prefs.setInt(
+        AppConstants.selectedScaleKey, _data.selectedScale.index);
+    await prefs.setInt(
+        AppConstants.selectedDurationKey, _data.selectedDuration.index);
+    await prefs.setDouble(AppConstants.cgpaKey, _data.cgpa);
   }
 
   Future<void> _loadData() async {
@@ -165,17 +169,17 @@ class CGPAViewModel extends ChangeNotifier {
 
     final prefs = await SharedPreferences.getInstance();
 
-    final semestersJson = prefs.getStringList('semesters') ?? [];
+    final semestersJson = prefs.getStringList(AppConstants.semestersKey) ?? [];
     final semesters =
         semestersJson.map((s) => Semester.fromMap(jsonDecode(s))).toList();
 
-    final scaleIndex = prefs.getInt('selectedScale') ?? 1;
+    final scaleIndex = prefs.getInt(AppConstants.selectedScaleKey) ?? 1;
     final selectedScale = GradingScale.values[scaleIndex];
 
-    final durationIndex = prefs.getInt('selectedDuration') ?? 0;
+    final durationIndex = prefs.getInt(AppConstants.selectedDurationKey) ?? 0;
     final selectedDuration = CourseDuration.values[durationIndex];
 
-    final cgpa = prefs.getDouble('cgpa') ?? 0.0;
+    final cgpa = prefs.getDouble(AppConstants.cgpaKey) ?? 0.0;
 
     cgpaDataResult.value = UIResult.success(
       data: CGPAData(

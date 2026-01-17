@@ -9,7 +9,7 @@ class AppTheme {
   static ThemeData appTheme = ThemeData(
     fontFamily: fontFamily,
     useMaterial3: false,
-    primarySwatch: Colors.blueGrey,
+    primarySwatch: Colors.blue,
     primaryColor: Colors.black,
     brightness: Brightness.dark,
     pageTransitionsTheme: const PageTransitionsTheme(builders: {
@@ -17,11 +17,11 @@ class AppTheme {
       TargetPlatform.iOS: CupertinoPageTransitionsBuilder(),
     }),
     appBarTheme: const AppBarTheme(
-      // backgroundColor: ThemeData.dark().canvasColor,
       backgroundColor: AppColors.scaffoldBackground,
       centerTitle: true,
       elevation: 0,
       titleTextStyle: TextStyle(
+        fontFamily: fontFamily,
         fontSize: 20,
         fontWeight: FontWeight.w600,
         color: Colors.white,
@@ -39,9 +39,17 @@ class AppTheme {
       ),
     ),
     dialogTheme: DialogTheme(
-      // backgroundColor: Colors.grey.shade900,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(24),
+      ),
+    ),
+    floatingActionButtonTheme: FloatingActionButtonThemeData(
+      backgroundColor: Colors.blue.shade800,
+      foregroundColor: Colors.white,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.all(
+          Radius.circular(12),
+        ),
       ),
     ),
   );

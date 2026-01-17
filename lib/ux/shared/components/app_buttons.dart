@@ -16,7 +16,7 @@ class PrimaryButton extends StatelessWidget {
     super.key,
     required this.child,
     this.onTap,
-    this.backgroundColor = AppColors.primary500,
+    this.backgroundColor = AppColors.primaryColor,
     this.foregroundColor = Colors.white,
     this.borderColor = Colors.transparent,
     this.overlayColor,
@@ -58,14 +58,14 @@ class PrimaryButton extends StatelessWidget {
       backgroundColor: MaterialStateProperty.resolveWith<Color?>(
           (Set<MaterialState> states) {
         if (states.contains(MaterialState.disabled)) {
-          return AppColors.greyInputBorder;
+          return AppColors.disabledButton;
         }
         return backgroundColor; // Defer to the widget's default.
       }),
       foregroundColor: MaterialStateProperty.resolveWith<Color?>(
           (Set<MaterialState> states) {
         if (states.contains(MaterialState.disabled)) {
-          return AppColors.lightFontGrey;
+          return Colors.grey;
         }
         return foregroundColor; // Defer to the widget's default.
       }),

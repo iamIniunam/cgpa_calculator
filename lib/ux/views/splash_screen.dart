@@ -1,3 +1,4 @@
+import 'package:cgpa_calculator/ux/shared/resources/app_strings.dart';
 import 'package:flutter/material.dart';
 
 class SplashScreen extends StatelessWidget {
@@ -13,12 +14,12 @@ class SplashScreen extends StatelessWidget {
             FlutterLogo(size: 100),
             SizedBox(height: 20),
             Text(
-              'MyCGPA',
+              AppStrings.appName,
               style: TextStyle(
                 fontSize: 24,
                 fontWeight: FontWeight.bold,
               ),
-            )
+            ),
           ],
         ),
       ),

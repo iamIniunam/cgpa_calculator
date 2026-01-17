@@ -21,7 +21,6 @@ class Utils {
     } catch (e) {
       printInDebugMode("Error launching link: $e");
       await copyText(text: link);
-      // UiUtils.showToast(message: 'Link copied to clipboard!');
     }
   }
 

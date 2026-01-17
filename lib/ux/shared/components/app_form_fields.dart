@@ -71,7 +71,6 @@ class SearchTextFormField extends StatelessWidget {
               const BoxConstraints(maxHeight: 36, maxWidth: 36),
           suffixIconConstraints:
               const BoxConstraints(maxHeight: 36, maxWidth: 36),
-          //TODO: Add back prefix icon if needed
           // prefixIcon: Padding(
           //   padding: const EdgeInsets.all(10),
           //   child: AppImages.svgSearchIcon,
@@ -127,6 +126,11 @@ class PrimaryTextFormField extends StatelessWidget {
   final TextInputAction? textInputAction;
   final bool hasBottomPadding;
   final Color? focusedColor;
+  final InputBorder? border;
+  final InputBorder? focusedBorder;
+  final InputBorder? enabledBorder;
+  final InputBorder? disabledBorder;
+  final FocusNode? focusNode;
 
   const PrimaryTextFormField({
     super.key,
@@ -153,6 +157,11 @@ class PrimaryTextFormField extends StatelessWidget {
     this.textInputAction,
     this.hasBottomPadding = true,
     this.focusedColor,
+    this.border,
+    this.focusedBorder,
+    this.enabledBorder,
+    this.disabledBorder,
+    this.focusNode,
   });
 
   @override
@@ -171,7 +180,7 @@ class PrimaryTextFormField extends StatelessWidget {
                   Text(
                     labelText ?? '',
                     style: const TextStyle(
-                      color: AppColors.primaryColor,
+                      color: AppColors.white,
                       fontSize: 14,
                       fontWeight: FontWeight.w400,
                     ),
@@ -204,30 +213,26 @@ class PrimaryTextFormField extends StatelessWidget {
           SizedBox(
             height: 48,
             child: TextFormField(
+              focusNode:
+                  focusNode ?? (readOnly ? AlwaysDisabledFocusNode() : null),
               readOnly: readOnly,
               enabled: enabled,
               autofocus: autofocus,
-              //focusNode: !enabled ? AlwaysDisabledFocusNode() : null,
               style: const TextStyle(
                 fontSize: 14,
                 fontWeight: FontWeight.w500,
               ),
-              cursorColor: AppColors.primaryColor,
+              cursorColor: Colors.blue,
               decoration: InputDecoration(
                 filled: true,
-                fillColor: enabled
-                    ? (greyedOut ? AppColors.field2 : AppColors.transparent)
-                    : AppColors.greyInputBorder,
-                // prefixIcon: prefixWidget != null? Padding(
-                //   padding: const EdgeInsets.all(14.0),
-                //   child: prefixWidget,
-                // ) : SizedBox.shrink(),
+                fillColor:
+                    enabled ? AppColors.transparent : AppColors.disabledButton,
                 suffixIcon: Padding(
                   padding: const EdgeInsets.all(14.0),
                   child: suffixWidget,
                 ),
                 contentPadding: const EdgeInsets.symmetric(
-                  horizontal: 8,
+                  horizontal: 12,
                   vertical: 4,
                 ),
                 hintText: hintText ?? '',
@@ -236,31 +241,37 @@ class PrimaryTextFormField extends StatelessWidget {
                   fontSize: 14,
                   fontWeight: FontWeight.w400,
                 ),
-                enabledBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(8),
-                  borderSide: greyedOut
-                      ? BorderSide.none
-                      : const BorderSide(color: AppColors.borderColor),
-                ),
-                disabledBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(8),
-                  borderSide: const BorderSide(color: AppColors.borderColor),
-                ),
-                focusedBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(8),
-                  borderSide: greyedOut
-                      ? BorderSide.none
-                      : BorderSide(
-                          color: focusedColor ?? AppColors.borderColor,
-                        ),
-                ),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(4),
-                  borderSide: greyedOut
-                      ? BorderSide.none
-                      : const BorderSide(
-                          color: AppColors.borderColor, width: 2.0),
-                ),
+                enabledBorder: enabledBorder ??
+                    OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(8),
+                      borderSide: greyedOut
+                          ? BorderSide.none
+                          : const BorderSide(
+                              color: AppColors.lightFontGrey, width: 0),
+                    ),
+                disabledBorder: disabledBorder ??
+                    OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(8),
+                      borderSide:
+                          const BorderSide(color: AppColors.lightFontGrey),
+                    ),
+                focusedBorder: focusedBorder ??
+                    OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(8),
+                      borderSide: greyedOut
+                          ? BorderSide.none
+                          : BorderSide(
+                              color: focusedColor ?? AppColors.lightFontGrey,
+                            ),
+                    ),
+                border: border ??
+                    OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(4),
+                      borderSide: greyedOut
+                          ? BorderSide.none
+                          : const BorderSide(
+                              color: AppColors.borderColor, width: 2.0),
+                    ),
               ),
               inputFormatters: inputFormatters,
               keyboardType: keyboardType,

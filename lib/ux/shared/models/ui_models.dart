@@ -270,3 +270,25 @@ class CGPAData {
     );
   }
 }
+
+class AppUser {
+  final String name;
+  final DateTime createdAt;
+
+  AppUser({
+    required this.name,
+    required this.createdAt,
+  });
+
+  Map<String, dynamic> toJson() => {
+        'name': name,
+        'createdAt': createdAt.toIso8601String(),
+      };
+
+  factory AppUser.fromJson(Map<String, dynamic> json) => AppUser(
+        name: json['name'] ?? '',
+        createdAt: json['createdAt'] != null
+            ? DateTime.parse(json['createdAt'])
+            : DateTime.now(),
+      );
+}

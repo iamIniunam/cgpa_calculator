@@ -38,6 +38,7 @@ dependencies:
   provider: ^6.1.5+1
   shared_preferences: ^2.2.3
   url_launcher: ^6.3.0
+  dropdown_button2: ^2.3.9
 
 dev_dependencies:
   flutter_test:

@@ -1,8 +1,9 @@
 import 'package:cgpa_calculator/ux/shared/extensions/extensions.dart';
 import 'package:cgpa_calculator/ux/shared/models/ui_models.dart';
 import 'package:cgpa_calculator/ux/shared/resources/app_strings.dart';
+import 'package:cgpa_calculator/ux/shared/view_models/auth_view_model.dart';
 import 'package:cgpa_calculator/ux/views/components/cgpa_display.dart';
-import 'package:cgpa_calculator/ux/shared/components/app_dialogs.dart';
+import 'package:cgpa_calculator/ux/shared/components/app_dialog_widgets.dart';
 import 'package:cgpa_calculator/ux/views/components/semester_card.dart';
 import 'package:cgpa_calculator/ux/shared/view_models/cgpa_view_model.dart';
 import 'package:flutter/material.dart';
@@ -46,6 +47,7 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     final viewModel = Provider.of<CGPAViewModel>(context);
+    final authViewModel = Provider.of<AuthViewModel>(context);
     return ValueListenableBuilder<UIResult<CGPAData>>(
       valueListenable: viewModel.cgpaDataResult,
       builder: (context, result, child) {
@@ -67,7 +69,7 @@ class _HomePageState extends State<HomePage> {
 
         return Scaffold(
           appBar: AppBar(
-            title: const Text('MyCGPA'),
+            title: Text('Hello, ${authViewModel.userName}!'),
             centerTitle: false,
             bottom: const Divider(height: 2).asPreferredSize(height: 1),
             actions: [
