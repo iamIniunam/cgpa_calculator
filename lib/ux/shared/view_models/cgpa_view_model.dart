@@ -60,13 +60,10 @@ class CGPAViewModel extends ChangeNotifier {
   }
 
   int getTotalCredits() {
-    int totalCredits = 0;
-    for (var semester in _data.semesters) {
-      for (var course in semester.courses) {
-        totalCredits += course.creditHours ?? 0;
-      }
-    }
-    return totalCredits;
+    return _data.semesters.fold(
+      0,
+      (total, semester) => total + getSemesterTotalCredits(semester.semesterNumber),
+    );
   }
 
   void addCourseToSemester(int semesterNumber, CourseInput courseInput) {
