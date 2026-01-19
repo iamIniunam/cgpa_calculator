@@ -71,6 +71,7 @@ class _HomePageState extends State<HomePage> {
 
         final maxGrade =
             GradeCalculator.getMaxGrade(authViewModel.gradingScale);
+        final totalCredits = viewModel.getTotalCredits();
 
         return GestureDetector(
           onTap: () => FocusScope.of(context).unfocus(),
@@ -122,7 +123,7 @@ class _HomePageState extends State<HomePage> {
                 CGPADisplay(
                   cgpa: data.cgpa,
                   maxGrade: maxGrade,
-                  totalCredits: viewModel.getTotalCredits(),
+                  totalCredits: totalCredits,
                 ),
                 const GpaTrajectory(),
                 Padding(
