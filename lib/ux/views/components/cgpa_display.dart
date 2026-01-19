@@ -6,10 +6,10 @@ class CGPADisplay extends StatelessWidget {
   final double maxGrade;
 
   const CGPADisplay({
-    Key? key,
+    super.key,
     required this.cgpa,
     required this.maxGrade,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -64,6 +64,7 @@ class CGPADisplay extends StatelessWidget {
                     size: 20,
                   ),
                   const SizedBox(width: 8),
+                  //TODO: Make total credits dynamic
                   Text(
                     'Total Credits: 120',
                     style: Theme.of(context).textTheme.titleMedium?.copyWith(
