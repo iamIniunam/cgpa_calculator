@@ -59,6 +59,13 @@ class CGPAViewModel extends ChangeNotifier {
     return totalCredits;
   }
 
+  int getTotalCredits() {
+    return _data.semesters.fold(
+      0,
+      (total, semester) => total + getSemesterTotalCredits(semester.semesterNumber),
+    );
+  }
+
   void addCourseToSemester(int semesterNumber, CourseInput courseInput) {
     final semesters = List<Semester>.from(_data.semesters);
     final semesterIndex =

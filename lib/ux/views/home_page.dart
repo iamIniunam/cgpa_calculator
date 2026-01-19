@@ -119,7 +119,11 @@ class _HomePageState extends State<HomePage> {
             ),
             body: ListView(
               children: [
-                CGPADisplay(cgpa: data.cgpa, maxGrade: maxGrade),
+                CGPADisplay(
+                  cgpa: data.cgpa,
+                  maxGrade: maxGrade,
+                  totalCredits: viewModel.getTotalCredits(),
+                ),
                 const GpaTrajectory(),
                 Padding(
                   padding: const EdgeInsets.only(left: 16, top: 8),

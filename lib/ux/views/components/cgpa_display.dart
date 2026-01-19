@@ -4,12 +4,14 @@ import 'package:flutter/material.dart';
 class CGPADisplay extends StatelessWidget {
   final double cgpa;
   final double maxGrade;
+  final int totalCredits;
 
   const CGPADisplay({
-    Key? key,
+    super.key,
     required this.cgpa,
     required this.maxGrade,
-  }) : super(key: key);
+    required this.totalCredits,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -65,7 +67,7 @@ class CGPADisplay extends StatelessWidget {
                   ),
                   const SizedBox(width: 8),
                   Text(
-                    'Total Credits: 120',
+                    'Total Credits: $totalCredits',
                     style: Theme.of(context).textTheme.titleMedium?.copyWith(
                           color: AppColors.textGrey,
                         ),
