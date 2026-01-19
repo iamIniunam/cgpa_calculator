@@ -2,6 +2,7 @@ import 'package:cgpa_calculator/ux/navigation/navigation.dart';
 import 'package:cgpa_calculator/ux/shared/components/app_buttons.dart';
 import 'package:cgpa_calculator/ux/shared/components/app_form_fields.dart';
 import 'package:cgpa_calculator/ux/shared/components/app_material.dart';
+import 'package:cgpa_calculator/ux/shared/extensions/extensions.dart';
 import 'package:cgpa_calculator/ux/shared/models/ui_models.dart';
 import 'package:cgpa_calculator/ux/shared/resources/app_colors.dart';
 import 'package:cgpa_calculator/ux/shared/resources/app_dialogs.dart';
@@ -109,6 +110,7 @@ class _AddCoursePageState extends State<AddCoursePage> {
                   ),
                 ]
               : null,
+          bottom: const Divider(height: 2).asPreferredSize(height: 1),
         ),
         body: Column(
           children: [
