@@ -131,6 +131,7 @@ class PrimaryTextFormField extends StatelessWidget {
   final InputBorder? enabledBorder;
   final InputBorder? disabledBorder;
   final FocusNode? focusNode;
+  final Color? fillColor;
 
   const PrimaryTextFormField({
     super.key,
@@ -162,6 +163,7 @@ class PrimaryTextFormField extends StatelessWidget {
     this.enabledBorder,
     this.disabledBorder,
     this.focusNode,
+    this.fillColor,
   });
 
   @override
@@ -180,8 +182,8 @@ class PrimaryTextFormField extends StatelessWidget {
                   Text(
                     labelText ?? '',
                     style: const TextStyle(
-                      color: AppColors.white,
-                      fontSize: 14,
+                      color: AppColors.textGrey,
+                      fontSize: 16,
                       fontWeight: FontWeight.w400,
                     ),
                   ),
@@ -211,7 +213,7 @@ class PrimaryTextFormField extends StatelessWidget {
             ),
           ),
           SizedBox(
-            height: 48,
+            height: 55,
             child: TextFormField(
               focusNode:
                   focusNode ?? (readOnly ? AlwaysDisabledFocusNode() : null),
@@ -219,54 +221,61 @@ class PrimaryTextFormField extends StatelessWidget {
               enabled: enabled,
               autofocus: autofocus,
               style: const TextStyle(
-                fontSize: 14,
+                fontSize: 18,
                 fontWeight: FontWeight.w500,
               ),
-              cursorColor: Colors.blue,
+              cursorColor: AppColors.grey300,
               decoration: InputDecoration(
                 filled: true,
-                fillColor:
-                    enabled ? AppColors.transparent : AppColors.disabledButton,
+                fillColor: fillColor ??
+                    (enabled
+                        ? AppColors.textFieldBackground
+                        : AppColors.disabledButton),
                 suffixIcon: Padding(
                   padding: const EdgeInsets.all(14.0),
                   child: suffixWidget,
                 ),
                 contentPadding: const EdgeInsets.symmetric(
-                  horizontal: 12,
-                  vertical: 4,
+                  horizontal: 16,
+                  vertical: 18,
                 ),
                 hintText: hintText ?? '',
                 hintStyle: const TextStyle(
                   color: Color.fromRGBO(166, 164, 164, 1),
-                  fontSize: 14,
+                  fontSize: 18,
                   fontWeight: FontWeight.w400,
                 ),
                 enabledBorder: enabledBorder ??
                     OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(8),
+                      borderRadius: BorderRadius.circular(12),
                       borderSide: greyedOut
                           ? BorderSide.none
                           : const BorderSide(
-                              color: AppColors.lightFontGrey, width: 0),
+                              color: AppColors.primaryColor,
+                              width: 1.2,
+                            ),
                     ),
                 disabledBorder: disabledBorder ??
                     OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(8),
-                      borderSide:
-                          const BorderSide(color: AppColors.lightFontGrey),
+                      borderRadius: BorderRadius.circular(12),
+                      borderSide: const BorderSide(
+                        color: AppColors.lightFontGrey,
+                        width: 1.2,
+                      ),
                     ),
                 focusedBorder: focusedBorder ??
                     OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(8),
+                      borderRadius: BorderRadius.circular(12),
                       borderSide: greyedOut
                           ? BorderSide.none
                           : BorderSide(
-                              color: focusedColor ?? AppColors.lightFontGrey,
+                              color: focusedColor ?? AppColors.primaryColor,
+                              width: 1.2,
                             ),
                     ),
                 border: border ??
                     OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(4),
+                      borderRadius: BorderRadius.circular(8),
                       borderSide: greyedOut
                           ? BorderSide.none
                           : const BorderSide(

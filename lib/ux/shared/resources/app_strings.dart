@@ -4,7 +4,7 @@ class AppStrings {
   static const appName = 'MyCGPA';
 
   static const whatShouldWeCallYou = 'What should we call you?';
-  static const nameHintText = 'e.g. John';
+  static const nameHintText = 'e.g. Alex';
   static const continueText = 'Continue';
 
   static const scale = 'Scale';

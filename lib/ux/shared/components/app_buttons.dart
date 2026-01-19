@@ -28,7 +28,7 @@ class PrimaryButton extends StatelessWidget {
   ButtonStyle getStyle() {
     return ButtonStyle(
       fixedSize: MaterialStateProperty.all(
-        const Size.fromHeight(45),
+        const Size.fromHeight(55),
       ),
       enableFeedback: true,
       overlayColor: MaterialStateColor.resolveWith((states) =>
@@ -43,13 +43,14 @@ class PrimaryButton extends StatelessWidget {
       textStyle: MaterialStateProperty.all(
         const TextStyle(
           fontWeight: FontWeight.w600,
-          fontSize: 14,
+          fontSize: 18,
           color: Colors.white,
+          letterSpacing: 1,
         ),
       ),
       shape: MaterialStateProperty.all(
         RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(8),
+          borderRadius: BorderRadius.circular(12),
           side: const BorderSide(
             color: AppColors.transparent,
           ),

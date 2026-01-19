@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:cgpa_calculator/ux/shared/models/ui_models.dart';
+import 'package:cgpa_calculator/ux/shared/models/user.dart';
 import 'package:cgpa_calculator/ux/shared/resources/app_constants.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -23,7 +24,7 @@ class AuthViewModel extends ChangeNotifier {
     }
   }
 
-  Future<void> login(String name) async {
+  Future<void> login(String name, GradingScale gradingScale) async {
     if (name.trim().isEmpty) {
       loginResult.value = UIResult.error(message: 'Please enter your name');
       return;
@@ -37,6 +38,7 @@ class AuthViewModel extends ChangeNotifier {
       final user = AppUser(
         name: name.trim(),
         createdAt: DateTime.now(),
+        gradingScale: gradingScale,
       );
 
       final prefs = await SharedPreferences.getInstance();
@@ -53,5 +55,24 @@ class AuthViewModel extends ChangeNotifier {
     }
   }
 
+  Future<void> updateGradingScale(GradingScale newScale) async {
+    if (appUser == null) return;
+
+    final updatedUser = AppUser(
+      name: appUser!.name,
+      createdAt: appUser!.createdAt,
+      gradingScale: newScale,
+    );
+
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString(
+        AppConstants.userKey, jsonEncode(updatedUser.toJson()));
+
+    appUser = updatedUser;
+    notifyListeners();
+  }
+
   String? get userName => appUser?.name;
+  GradingScale get gradingScale =>
+      appUser?.gradingScale ?? GradingScale.scale43;
 }

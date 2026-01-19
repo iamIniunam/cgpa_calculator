@@ -13,35 +13,40 @@ enum CourseDuration {
 
 class GradeOption {
   final String label;
+  final String gradePoint;
   final double value;
 
-  GradeOption(this.label, this.value);
+  GradeOption(this.label, this.gradePoint, this.value);
 }
 
 class Course {
-  String name;
-  int creditHours;
-  double grade;
+  String? courseCode;
+  int? creditHours;
+  String? grade;
+  double? score;
 
   Course({
-    required this.name,
-    required this.creditHours,
-    required this.grade,
+    this.courseCode,
+    this.creditHours,
+    this.grade,
+    this.score,
   });
 
   Map<String, dynamic> toMap() {
     return {
-      'name': name,
+      'courseCode': courseCode,
       'creditHours': creditHours,
-      'grade': grade,
+      'grade': grade?.toString(),
+      'score': score,
     };
   }
 
-  factory Course.fromMap(Map<String, dynamic> map) {
+  factory Course.fromMap(Map<String, dynamic>? map) {
     return Course(
-      name: map['name'] ?? '',
-      creditHours: map['creditHours'] ?? 3,
-      grade: map['grade'] ?? 4.0,
+      courseCode: map?['courseCode'] ?? '',
+      creditHours: map?['creditHours'] ?? 3,
+      grade: map?['grade']?.toString() ?? 'A',
+      score: map?['score'] ?? 0.0,
     );
   }
 }
@@ -82,45 +87,45 @@ class GradeCalculator {
     switch (scale) {
       case GradingScale.scale40:
         return [
-          GradeOption('A (4.0)', 4.0),
-          GradeOption('A- (3.7)', 3.7),
-          GradeOption('B+ (3.3)', 3.3),
-          GradeOption('B (3.0)', 3.0),
-          GradeOption('B- (2.7)', 2.7),
-          GradeOption('C+ (2.3)', 2.3),
-          GradeOption('C (2.0)', 2.0),
-          GradeOption('C- (1.7)', 1.7),
-          GradeOption('D+ (1.3)', 1.3),
-          GradeOption('D (1.0)', 1.0),
-          GradeOption('F (0.0)', 0.0),
+          GradeOption('A', '4.0', 4.0),
+          GradeOption('A-', '3.7', 3.7),
+          GradeOption('B+', '3.3', 3.3),
+          GradeOption('B', '3.0', 3.0),
+          GradeOption('B-', '2.7', 2.7),
+          GradeOption('C+', '2.3', 2.3),
+          GradeOption('C', '2.0', 2.0),
+          GradeOption('C-', '1.7', 1.7),
+          GradeOption('D+', '1.3', 1.3),
+          GradeOption('D', '1.0', 1.0),
+          GradeOption('F', '0.0', 0.0),
         ];
       case GradingScale.scale43:
         return [
-          GradeOption('A+ (4.3)', 4.3),
-          GradeOption('A (4.0)', 4.0),
-          GradeOption('A- (3.7)', 3.7),
-          GradeOption('B+ (3.3)', 3.3),
-          GradeOption('B (3.0)', 3.0),
-          GradeOption('B- (2.7)', 2.7),
-          GradeOption('C+ (2.3)', 2.3),
-          GradeOption('C (2.0)', 2.0),
-          GradeOption('C- (1.7)', 1.7),
-          GradeOption('D+ (1.3)', 1.3),
-          GradeOption('D (1.0)', 1.0),
-          GradeOption('F (0.0)', 0.0),
+          GradeOption('A+', '4.3', 4.3),
+          GradeOption('A', '4.0', 4.0),
+          GradeOption('A-', '3.7', 3.7),
+          GradeOption('B+', '3.3', 3.3),
+          GradeOption('B', '3.0', 3.0),
+          GradeOption('B-', '2.7', 2.7),
+          GradeOption('C+', '2.3', 2.3),
+          GradeOption('C', '2.0', 2.0),
+          GradeOption('C-', '1.7', 1.7),
+          GradeOption('D+', '1.3', 1.3),
+          GradeOption('D', '1.0', 1.0),
+          GradeOption('F', '0.0', 0.0),
         ];
       case GradingScale.scale50:
         return [
-          GradeOption('A+ (5.0)', 5.0),
-          GradeOption('A (4.5)', 4.5),
-          GradeOption('B+ (4.0)', 4.0),
-          GradeOption('B (3.5)', 3.5),
-          GradeOption('C+ (3.0)', 3.0),
-          GradeOption('C (2.5)', 2.5),
-          GradeOption('D+ (2.0)', 2.0),
-          GradeOption('D (1.5)', 1.5),
-          GradeOption('E (1.0)', 1.0),
-          GradeOption('F (0.0)', 0.0),
+          GradeOption('A+', '5.0', 5.0),
+          GradeOption('A', '4.5', 4.5),
+          GradeOption('B+', '4.0', 4.0),
+          GradeOption('B', '3.5', 3.5),
+          GradeOption('C+', '3.0', 3.0),
+          GradeOption('C', '2.5', 2.5),
+          GradeOption('D+', '2.0', 2.0),
+          GradeOption('D ', '1.5', 1.5),
+          GradeOption('E', '1.0', 1.0),
+          GradeOption('F', '0.0', 0.0),
         ];
     }
   }
@@ -154,8 +159,8 @@ class GradeCalculator {
     int totalCredits = 0;
 
     for (var course in courses) {
-      totalPoints += course.grade * course.creditHours;
-      totalCredits += course.creditHours;
+      totalPoints += (course.score ?? 0.0) * (course.creditHours ?? 0);
+      totalCredits += (course.creditHours ?? 0);
     }
 
     return totalCredits > 0 ? totalPoints / totalCredits : 0.0;
@@ -169,12 +174,25 @@ class GradeCalculator {
 
     for (var semester in semesters) {
       for (var course in semester.courses) {
-        totalPoints += course.grade * course.creditHours;
-        totalCredits += course.creditHours;
+        totalPoints += (course.score ?? 0.0) * (course.creditHours ?? 0);
+        totalCredits += (course.creditHours ?? 0);
       }
     }
 
     return totalCredits > 0 ? totalPoints / totalCredits : 0.0;
+  }
+}
+
+extension GradeScaleExtension on GradingScale {
+  String get name {
+    switch (this) {
+      case GradingScale.scale40:
+        return '4.0';
+      case GradingScale.scale43:
+        return '4.3';
+      case GradingScale.scale50:
+        return '5.0';
+    }
   }
 }
 
@@ -243,51 +261,16 @@ class UIResult<T> {
   bool get isError => status == UIResultStatus.error;
 }
 
-class CGPAData {
-  final List<Semester> semesters;
-  final double cgpa;
-  final GradingScale selectedScale;
-  final CourseDuration selectedDuration;
+class CourseInput {
+  final String courseCode;
+  final int creditHours;
+  final String grade;
+  final double score;
 
-  CGPAData({
-    required this.semesters,
-    required this.cgpa,
-    required this.selectedScale,
-    required this.selectedDuration,
+  CourseInput({
+    required this.courseCode,
+    required this.creditHours,
+    required this.grade,
+    required this.score,
   });
-
-  CGPAData copyWith({
-    List<Semester>? semesters,
-    double? cgpa,
-    GradingScale? selectedScale,
-    CourseDuration? selectedDuration,
-  }) {
-    return CGPAData(
-      semesters: semesters ?? this.semesters,
-      cgpa: cgpa ?? this.cgpa,
-      selectedScale: selectedScale ?? this.selectedScale,
-      selectedDuration: selectedDuration ?? this.selectedDuration,
-    );
-  }
-}
-class AppUser {
-  final String name;
-  final DateTime createdAt;
-
-  AppUser({
-    required this.name,
-    required this.createdAt,
-  });
-
-  Map<String, dynamic> toJson() => {
-        'name': name,
-        'createdAt': createdAt.toIso8601String(),
-      };
-
-  factory AppUser.fromJson(Map<String, dynamic> json) => AppUser(
-        name: json['name'] ?? '',
-        createdAt: json['createdAt'] != null
-            ? DateTime.parse(json['createdAt'])
-            : DateTime.now(),
-      );
 }

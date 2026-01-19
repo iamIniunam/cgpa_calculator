@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 
 class AppColors {
   AppColors._();
-  static const Color primaryColor = Color(0xFF1565C0);
+  // static const Color primaryColorColor.fromRGBO(21, 101, 192, 1)C0);
+  static const Color primaryColor = Color(0xFF294F56);
+  static const Color primaryColorLight = Color(0xFF6FBAC9);
   static const Color primary500 = Color(0xFF0D47A1);
   static const Color scaffoldBackground = Color(0xFF303030);
   static const Color disabledButton = Color(0xFF4A4A4A);
@@ -19,6 +21,12 @@ class AppColors {
   static const Color grey200 = Color(0xFFE8E8E8);
   static const Color grey300 = Color(0xFF9D9D9D);
   static const Color disabledBorder = Color(0xFF616161);
+
+  static const Color dark = Color(0xFF19191A);
+  static const Color dark2 = Color(0xFF2E3B3D);
+  static const Color textGrey = Color(0xFFA0A0A0);
+  static const Color textFieldBackground = Color(0xFF2E3B3D);
+  static const Color cardBackground = Color(0xFF2C3033);
 }
 
 //This converts Hexadecimal color code to RGB or RGBA

@@ -4,7 +4,7 @@ import 'package:cgpa_calculator/ux/navigation/navigation.dart';
 import 'package:cgpa_calculator/ux/shared/resources/app_strings.dart';
 import 'package:cgpa_calculator/ux/shared/resources/app_theme.dart';
 import 'package:cgpa_calculator/ux/shared/view_models/auth_view_model.dart';
-import 'package:cgpa_calculator/ux/views/login_page.dart';
+import 'package:cgpa_calculator/ux/views/onboarding/walk_through_screen.dart';
 import 'package:cgpa_calculator/ux/views/splash_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -51,10 +51,10 @@ class _EntryPageState extends State<EntryPage> {
       if (authViewModel.appUser != null) {
         Navigation.navigateToHomePage(context: context);
       } else {
-        Navigation.navigateToScreenAndClearAllPrevious(
-          context: context,
-          screen: const LoginPage(),
-        );
+      Navigation.navigateToScreenAndClearAllPrevious(
+        context: context,
+        screen: const WalkThroughScreen(),
+      );
       }
     });
   }

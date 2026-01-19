@@ -15,8 +15,14 @@ class CGPACalculatorApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider(create: (_) => CGPAViewModel()),
         ChangeNotifierProvider(create: (_) => AuthViewModel()),
+        ChangeNotifierProxyProvider<AuthViewModel, CGPAViewModel>(
+          create: (context) => CGPAViewModel(
+            authViewModel: context.read<AuthViewModel>(),
+          ),
+          update: (context, authViewModel, previous) =>
+              previous ?? CGPAViewModel(authViewModel: authViewModel),
+        ),
       ],
       child: const MyCGPAApp(),
     );

@@ -9,16 +9,16 @@ class AppTheme {
   static ThemeData appTheme = ThemeData(
     fontFamily: fontFamily,
     useMaterial3: false,
-    primarySwatch: Colors.blue,
-    primaryColor: Colors.black,
+    primarySwatch: Colors.blueGrey,
+    primaryColor: AppColors.dark,
     brightness: Brightness.dark,
-    scaffoldBackgroundColor: AppColors.black,
+    scaffoldBackgroundColor: AppColors.dark,
     pageTransitionsTheme: const PageTransitionsTheme(builders: {
       TargetPlatform.android: CupertinoPageTransitionsBuilder(),
       TargetPlatform.iOS: CupertinoPageTransitionsBuilder(),
     }),
     appBarTheme: const AppBarTheme(
-      backgroundColor: AppColors.black,
+      backgroundColor: AppColors.dark,
       centerTitle: true,
       elevation: 0,
       titleTextStyle: TextStyle(
@@ -32,9 +32,9 @@ class AppTheme {
       ),
     ),
     cardTheme: CardTheme(
-      color: Colors.grey[900],
+      color: AppColors.cardBackground,
       margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-      elevation: 2,
+      elevation: 0,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(12),
       ),
