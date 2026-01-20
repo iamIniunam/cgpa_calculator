@@ -1,4 +1,5 @@
 import 'package:cgpa_calculator/ux/navigation/navigation.dart';
+import 'package:cgpa_calculator/ux/navigation/navigation_host_page.dart';
 import 'package:cgpa_calculator/ux/shared/components/app_buttons.dart';
 import 'package:cgpa_calculator/ux/shared/components/app_form_fields.dart';
 import 'package:cgpa_calculator/ux/shared/components/app_material.dart';
@@ -127,7 +128,12 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                     const SizedBox(height: 16),
                     PrimaryButton(
-                      onTap: () {},
+                      onTap: () {
+                        Navigation.navigateToScreen(
+                          context: context,
+                          screen: const NavigationHostPage(),
+                        );
+                      },
                       child: const Text('Sign In'),
                     ),
                   ],

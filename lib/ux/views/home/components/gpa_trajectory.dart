@@ -3,7 +3,7 @@ import 'package:cgpa_calculator/ux/shared/models/cgpa_data.dart';
 import 'package:cgpa_calculator/ux/shared/models/ui_models.dart';
 import 'package:cgpa_calculator/ux/shared/resources/app_colors.dart';
 import 'package:cgpa_calculator/ux/shared/view_models/cgpa_view_model.dart';
-import 'package:cgpa_calculator/ux/views/components/gpa_trajectory_data.dart';
+import 'package:cgpa_calculator/ux/views/home/components/gpa_trajectory_data.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -27,10 +27,10 @@ class GpaTrajectory extends StatelessWidget {
           padding:
               const EdgeInsets.only(left: 16, top: 16, right: 16, bottom: 8),
           child: Material(
-            elevation: 2,
+            // elevation: 2,
             color: Theme.of(context).brightness == Brightness.dark
-                ? AppColors.cardBackground
-                : Colors.white,
+                ? AppColors.transparentBackgroundDark
+                : AppColors.transparentBackgroundLight,
             borderRadius: BorderRadius.circular(32),
             child: SizedBox(
               width: double.infinity,

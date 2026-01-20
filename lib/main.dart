@@ -4,7 +4,13 @@ import 'package:cgpa_calculator/ux/shared/view_models/cgpa_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-void main() {
+import 'package:cgpa_calculator/platform/di/dependency_injection.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  final sharedPreferences = await SharedPreferences.getInstance();
+  await AppDi.init(sharedPreferences: sharedPreferences);
   runApp(const CGPACalculatorApp());
 }
 

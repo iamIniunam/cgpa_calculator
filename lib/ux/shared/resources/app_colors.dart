@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 
 class AppColors {
   AppColors._();
-  // static const Color primaryColorColor.fromRGBO(21, 101, 192, 1)C0);
-  static const Color primaryColor = Color(0xFF294F56);
+  // static const Color primaryColor = Color(0xFF294F56);
+  static const Color primaryColor = Color(0xFF00606B);
   static const Color primaryColorLight = Color(0xFF6FBAC9);
   static const Color primaryColorGradientLight = Color(0xFF057C8A);
   static const Color primaryColorGradientDark = Color(0xFF00616C);
@@ -38,6 +38,8 @@ class AppColors {
   static const Color greenBackground = Color(0xFFECFDF5);
   static const Color blue = Color(0xFF3B82F6);
   static const Color blueBackground = Color(0xFFE0F2FE);
+  static  Color transparentBackgroundDark = Colors.white.withOpacity(0.11);
+  static  Color transparentBackgroundLight = AppColors.primaryColor.withOpacity(0.1);
 }
 
 //This converts Hexadecimal color code to RGB or RGBA
@@ -51,4 +53,38 @@ class HexColor extends Color {
   }
 
   HexColor(final String hexColor) : super(_getColorFromHex(hexColor));
+}
+
+class AppGradients {
+  AppGradients._();
+
+  static LinearGradient primaryGradientDark = LinearGradient(
+    begin: Alignment.topLeft,
+    end: Alignment.bottomRight,
+    colors: [
+      AppColors.primaryColorGradientDark,
+      AppColors.primaryColorGradientDark.withOpacity(0.0),
+    ],
+  );
+
+  static LinearGradient primaryGradientLight = LinearGradient(
+    begin: Alignment.topLeft,
+    end: Alignment.bottomRight,
+    colors: [
+      AppColors.white,
+      AppColors.white,
+      AppColors.white.withOpacity(0.0),
+    ],
+  );
+
+  static LinearGradient bottomBackground = LinearGradient(
+    begin: Alignment.topCenter,
+    end: Alignment.bottomCenter,
+    colors: [
+      Colors.transparent,
+      AppColors.black.withOpacity(0.2),
+      AppColors.black.withOpacity(0.4),
+      // AppColors.black.withOpacity(0.6),
+    ],
+  );
 }

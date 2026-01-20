@@ -72,6 +72,7 @@ class AppTheme {
     scaffoldBackgroundColor: AppColors.white,
     colorScheme: const ColorScheme.light(
       background: Colors.white,
+      primary: AppColors.primaryColor,
     ),
     pageTransitionsTheme: const PageTransitionsTheme(
       builders: {
