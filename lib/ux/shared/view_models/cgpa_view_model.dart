@@ -62,7 +62,8 @@ class CGPAViewModel extends ChangeNotifier {
   int getTotalCredits() {
     return _data.semesters.fold(
       0,
-      (total, semester) => total + getSemesterTotalCredits(semester.semesterNumber),
+      (total, semester) =>
+          total + getSemesterTotalCredits(semester.semesterNumber),
     );
   }
 
