@@ -76,6 +76,7 @@ class CGPADisplay extends StatelessWidget {
                 ),
               ],
             ),
+            const SizedBox(height: 16),
             Row(
               crossAxisAlignment: CrossAxisAlignment.end,
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -86,6 +87,7 @@ class CGPADisplay extends StatelessWidget {
                   style: Theme.of(context).textTheme.headlineLarge?.copyWith(
                         color: AppColors.white,
                         fontSize: 60,
+                        height: 1,
                       ),
                 ),
                 Text(
@@ -123,36 +125,60 @@ class GPADisplay extends StatelessWidget {
         border: Border.all(color: Colors.grey.shade800, width: 0.5),
       ),
       child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text('Total Credits',
-                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                          color: AppColors.textGrey,
-                        )),
-                Text(
-                  maxcredits.toString(),
-                  style: Theme.of(context)
-                      .textTheme
-                      .headlineSmall
-                      ?.copyWith(color: Colors.white70),
-                ),
-              ],
-            ),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text('Total Credits',
+                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                        color: Theme.of(context).brightness == Brightness.dark
+                            ? AppColors.textGrey
+                            : AppColors.dark,
+                      )),
+              Text(
+                maxcredits.toString(),
+                style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                      color: Theme.of(context).brightness == Brightness.dark
+                          ? Colors.white70
+                          : AppColors.dark,
+                    ),
+              ),
+            ],
+          ),
+          Column(
+            children: [
+              Text(
+                'GPA',
+                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                      color: Theme.of(context).brightness == Brightness.dark
+                          ? AppColors.textGrey
+                          : AppColors.dark,
+                    ),
+              ),
+              Text(
+                gpa.toStringAsFixed(2),
+                style: Theme.of(context).textTheme.headlineMedium,
+              ),
+            ],
           ),
           Column(
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
-              Text('SGPA',
-                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                        color: AppColors.textGrey,
-                      )),
               Text(
-                gpa.toStringAsFixed(2),
+                'Target GPA',
+                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                      color: Theme.of(context).brightness == Brightness.dark
+                          ? AppColors.textGrey
+                          : AppColors.dark,
+                    ),
+              ),
+              Text(
+                '4.30',
                 style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                      fontWeight: FontWeight.bold,
+                      color: Theme.of(context).brightness == Brightness.dark
+                          ? Colors.white70
+                          : AppColors.dark,
                     ),
               ),
             ],

@@ -233,7 +233,9 @@ class PrimaryTextFormField extends StatelessWidget {
                 fontSize: 18,
                 fontWeight: FontWeight.w500,
               ),
-              cursorColor: AppColors.grey300,
+              cursorColor: Theme.of(context).brightness == Brightness.dark
+                  ? AppColors.white
+                  : AppColors.primaryColor,
               decoration: InputDecoration(
                 filled: true,
                 fillColor: fillColor ??

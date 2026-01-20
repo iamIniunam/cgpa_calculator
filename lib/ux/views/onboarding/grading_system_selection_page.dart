@@ -8,7 +8,9 @@ import 'package:cgpa_calculator/ux/views/onboarding/components/grading_system_vi
 import 'package:flutter/material.dart';
 
 class GradingSystemSelectionPage extends StatefulWidget {
-  const GradingSystemSelectionPage({super.key});
+  const GradingSystemSelectionPage({super.key, this.isEditMode = false});
+
+  final bool isEditMode;
 
   @override
   State<GradingSystemSelectionPage> createState() =>
@@ -106,9 +108,11 @@ class _GradingSystemSelectionPageState
             padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
             child: PrimaryButton(
               onTap: () {
-                Navigation.navigateToHomePage(context: context);
+                widget.isEditMode
+                    ? Navigation.back(context: context)
+                    : Navigation.navigateToHomePage(context: context);
               },
-              child: const Text(AppStrings.continueText),
+              child: Text(widget.isEditMode ? 'Save' : AppStrings.continueText),
             ),
           ),
         ],

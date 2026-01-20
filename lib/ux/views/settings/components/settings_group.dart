@@ -18,7 +18,7 @@ class SettingsGroup extends StatelessWidget {
               ((Theme.of(context).brightness == Brightness.dark)
                   ? AppColors.transparentBackgroundDark
                   : AppColors.primaryColor.withOpacity(0.1)),
-          borderRadius: BorderRadius.circular(20),
+          borderRadius: BorderRadius.circular(32),
         ),
         child: Column(children: settingTiles),
       ),

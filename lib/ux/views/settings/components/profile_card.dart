@@ -16,14 +16,14 @@ class ProfileCard extends StatelessWidget {
         color: Theme.of(context).brightness == Brightness.dark
             ? AppColors.transparentBackgroundDark
             : AppColors.primaryColor.withOpacity(0.1),
-        borderRadius: BorderRadius.circular(20),
-        inkwellBorderRadius: BorderRadius.circular(20),
+        borderRadius: BorderRadius.circular(32),
+        inkwellBorderRadius: BorderRadius.circular(32),
         onTap: () {
           // Navigation.navigateToScreen(
           //     context: context, screen: const EditProfilePage());
         },
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+          padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 6),
           child: Row(
             children: [
               ClipRRect(

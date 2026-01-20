@@ -22,7 +22,7 @@ class CustomBottomNav extends StatelessWidget {
         decoration: BoxDecoration(
           color: Theme.of(context).brightness == Brightness.dark
               ? AppColors.transparentBackgroundDark
-              : AppColors.primaryColor.withOpacity(0.4),
+              : AppColors.transparentBackgroundLight.withOpacity(0.4),
           borderRadius: BorderRadius.circular(50),
         ),
         child: Row(

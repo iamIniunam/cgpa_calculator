@@ -2,7 +2,7 @@ import 'package:cgpa_calculator/ux/navigation/navigation.dart';
 import 'package:cgpa_calculator/ux/shared/models/ui_models.dart';
 import 'package:cgpa_calculator/ux/shared/resources/app_colors.dart';
 import 'package:cgpa_calculator/ux/shared/view_models/cgpa_view_model.dart';
-import 'package:cgpa_calculator/ux/views/add_course_page.dart';
+import 'package:cgpa_calculator/ux/views/semesters/add_course_page.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -33,9 +33,7 @@ class CourseCard extends StatelessWidget {
     final viewModel = Provider.of<CGPAViewModel>(context, listen: false);
     return Card(
       margin: const EdgeInsets.only(bottom: 0),
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(16),
-      ),
+      shape: border(context),
       child: ListTile(
         title: Column(
           mainAxisSize: MainAxisSize.min,
@@ -62,21 +60,13 @@ class CourseCard extends StatelessWidget {
           child: Text(
             grade.toUpperCase(),
             style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                  color: AppColors.white,
                   fontSize: 22,
                   fontWeight: FontWeight.bold,
                 ),
           ),
         ),
-        tileColor: AppColors.cardBackground,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.only(
-            topLeft: isFirst ? const Radius.circular(16) : Radius.zero,
-            topRight: isFirst ? const Radius.circular(16) : Radius.zero,
-            bottomLeft: isLast ? const Radius.circular(16) : Radius.zero,
-            bottomRight: isLast ? const Radius.circular(16) : Radius.zero,
-          ),
-          side: const BorderSide(color: Colors.black, width: 0),
-        ),
+        shape: border(context),
         onTap: () async {
           final result = await Navigation.navigateToScreen(
             context: context,
@@ -104,6 +94,18 @@ class CourseCard extends StatelessWidget {
           }
         },
       ),
+    );
+  }
+
+  RoundedRectangleBorder border(BuildContext context) {
+    return RoundedRectangleBorder(
+      borderRadius: BorderRadius.only(
+        topLeft: isFirst ? const Radius.circular(24) : Radius.zero,
+        topRight: isFirst ? const Radius.circular(24) : Radius.zero,
+        bottomLeft: isLast ? const Radius.circular(24) : Radius.zero,
+        bottomRight: isLast ? const Radius.circular(24) : Radius.zero,
+      ),
+      side: BorderSide(color: Theme.of(context).dividerColor, width: 0),
     );
   }
 }

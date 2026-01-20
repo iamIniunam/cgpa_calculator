@@ -1,14 +1,14 @@
+import 'package:cgpa_calculator/ux/shared/components/app_bar.dart';
 import 'package:cgpa_calculator/ux/shared/components/bottom_dark_gradient.dart';
 import 'package:cgpa_calculator/ux/shared/extensions/extensions.dart';
 import 'package:cgpa_calculator/ux/shared/models/cgpa_data.dart';
 import 'package:cgpa_calculator/ux/shared/models/ui_models.dart';
 import 'package:cgpa_calculator/ux/shared/resources/app_colors.dart';
-import 'package:cgpa_calculator/ux/shared/resources/app_images.dart';
-import 'package:cgpa_calculator/ux/shared/resources/app_strings.dart';
 import 'package:cgpa_calculator/ux/shared/view_models/auth_view_model.dart';
 import 'package:cgpa_calculator/ux/views/home/components/cgpa_display.dart';
 import 'package:cgpa_calculator/ux/views/home/components/gpa_trajectory.dart';
 import 'package:cgpa_calculator/ux/shared/view_models/cgpa_view_model.dart';
+import 'package:cgpa_calculator/ux/views/home/components/stats_card.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -76,40 +76,7 @@ class _HomePageState extends State<HomePage> {
           child: Stack(
             children: [
               Scaffold(
-                appBar: AppBar(
-                  automaticallyImplyLeading: false,
-                  title: Row(
-                    children: [
-                      Image(
-                        image: AppImages.appLogo3,
-                        fit: BoxFit.cover,
-                        height: 35,
-                        width: 35,
-                      ),
-                      const SizedBox(width: 10),
-                      Text(AppStrings.appName,
-                          style: Theme.of(context).textTheme.titleLarge),
-                    ],
-                  ),
-                  centerTitle: false,
-                  bottom: const Divider(height: 2).asPreferredSize(height: 1),
-                  actions: [
-                    Padding(
-                      padding: const EdgeInsets.only(right: 16),
-                      child: Center(
-                        child: CircleAvatar(
-                          radius: 22,
-                          backgroundColor:
-                              Theme.of(context).brightness == Brightness.dark
-                                  ? AppColors.transparentBackgroundDark
-                                  : AppColors.transparentBackgroundLight,
-                          child: Image(
-                              image: AppImages.appLogo, height: 32, width: 32),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
+                appBar: const HomeAppBar().asPreferredSize(height: 58),
                 body: ListView(
                   children: [
                     CGPADisplay(
@@ -150,7 +117,7 @@ class _HomePageState extends State<HomePage> {
                           ),
                           SizedBox(height: 20),
                           StatsCard(
-                            icon: Icons.my_location_rounded,
+                            icon: Icons.track_changes_rounded,
                             title: 'Target',
                             value: '4.30',
                             iconColor: AppColors.blue,
@@ -160,53 +127,6 @@ class _HomePageState extends State<HomePage> {
                         ],
                       ),
                     ),
-                    // Padding(
-                    //   padding: const EdgeInsets.only(left: 16, top: 8),
-                    //   child: Row(
-                    //     children: [
-                    //       Expanded(
-                    //         child: Text(AppStrings.semesters,
-                    //             style: Theme.of(context).textTheme.titleLarge),
-                    //       ),
-                    //       Padding(
-                    //         padding: const EdgeInsets.only(right: 8),
-                    //         child: Center(
-                    //           child: TextButton.icon(
-                    //             onPressed: () {
-                    //               _showCourseDurationDialog(context, viewModel);
-                    //             },
-                    //             icon: const Icon(Icons.settings, size: 18),
-                    //             label: Text(
-                    //                 '${data.selectedDuration.yearsText} ${AppStrings.years}'),
-                    //             style: TextButton.styleFrom(
-                    //               foregroundColor: Colors.white,
-                    //               shape: RoundedRectangleBorder(
-                    //                 borderRadius: BorderRadius.circular(8),
-                    //               ),
-                    //             ),
-                    //           ),
-                    //         ),
-                    //       ),
-                    //     ],
-                    //   ),
-                    // ),
-                    // ...List.generate(
-                    //   data.selectedDuration.semesterCount,
-                    //   (index) {
-                    //     final semesterNumber = index + 1;
-                    //     final gpa = viewModel.getSemesterGPA(semesterNumber);
-                    //     final crediHours =
-                    //         viewModel.getSemesterTotalCredits(semesterNumber);
-                    //     return SemesterCard(
-                    //       semesterNumber: semesterNumber,
-                    //       gpa: gpa,
-                    //       creditHours: crediHours,
-                    //       isFirst: index == 0,
-                    //       isLast:
-                    //           index == data.selectedDuration.semesterCount - 1,
-                    //     );
-                    //   },
-                    // ),
                     const SizedBox(height: 110),
                   ],
                 ),
@@ -216,59 +136,6 @@ class _HomePageState extends State<HomePage> {
           ),
         );
       },
-    );
-  }
-}
-
-class StatsCard extends StatelessWidget {
-  const StatsCard({
-    super.key,
-    required this.icon,
-    required this.title,
-    required this.value,
-    required this.iconColor,
-    required this.iconBackgroundColor,
-    this.width,
-  });
-
-  final IconData icon;
-  final String title;
-  final String value;
-  final Color iconColor;
-  final Color iconBackgroundColor;
-  final double? width;
-
-  @override
-  Widget build(BuildContext context) {
-    return Material(
-      color: Theme.of(context).brightness == Brightness.dark
-          ? AppColors.transparentBackgroundDark
-          : AppColors.transparentBackgroundLight,
-      borderRadius: BorderRadius.circular(24),
-      child: Container(
-        width: width ?? 0,
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Container(
-              height: 36,
-              width: 36,
-              decoration: BoxDecoration(
-                color: iconBackgroundColor,
-                shape: BoxShape.circle,
-              ),
-              child: Icon(icon, color: iconColor),
-            ),
-            const SizedBox(height: 12),
-            Text(title),
-            Text(
-              value,
-              style: Theme.of(context).textTheme.displayMedium,
-            ),
-          ],
-        ),
-      ),
     );
   }
 }

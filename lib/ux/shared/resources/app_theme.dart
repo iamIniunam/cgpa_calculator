@@ -1,4 +1,5 @@
 import 'package:cgpa_calculator/ux/shared/resources/app_colors.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -37,7 +38,7 @@ class AppTheme {
       margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
       elevation: 0,
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(24),
       ),
     ),
     dialogTheme: DialogTheme(
@@ -56,7 +57,7 @@ class AppTheme {
     ),
     listTileTheme: ListTileThemeData(
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(24),
       ),
       tileColor: Colors.transparent,
       contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 0),
@@ -172,6 +173,28 @@ class AppTheme {
         fontWeight: FontWeight.normal,
       ),
     ),
+    cardTheme: CardTheme(
+      color: AppColors.transparentBackgroundLight,
+      margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+      elevation: 0,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(24),
+      ),
+    ),
+    listTileTheme: ListTileThemeData(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(24),
+      ),
+      tileColor: AppColors.transparentBackgroundDark,
+      contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 0),
+    ),
+    sliderTheme: SliderThemeData(
+      activeTrackColor: AppColors.primaryColor,
+      inactiveTrackColor: AppColors.primaryColor.withOpacity(0.2),
+      thumbColor: AppColors.primaryColor,
+      overlayColor: AppColors.primaryColor.withOpacity(0.2),
+      valueIndicatorColor: AppColors.primaryColor,
+    ),
   );
 
   static ThemeData darkThemeData = ThemeData(
@@ -284,6 +307,28 @@ class AppTheme {
         fontSize: 12,
         fontWeight: FontWeight.normal,
       ),
+    ),
+    cardTheme: CardTheme(
+      color: AppColors.transparentBackgroundDark,
+      margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+      elevation: 0,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(24),
+      ),
+    ),
+    listTileTheme: ListTileThemeData(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(24),
+      ),
+      tileColor: AppColors.transparentBackgroundDark,
+      contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 0),
+    ),
+    sliderTheme: SliderThemeData(
+      activeTrackColor: AppColors.primaryColor,
+      inactiveTrackColor: AppColors.grey300,
+      thumbColor: AppColors.primaryColor,
+      overlayColor: AppColors.primaryColor.withOpacity(0.2),
+      valueIndicatorColor: AppColors.primaryColor,
     ),
   );
 }

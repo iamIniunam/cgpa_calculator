@@ -6,11 +6,12 @@ import 'package:cgpa_calculator/ux/shared/extensions/extensions.dart';
 import 'package:cgpa_calculator/ux/shared/models/cgpa_data.dart';
 import 'package:cgpa_calculator/ux/shared/models/ui_models.dart';
 import 'package:cgpa_calculator/ux/shared/resources/app_strings.dart';
-import 'package:cgpa_calculator/ux/views/add_course_page.dart';
+import 'package:cgpa_calculator/ux/views/semesters/add_course_page.dart';
 import 'package:cgpa_calculator/ux/views/home/components/cgpa_display.dart';
 import 'package:cgpa_calculator/ux/views/home/components/course_card.dart';
 import 'package:cgpa_calculator/ux/shared/components/empty_state.dart';
 import 'package:cgpa_calculator/ux/shared/view_models/cgpa_view_model.dart';
+import 'package:cgpa_calculator/ux/views/home/components/delete_course_button.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -37,6 +38,7 @@ class SemesterDetailsPage extends StatelessWidget {
           child: Scaffold(
             appBar: AppBar(
               title: Text('${AppStrings.semester} $semesterNumber'),
+              actions: const [CompleteCourseButton()],
               bottom: const Divider(height: 2).asPreferredSize(height: 1),
             ),
             body: Stack(

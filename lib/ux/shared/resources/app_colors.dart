@@ -23,10 +23,12 @@ class AppColors {
   static const Color borderColor = Color(0xFFEAEAEA);
   static const Color grey200 = Color(0xFFE8E8E8);
   static const Color grey300 = Color(0xFF9D9D9D);
+  static const Color grey400 = Color(0xFF707070);
   static const Color disabledBorder = Color(0xFF616161);
 
   static const Color dark = Color(0xFF19191A);
   static const Color dark2 = Color(0xFF2E3B3D);
+  static const Color grey = Color(0xFF94A3B8);
   static const Color textGrey = Color(0xFFA0A0A0);
   static const Color textGrey2 = Color(0xFFE6F0F1);
   static const Color textFieldBackground = Color(0xFF2E3B3D);

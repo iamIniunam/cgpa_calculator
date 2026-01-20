@@ -118,8 +118,10 @@ class _AddCoursePageState extends State<AddCoursePage> {
                   PrimaryTextFormField(
                     autofocus: true,
                     hintText: 'e.g. CS101',
-                    fillColor: AppColors.cardBackground,
-                    greyedOut: true,
+                    // fillColor: Theme.of(context).brightness == Brightness.dark
+                    //     ? AppColors.transparentBackgroundDark
+                    //     : AppColors.transparentBackgroundLight,
+                    // greyedOut: true,
                     controller: courseCodeController,
                     keyboardType: TextInputType.visiblePassword,
                     textInputAction: TextInputAction.done,
@@ -132,7 +134,9 @@ class _AddCoursePageState extends State<AddCoursePage> {
                     padding: const EdgeInsets.symmetric(
                         horizontal: 16, vertical: 24),
                     decoration: BoxDecoration(
-                      color: AppColors.cardBackground,
+                      color: Theme.of(context).brightness == Brightness.dark
+                          ? AppColors.transparentBackgroundDark
+                          : AppColors.transparentBackgroundLight,
                       borderRadius: BorderRadius.circular(12),
                     ),
                     child: Column(
@@ -168,14 +172,22 @@ class _AddCoursePageState extends State<AddCoursePage> {
                                 padding: const EdgeInsets.symmetric(
                                     horizontal: 10, vertical: 8),
                                 decoration: BoxDecoration(
-                                  color: AppColors.dark,
-                                  borderRadius: BorderRadius.circular(8),
+                                  color: Theme.of(context).brightness ==
+                                          Brightness.dark
+                                      ? AppColors.transparentBackgroundDark
+                                      : AppColors.transparentBackgroundLight
+                                          .withOpacity(0.3),
+                                  borderRadius: BorderRadius.circular(20),
                                 ),
                                 child: Row(
                                   children: [
                                     iconBox(
                                       icon: Icons.remove_rounded,
-                                      color: AppColors.cardBackground,
+                                      color: Theme.of(context).brightness ==
+                                              Brightness.dark
+                                          ? AppColors.transparentBackgroundDark
+                                          : AppColors.transparentBackgroundLight
+                                              .withOpacity(0.2),
                                       onTap: () {
                                         if (creditHours > 0) {
                                           setState(() {
@@ -184,12 +196,11 @@ class _AddCoursePageState extends State<AddCoursePage> {
                                         }
                                       },
                                     ),
-                                    Text(
-                                      '$creditHours',
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .titleMedium,
-                                    ),
+                                    Text('$creditHours',
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .titleMedium
+                                            ?.copyWith(fontSize: 16)),
                                     iconBox(
                                       icon: Icons.add_rounded,
                                       color: AppColors.primaryColor,
@@ -224,13 +235,24 @@ class _AddCoursePageState extends State<AddCoursePage> {
                                   padding: const EdgeInsets.symmetric(
                                       horizontal: 10, vertical: 8),
                                   decoration: BoxDecoration(
-                                    color: AppColors.dark,
+                                    color: Theme.of(context).brightness ==
+                                            Brightness.dark
+                                        ? AppColors.transparentBackgroundDark
+                                        : AppColors.transparentBackgroundLight
+                                            .withOpacity(0.4),
                                     borderRadius: BorderRadius.circular(8),
                                     border: Border.all(
                                         color: Colors.white70, width: 0.3),
                                   ),
                                   child: Text(
                                     gradeOptions[selectedGradeIndex].label,
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .titleMedium
+                                        ?.copyWith(
+                                          color: AppColors.white,
+                                          fontWeight: FontWeight.bold,
+                                        ),
                                   ),
                                 ),
                             ],
@@ -264,7 +286,13 @@ class _AddCoursePageState extends State<AddCoursePage> {
                                       decoration: BoxDecoration(
                                         color: isSelected
                                             ? AppColors.primaryColor
-                                            : AppColors.dark2,
+                                            : (Theme.of(context).brightness ==
+                                                    Brightness.dark
+                                                ? AppColors
+                                                    .transparentBackgroundDark
+                                                : AppColors
+                                                    .transparentBackgroundLight
+                                                    .withOpacity(0.3)),
                                         shape: BoxShape.circle,
                                       ),
                                       child: Text(
@@ -287,7 +315,6 @@ class _AddCoursePageState extends State<AddCoursePage> {
                                         .textTheme
                                         .titleMedium
                                         ?.copyWith(
-                                          color: AppColors.white,
                                           fontSize: 12,
                                           fontWeight: FontWeight.bold,
                                         ),
@@ -319,10 +346,8 @@ class _AddCoursePageState extends State<AddCoursePage> {
   Text sectionHeader(BuildContext context, String text) {
     return Text(
       text.toUpperCase(),
-      style: Theme.of(context)
-          .textTheme
-          .titleMedium
-          ?.copyWith(letterSpacing: 1.2, color: Colors.white70),
+      style:
+          Theme.of(context).textTheme.titleMedium?.copyWith(letterSpacing: 1.2),
     );
   }
 
@@ -343,7 +368,7 @@ class _AddCoursePageState extends State<AddCoursePage> {
           padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
           decoration: BoxDecoration(
             color: color,
-            borderRadius: BorderRadius.circular(8),
+            borderRadius: BorderRadius.circular(20),
           ),
           child: Icon(icon, color: AppColors.white, size: 18),
         ),
