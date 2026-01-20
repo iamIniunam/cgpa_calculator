@@ -5,7 +5,6 @@ import 'package:cgpa_calculator/ux/shared/components/app_buttons.dart';
 import 'package:cgpa_calculator/ux/shared/extensions/extensions.dart';
 import 'package:cgpa_calculator/ux/shared/models/cgpa_data.dart';
 import 'package:cgpa_calculator/ux/shared/models/ui_models.dart';
-import 'package:cgpa_calculator/ux/shared/resources/app_colors.dart';
 import 'package:cgpa_calculator/ux/shared/resources/app_strings.dart';
 import 'package:cgpa_calculator/ux/views/add_course_page.dart';
 import 'package:cgpa_calculator/ux/views/components/cgpa_display.dart';
@@ -13,7 +12,6 @@ import 'package:cgpa_calculator/ux/views/components/course_card.dart';
 import 'package:cgpa_calculator/ux/shared/components/empty_state.dart';
 import 'package:cgpa_calculator/ux/shared/view_models/cgpa_view_model.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
 class SemesterDetailsPage extends StatelessWidget {
@@ -40,10 +38,6 @@ class SemesterDetailsPage extends StatelessWidget {
             appBar: AppBar(
               title: Text('${AppStrings.semester} $semesterNumber'),
               bottom: const Divider(height: 2).asPreferredSize(height: 1),
-              systemOverlayStyle: const SystemUiOverlayStyle(
-                statusBarColor: AppColors.transparent,
-                statusBarIconBrightness: Brightness.light,
-              ),
             ),
             body: Stack(
               children: [

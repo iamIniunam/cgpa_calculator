@@ -11,7 +11,6 @@ import 'package:cgpa_calculator/ux/views/components/gpa_trajectory.dart';
 import 'package:cgpa_calculator/ux/shared/view_models/cgpa_view_model.dart';
 import 'package:cgpa_calculator/ux/views/components/semester_card.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
 class HomePage extends StatefulWidget {
@@ -92,10 +91,6 @@ class _HomePageState extends State<HomePage> {
               ),
               centerTitle: false,
               bottom: const Divider(height: 2).asPreferredSize(height: 1),
-              systemOverlayStyle: const SystemUiOverlayStyle(
-                statusBarColor: AppColors.transparent,
-                statusBarIconBrightness: Brightness.light,
-              ),
               actions: [
                 Padding(
                   padding: const EdgeInsets.only(right: 8),
@@ -126,6 +121,46 @@ class _HomePageState extends State<HomePage> {
                   totalCredits: totalCredits,
                 ),
                 const GpaTrajectory(),
+                const SizedBox(height: 16),
+                const Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 24),
+                  child: Column(
+                    children: [
+                      Row(
+                        children: [
+                          Expanded(
+                            child: StatsCard(
+                              icon: Icons.school_rounded,
+                              title: 'Total Credits',
+                              value: '84',
+                              iconColor: AppColors.purple,
+                              iconBackgroundColor: AppColors.purpleBackground,
+                            ),
+                          ),
+                          SizedBox(width: 20),
+                          Expanded(
+                            child: StatsCard(
+                              icon: Icons.bar_chart_rounded,
+                              title: 'Highest GPA',
+                              value: '3.90',
+                              iconColor: AppColors.green,
+                              iconBackgroundColor: AppColors.greenBackground,
+                            ),
+                          ),
+                        ],
+                      ),
+                      SizedBox(height: 20),
+                      StatsCard(
+                        icon: Icons.my_location_rounded,
+                        title: 'Target',
+                        value: '4.30',
+                        iconColor: AppColors.blue,
+                        iconBackgroundColor: AppColors.blueBackground,
+                        width: double.infinity,
+                      ),
+                    ],
+                  ),
+                ),
                 Padding(
                   padding: const EdgeInsets.only(left: 16, top: 8),
                   child: Row(
@@ -178,6 +213,60 @@ class _HomePageState extends State<HomePage> {
           ),
         );
       },
+    );
+  }
+}
+
+class StatsCard extends StatelessWidget {
+  const StatsCard({
+    super.key,
+    required this.icon,
+    required this.title,
+    required this.value,
+    required this.iconColor,
+    required this.iconBackgroundColor,
+    this.width,
+  });
+
+  final IconData icon;
+  final String title;
+  final String value;
+  final Color iconColor;
+  final Color iconBackgroundColor;
+  final double? width;
+
+  @override
+  Widget build(BuildContext context) {
+    return Material(
+      elevation: 2,
+      color: Theme.of(context).brightness == Brightness.dark
+          ? AppColors.cardBackground
+          : Colors.white,
+      borderRadius: BorderRadius.circular(24),
+      child: Container(
+        width: width ?? 0,
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Container(
+              height: 36,
+              width: 36,
+              decoration: BoxDecoration(
+                color: iconBackgroundColor,
+                shape: BoxShape.circle,
+              ),
+              child: Icon(icon, color: iconColor),
+            ),
+            const SizedBox(height: 12),
+            Text(title),
+            Text(
+              value,
+              style: Theme.of(context).textTheme.displayMedium,
+            ),
+          ],
+        ),
+      ),
     );
   }
 }

@@ -4,6 +4,7 @@ import 'package:cgpa_calculator/ux/navigation/navigation.dart';
 import 'package:cgpa_calculator/ux/shared/resources/app_strings.dart';
 import 'package:cgpa_calculator/ux/shared/resources/app_theme.dart';
 import 'package:cgpa_calculator/ux/shared/view_models/auth_view_model.dart';
+import 'package:cgpa_calculator/ux/views/onboarding/login_page.dart';
 import 'package:cgpa_calculator/ux/views/onboarding/walk_through_screen.dart';
 import 'package:cgpa_calculator/ux/views/splash_screen.dart';
 import 'package:flutter/material.dart';
@@ -17,7 +18,9 @@ class MyCGPAApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: AppStrings.appName,
-      theme: AppTheme.appTheme,
+      theme: AppTheme.lightThemeData,
+      darkTheme: AppTheme.darkThemeData,
+      themeMode: ThemeMode.system,
       navigatorKey: Navigation.navigatorKey,
       scrollBehavior: const MaterialScrollBehavior().copyWith(
         dragDevices: {
@@ -53,7 +56,7 @@ class _EntryPageState extends State<EntryPage> {
       } else {
       Navigation.navigateToScreenAndClearAllPrevious(
         context: context,
-        screen: const WalkThroughScreen(),
+        screen: const LoginPage(),
       );
       }
     });

@@ -20,80 +20,84 @@ class GpaTrajectory extends StatelessWidget {
         final data = result.data;
         if (data == null) return const SizedBox.shrink();
 
-        final hasData = data.semesters.isNotEmpty;
-        if (!hasData) return const SizedBox.shrink();
+        // final hasData = data.semesters.isNotEmpty;
+        // if (!hasData) return const SizedBox.shrink();
 
         return Padding(
           padding:
               const EdgeInsets.only(left: 16, top: 16, right: 16, bottom: 8),
-          child: Container(
-            width: double.infinity,
-            decoration: BoxDecoration(
-              color: AppColors.cardBackground,
-              borderRadius: BorderRadius.circular(24),
-              border: Border.all(color: Colors.grey.shade900, width: 0.5),
-            ),
-            child: Column(
-              children: [
-                Padding(
-                  padding: const EdgeInsets.all(24),
-                  child: Row(
-                    children: [
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              'GPA Trajectory',
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .titleMedium
-                                  ?.copyWith(fontWeight: FontWeight.bold),
-                            ),
-                            Text(
-                              '8 semesters',
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .titleSmall
-                                  ?.copyWith(
-                                    color: AppColors.textGrey,
-                                  ),
-                            ),
-                          ],
+          child: Material(
+            elevation: 2,
+            color: Theme.of(context).brightness == Brightness.dark
+                ? AppColors.cardBackground
+                : Colors.white,
+            borderRadius: BorderRadius.circular(32),
+            child: SizedBox(
+              width: double.infinity,
+              child: Column(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(24),
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                'GPA Trajectory',
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .titleMedium
+                                    ?.copyWith(fontWeight: FontWeight.bold),
+                              ),
+                              Text(
+                                '8 semesters',
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .titleSmall
+                                    ?.copyWith(
+                                      color: AppColors.textGrey,
+                                    ),
+                              ),
+                            ],
+                          ),
                         ),
-                      ),
-                      Container(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 16, vertical: 4),
-                        decoration: BoxDecoration(
-                          color: AppColors.dark,
-                          borderRadius: BorderRadius.circular(12),
+                        Container(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 16, vertical: 4),
+                          decoration: BoxDecoration(
+                            color:
+                                Theme.of(context).brightness == Brightness.dark
+                                    ? AppColors.dark
+                                    : AppColors.field2,
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              const StatusDot(),
+                              Text(
+                                'Live'.toUpperCase(),
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .bodyMedium
+                                    ?.copyWith(
+                                      fontWeight: FontWeight.w600,
+                                    ),
+                              ),
+                            ],
+                          ),
                         ),
-                        child: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            const StatusDot(),
-                            Text(
-                              'Live'.toUpperCase(),
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .bodyMedium
-                                  ?.copyWith(
-                                    color: Colors.white70,
-                                    fontWeight: FontWeight.w500,
-                                  ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
-                ),
-                GpaTrajectoryData(
-                  semesters: data.semesters,
-                  totalSemesters: data.selectedDuration.semesterCount,
-                ),
-              ],
+                  GpaTrajectoryData(
+                    semesters: data.semesters,
+                    totalSemesters: data.selectedDuration.semesterCount,
+                  ),
+                ],
+              ),
             ),
           ),
         );

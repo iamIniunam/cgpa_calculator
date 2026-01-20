@@ -1,19 +1,15 @@
 import 'package:cgpa_calculator/ux/navigation/navigation.dart';
+import 'package:cgpa_calculator/ux/shared/components/dev_credits.dart';
 import 'package:cgpa_calculator/ux/shared/components/slide_indicator.dart';
 import 'package:cgpa_calculator/ux/shared/models/ui_models.dart';
-import 'package:cgpa_calculator/ux/shared/resources/app_colors.dart';
 import 'package:cgpa_calculator/ux/shared/resources/app_dialogs.dart';
 import 'package:cgpa_calculator/ux/shared/resources/app_strings.dart';
-import 'package:cgpa_calculator/ux/shared/resources/app_theme.dart';
-import 'package:cgpa_calculator/ux/shared/utils/utils.dart';
 import 'package:cgpa_calculator/ux/shared/components/app_buttons.dart';
 import 'package:cgpa_calculator/ux/shared/view_models/auth_view_model.dart';
 import 'package:cgpa_calculator/ux/views/onboarding/components/grading_system_view.dart';
 import 'package:cgpa_calculator/ux/views/onboarding/components/login_view.dart';
 import 'package:cgpa_calculator/ux/views/onboarding/components/summary_view.dart';
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
 class WalkThroughScreen extends StatefulWidget {
@@ -106,98 +102,62 @@ class _WalkThroughScreenState extends State<WalkThroughScreen> {
       onTap: () {
         FocusScope.of(context).unfocus();
       },
-      child: AnnotatedRegion<SystemUiOverlayStyle>(
-        value: const SystemUiOverlayStyle(
-          statusBarColor: AppColors.transparent,
+      child: Scaffold(
+        appBar: AppBar(
+          title: SlideIndicator(
+            selectedIndex: _currentPage,
+            slideList: slideList,
+          ),
+          automaticallyImplyLeading: false,
+          leading: _currentPage > 0
+              ? IconButton(
+                  icon: const Icon(Icons.arrow_back_rounded),
+                  onPressed: () {
+                    _pageController.previousPage(
+                      duration: _slideAnimationDuration,
+                      curve: Curves.easeInOut,
+                    );
+                  },
+                )
+              : null,
         ),
-        child: Scaffold(
-          appBar: AppBar(
-            title: SlideIndicator(
-              selectedIndex: _currentPage,
-              slideList: slideList,
+        body: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Expanded(
+              child: PageView.builder(
+                padEnds: false,
+                scrollDirection: Axis.horizontal,
+                controller: _pageController,
+                onPageChanged: (value) {
+                  setState(() {
+                    _currentPage = value;
+                  });
+                },
+                itemBuilder: (context, index) {
+                  return slideList[index];
+                },
+              ),
             ),
-            automaticallyImplyLeading: false,
-            leading: _currentPage > 0
-                ? IconButton(
-                    icon: const Icon(Icons.arrow_back_rounded),
-                    onPressed: () {
-                      _pageController.previousPage(
-                        duration: _slideAnimationDuration,
-                        curve: Curves.easeInOut,
-                      );
-                    },
-                  )
-                : null,
-            systemOverlayStyle: const SystemUiOverlayStyle(
-              statusBarColor: AppColors.transparent,
-              statusBarIconBrightness: Brightness.light,
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+              child: PrimaryButton(
+                onTap: () {
+                  if (_currentPage == 2) {
+                    handleLogin();
+                  } else {
+                    FocusScope.of(context).unfocus();
+                    _pageController.nextPage(
+                      duration: _slideAnimationDuration,
+                      curve: Curves.easeInOut,
+                    );
+                  }
+                },
+                child: const Text(AppStrings.continueText),
+              ),
             ),
-          ),
-          body: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Expanded(
-                child: PageView.builder(
-                  padEnds: false,
-                  scrollDirection: Axis.horizontal,
-                  controller: _pageController,
-                  onPageChanged: (value) {
-                    setState(() {
-                      _currentPage = value;
-                    });
-                  },
-                  itemBuilder: (context, index) {
-                    return slideList[index];
-                  },
-                ),
-              ),
-              Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
-                child: PrimaryButton(
-                  onTap: () {
-                    if (_currentPage == 2) {
-                      handleLogin();
-                    } else {
-                      FocusScope.of(context).unfocus();
-                      _pageController.nextPage(
-                        duration: _slideAnimationDuration,
-                        curve: Curves.easeInOut,
-                      );
-                    }
-                  },
-                  child: const Text(AppStrings.continueText),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(16),
-                child: RichText(
-                  text: TextSpan(
-                    style: const TextStyle(
-                      fontFamily: AppTheme.fontFamily,
-                      fontSize: 13,
-                      color: AppColors.textGrey,
-                    ),
-                    text: 'Built with Flutter & 🤍 by ',
-                    recognizer: TapGestureRecognizer()
-                      ..onTap = () {
-                        Utils.openWebLink(
-                            link: 'https://iniunamid.framer.website');
-                      },
-                    children: const [
-                      TextSpan(
-                        text: 'ID',
-                        style: TextStyle(
-                          color: AppColors.white,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ],
-          ),
+            const DevCredits(),
+          ],
         ),
       ),
     );

@@ -59,13 +59,15 @@ class GradingSystemView extends StatelessWidget {
 class GradeSystemCard extends StatelessWidget {
   const GradeSystemCard({
     super.key,
-    required this.grade,
+    this.grade,
+    this.title,
     required this.gradeName,
     required this.selected,
     required this.onTap,
   });
 
-  final GradingScale grade;
+  final GradingScale? grade;
+  final String? title;
   final String gradeName;
   final bool selected;
   final VoidCallback onTap;
@@ -79,25 +81,38 @@ class GradeSystemCard extends StatelessWidget {
         onTap: onTap,
         child: Container(
           width: double.infinity,
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 18),
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
           decoration: BoxDecoration(
-            color: selected ? AppColors.primaryColor : AppColors.cardBackground,
+            color: selected
+                ? AppColors.primaryColor
+                : Theme.of(context).brightness == Brightness.dark
+                    ? AppColors.cardBackground
+                    : AppColors.field2,
             borderRadius: BorderRadius.circular(16),
           ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                grade.name.toString(),
-                style: Theme.of(context).textTheme.headlineLarge?.copyWith(
-                      color: AppColors.white,
-                      fontWeight: FontWeight.w600,
+                grade?.name.toString() ?? title ?? '',
+                style: Theme.of(context).textTheme.displayMedium?.copyWith(
+                      color:
+                          (Theme.of(context).brightness == Brightness.light &&
+                                  selected)
+                              ? AppColors.white
+                              : (Theme.of(context).brightness == Brightness.dark
+                                  ? AppColors.white
+                                  : AppColors.dark),
                     ),
               ),
               Text(
                 gradeName,
                 style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                      color: AppColors.textGrey,
+                      color:
+                          (Theme.of(context).brightness == Brightness.light &&
+                                  selected)
+                              ? Colors.white70
+                              : AppColors.textGrey,
                     ),
               ),
             ],

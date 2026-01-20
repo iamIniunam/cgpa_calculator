@@ -1,4 +1,6 @@
 import 'package:cgpa_calculator/ux/shared/resources/app_colors.dart';
+import 'package:cgpa_calculator/ux/shared/resources/app_dimens.dart';
+import 'package:cgpa_calculator/ux/shared/resources/app_theme.dart';
 import 'package:flutter/material.dart';
 
 class PrimaryButton extends StatelessWidget {
@@ -42,7 +44,8 @@ class PrimaryButton extends StatelessWidget {
       ),
       textStyle: MaterialStateProperty.all(
         const TextStyle(
-          fontWeight: FontWeight.w600,
+          fontWeight: FontWeight.bold,
+          fontFamily: AppTheme.fontFamily,
           fontSize: 18,
           color: Colors.white,
           letterSpacing: 1,
@@ -50,7 +53,7 @@ class PrimaryButton extends StatelessWidget {
       ),
       shape: MaterialStateProperty.all(
         RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: BorderRadius.circular(AppDimens.dafaultBorderRadius),
           side: const BorderSide(
             color: AppColors.transparent,
           ),

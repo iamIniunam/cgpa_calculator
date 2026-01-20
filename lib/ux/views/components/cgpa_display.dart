@@ -21,59 +21,80 @@ class CGPADisplay extends StatelessWidget {
         width: double.infinity,
         padding: const EdgeInsets.all(24),
         decoration: BoxDecoration(
-          color: AppColors.cardBackground,
-          borderRadius: BorderRadius.circular(24),
-          border: Border.all(color: Colors.grey.shade900, width: 0.5),
+          borderRadius: BorderRadius.circular(32),
+          gradient: const LinearGradient(
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+            colors: [
+              AppColors.primaryColorGradientDark,
+              AppColors.primaryColorGradientLight,
+            ],
+          ),
         ),
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
-              cgpa.toStringAsFixed(2),
-              style: const TextStyle(
-                fontSize: 60,
-                fontWeight: FontWeight.bold,
-                color: AppColors.primaryColorLight,
-              ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  'Current CGPA'.toUpperCase(),
+                  style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                        color: AppColors.textGrey2,
+                        letterSpacing: 1.2,
+                      ),
+                ),
+                Container(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+                  decoration: BoxDecoration(
+                    color: AppColors.textGrey2.withOpacity(0.5),
+                    borderRadius: BorderRadius.circular(18),
+                    border: Border.all(
+                      color: AppColors.greyInputBorder,
+                      width: 0.3,
+                    ),
+                  ),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Icon(
+                        Icons.trending_up_rounded,
+                        color: AppColors.white.withOpacity(0.7),
+                        size: 20,
+                      ),
+                      const SizedBox(width: 8),
+                      Text(
+                        '+0.12',
+                        style:
+                            Theme.of(context).textTheme.titleMedium?.copyWith(
+                                  color: AppColors.white,
+                                ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
             ),
-            Text(
-              'out of ${maxGrade.toStringAsFixed(1)}',
-              style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                    color: Colors.grey.shade600,
-                  ),
-            ),
-            const SizedBox(height: 8),
-            Text(
-              'Cumulative GPA'.toUpperCase(),
-              style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                    color: AppColors.textGrey,
-                    letterSpacing: 1.2,
-                  ),
-            ),
-            const SizedBox(height: 16),
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-              decoration: BoxDecoration(
-                color: AppColors.dark,
-                borderRadius: BorderRadius.circular(18),
-              ),
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Icon(
-                    Icons.school_rounded,
-                    color: AppColors.textGrey.withOpacity(0.7),
-                    size: 20,
-                  ),
-                  const SizedBox(width: 8),
-                  Text(
-                    'Total Credits: $totalCredits',
-                    style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                          color: AppColors.textGrey,
-                        ),
-                  ),
-                ],
-              ),
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.end,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              textBaseline: TextBaseline.alphabetic,
+              children: [
+                Text(
+                  cgpa.toStringAsFixed(2),
+                  style: Theme.of(context).textTheme.headlineLarge?.copyWith(
+                        color: AppColors.white,
+                        fontSize: 60,
+                      ),
+                ),
+                Text(
+                  'Target: ${maxGrade.toStringAsFixed(1)}',
+                  style: Theme.of(context).textTheme.titleSmall?.copyWith(
+                        color: AppColors.textGrey2,
+                      ),
+                ),
+              ],
             ),
           ],
         ),

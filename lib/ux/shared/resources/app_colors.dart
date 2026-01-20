@@ -5,8 +5,11 @@ class AppColors {
   // static const Color primaryColorColor.fromRGBO(21, 101, 192, 1)C0);
   static const Color primaryColor = Color(0xFF294F56);
   static const Color primaryColorLight = Color(0xFF6FBAC9);
+  static const Color primaryColorGradientLight = Color(0xFF057C8A);
+  static const Color primaryColorGradientDark = Color(0xFF00616C);
   static const Color primary500 = Color(0xFF0D47A1);
-  static const Color scaffoldBackground = Color(0xFF303030);
+  static const Color scaffoldBackground2 = Color(0xFF303030);
+  static const Color scaffoldBackground = Color(0xFF19202E);
   static const Color disabledButton = Color(0xFF4A4A4A);
   static const Color transparent = Colors.transparent;
   static const Color white = Colors.white;
@@ -25,8 +28,16 @@ class AppColors {
   static const Color dark = Color(0xFF19191A);
   static const Color dark2 = Color(0xFF2E3B3D);
   static const Color textGrey = Color(0xFFA0A0A0);
+  static const Color textGrey2 = Color(0xFFE6F0F1);
   static const Color textFieldBackground = Color(0xFF2E3B3D);
   static const Color cardBackground = Color(0xFF2C3033);
+
+  static const Color purple = Color(0xFF4F46E5);
+  static const Color purpleBackground = Color(0xFFEEF2FF);
+  static const Color green = Color(0xFF059669);
+  static const Color greenBackground = Color(0xFFECFDF5);
+  static const Color blue = Color(0xFF3B82F6);
+  static const Color blueBackground = Color(0xFFE0F2FE);
 }
 
 //This converts Hexadecimal color code to RGB or RGBA

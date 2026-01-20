@@ -1,5 +1,6 @@
 import 'package:cgpa_calculator/ux/shared/resources/app_colors.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 class AppTheme {
   AppTheme._();
@@ -59,6 +60,229 @@ class AppTheme {
       ),
       tileColor: Colors.transparent,
       contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 0),
+    ),
+  );
+
+  static ThemeData lightThemeData = ThemeData(
+    brightness: Brightness.light,
+    fontFamily: fontFamily,
+    useMaterial3: false,
+    primarySwatch: Colors.blueGrey,
+    primaryColor: AppColors.white,
+    scaffoldBackgroundColor: AppColors.white,
+    colorScheme: const ColorScheme.light(
+      background: Colors.white,
+    ),
+    pageTransitionsTheme: const PageTransitionsTheme(
+      builders: {
+        TargetPlatform.android: CupertinoPageTransitionsBuilder(),
+        TargetPlatform.iOS: CupertinoPageTransitionsBuilder(),
+      },
+    ),
+    appBarTheme: const AppBarTheme(
+      backgroundColor: AppColors.white,
+      foregroundColor: AppColors.dark,
+      centerTitle: true,
+      elevation: 0,
+      titleTextStyle: TextStyle(
+        fontFamily: fontFamily,
+        fontSize: 20,
+        fontWeight: FontWeight.w600,
+        color: AppColors.dark,
+      ),
+      iconTheme: IconThemeData(color: AppColors.dark),
+      systemOverlayStyle: SystemUiOverlayStyle(
+        statusBarColor: AppColors.transparent,
+        statusBarIconBrightness: Brightness.dark,
+        statusBarBrightness: Brightness.dark,
+        systemNavigationBarIconBrightness: Brightness.dark,
+      ),
+    ),
+    textTheme: const TextTheme(
+      displayLarge: TextStyle(
+        color: AppColors.dark,
+        fontFamily: fontFamily,
+        fontSize: 34,
+        fontWeight: FontWeight.bold,
+      ),
+      displayMedium: TextStyle(
+        color: AppColors.dark,
+        fontFamily: fontFamily,
+        fontSize: 28,
+        fontWeight: FontWeight.bold,
+      ),
+      displaySmall: TextStyle(
+        color: AppColors.dark,
+        fontFamily: fontFamily,
+        fontSize: 22,
+        fontWeight: FontWeight.bold,
+      ),
+      headlineLarge: TextStyle(
+        color: AppColors.dark,
+        fontFamily: fontFamily,
+        fontSize: 20,
+        fontWeight: FontWeight.bold,
+      ),
+      headlineMedium: TextStyle(
+        color: AppColors.dark,
+        fontFamily: fontFamily,
+        fontSize: 18,
+        fontWeight: FontWeight.bold,
+      ),
+      headlineSmall: TextStyle(
+        color: AppColors.dark,
+        fontFamily: fontFamily,
+        fontSize: 16,
+        fontWeight: FontWeight.bold,
+      ),
+      titleLarge: TextStyle(
+        color: AppColors.dark,
+        fontFamily: fontFamily,
+        fontSize: 14,
+        fontWeight: FontWeight.bold,
+      ),
+      titleMedium: TextStyle(
+        color: AppColors.dark,
+        fontFamily: fontFamily,
+        fontSize: 13,
+        fontWeight: FontWeight.bold,
+      ),
+      titleSmall: TextStyle(
+        color: AppColors.dark,
+        fontFamily: fontFamily,
+        fontSize: 12,
+        fontWeight: FontWeight.bold,
+      ),
+      bodyLarge: TextStyle(
+        color: AppColors.dark,
+        fontSize: 14,
+        fontWeight: FontWeight.normal,
+      ),
+      bodyMedium: TextStyle(
+        color: AppColors.dark,
+        fontFamily: fontFamily,
+        fontSize: 13,
+        fontWeight: FontWeight.normal,
+      ),
+      bodySmall: TextStyle(
+        color: AppColors.dark,
+        fontFamily: fontFamily,
+        fontSize: 12,
+        fontWeight: FontWeight.normal,
+      ),
+    ),
+  );
+
+  static ThemeData darkThemeData = ThemeData(
+    brightness: Brightness.dark,
+    fontFamily: fontFamily,
+    useMaterial3: false,
+    primarySwatch: Colors.blueGrey,
+    primaryColor: AppColors.dark,
+    scaffoldBackgroundColor: AppColors.scaffoldBackground,
+    colorScheme: const ColorScheme.dark(
+      background: AppColors.dark,
+      primary: AppColors.dark,
+      secondary: AppColors.dark2,
+    ),
+    pageTransitionsTheme: const PageTransitionsTheme(
+      builders: {
+        TargetPlatform.android: CupertinoPageTransitionsBuilder(),
+        TargetPlatform.iOS: CupertinoPageTransitionsBuilder(),
+      },
+    ),
+    appBarTheme: const AppBarTheme(
+      backgroundColor: AppColors.scaffoldBackground,
+      foregroundColor: AppColors.white,
+      centerTitle: true,
+      elevation: 0,
+      titleTextStyle: TextStyle(
+        fontFamily: fontFamily,
+        fontSize: 20,
+        fontWeight: FontWeight.w600,
+        color: AppColors.white,
+      ),
+      iconTheme: IconThemeData(color: AppColors.white),
+      systemOverlayStyle: SystemUiOverlayStyle(
+        statusBarColor: AppColors.transparent,
+        statusBarIconBrightness: Brightness.light,
+        statusBarBrightness: Brightness.light,
+        systemNavigationBarIconBrightness: Brightness.light,
+      ),
+    ),
+    textTheme: const TextTheme(
+      displayLarge: TextStyle(
+        color: AppColors.white,
+        fontFamily: fontFamily,
+        fontSize: 34,
+        fontWeight: FontWeight.bold,
+      ),
+      displayMedium: TextStyle(
+        color: AppColors.white,
+        fontFamily: fontFamily,
+        fontSize: 28,
+        fontWeight: FontWeight.bold,
+      ),
+      displaySmall: TextStyle(
+        color: AppColors.white,
+        fontFamily: fontFamily,
+        fontSize: 22,
+        fontWeight: FontWeight.bold,
+      ),
+      headlineLarge: TextStyle(
+        color: AppColors.white,
+        fontFamily: fontFamily,
+        fontSize: 20,
+        fontWeight: FontWeight.bold,
+      ),
+      headlineMedium: TextStyle(
+        color: AppColors.white,
+        fontFamily: fontFamily,
+        fontSize: 18,
+        fontWeight: FontWeight.bold,
+      ),
+      headlineSmall: TextStyle(
+        color: AppColors.white,
+        fontFamily: fontFamily,
+        fontSize: 16,
+        fontWeight: FontWeight.bold,
+      ),
+      titleLarge: TextStyle(
+        color: AppColors.white,
+        fontFamily: fontFamily,
+        fontSize: 14,
+        fontWeight: FontWeight.bold,
+      ),
+      titleMedium: TextStyle(
+        color: AppColors.white,
+        fontFamily: fontFamily,
+        fontSize: 13,
+        fontWeight: FontWeight.bold,
+      ),
+      titleSmall: TextStyle(
+        color: AppColors.white,
+        fontFamily: fontFamily,
+        fontSize: 12,
+        fontWeight: FontWeight.bold,
+      ),
+      bodyLarge: TextStyle(
+        color: AppColors.white,
+        fontFamily: fontFamily,
+        fontSize: 14,
+        fontWeight: FontWeight.normal,
+      ),
+      bodyMedium: TextStyle(
+        color: AppColors.white,
+        fontFamily: fontFamily,
+        fontSize: 13,
+        fontWeight: FontWeight.normal,
+      ),
+      bodySmall: TextStyle(
+        color: AppColors.white,
+        fontFamily: fontFamily,
+        fontSize: 12,
+        fontWeight: FontWeight.normal,
+      ),
     ),
   );
 }

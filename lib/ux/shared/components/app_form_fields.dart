@@ -1,4 +1,5 @@
 import 'package:cgpa_calculator/ux/shared/resources/app_colors.dart';
+import 'package:cgpa_calculator/ux/shared/resources/app_dimens.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -132,6 +133,7 @@ class PrimaryTextFormField extends StatelessWidget {
   final InputBorder? disabledBorder;
   final FocusNode? focusNode;
   final Color? fillColor;
+  final Widget? labelTrailing;
 
   const PrimaryTextFormField({
     super.key,
@@ -164,6 +166,7 @@ class PrimaryTextFormField extends StatelessWidget {
     this.disabledBorder,
     this.focusNode,
     this.fillColor,
+    this.labelTrailing,
   });
 
   @override
@@ -178,36 +181,42 @@ class PrimaryTextFormField extends StatelessWidget {
             child: Padding(
               padding: const EdgeInsets.only(bottom: 6),
               child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text(
-                    labelText ?? '',
-                    style: const TextStyle(
-                      color: AppColors.textGrey,
-                      fontSize: 16,
-                      fontWeight: FontWeight.w400,
-                    ),
-                  ),
-                  Visibility(
-                    visible: optional,
-                    child: const Text(
-                      ' (Optional)',
-                      style: TextStyle(
-                        color: Color.fromRGBO(154, 154, 154, 1),
-                        fontSize: 13,
-                        fontWeight: FontWeight.w400,
+                  Row(
+                    children: [
+                      Text(
+                        labelText ?? '',
+                        style: const TextStyle(
+                          color: AppColors.textGrey,
+                          fontSize: 16,
+                          fontWeight: FontWeight.w400,
+                        ),
                       ),
-                    ),
-                  ),
-                  Visibility(
-                    visible: required,
-                    child: const Text(
-                      '*',
-                      style: TextStyle(
-                        color: AppColors.red500,
-                        fontWeight: FontWeight.w500,
+                      Visibility(
+                        visible: optional,
+                        child: const Text(
+                          ' (Optional)',
+                          style: TextStyle(
+                            color: Color.fromRGBO(154, 154, 154, 1),
+                            fontSize: 13,
+                            fontWeight: FontWeight.w400,
+                          ),
+                        ),
                       ),
-                    ),
+                      Visibility(
+                        visible: required,
+                        child: const Text(
+                          '*',
+                          style: TextStyle(
+                            color: AppColors.red500,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
+                  labelTrailing ?? const SizedBox.shrink()
                 ],
               ),
             ),
@@ -229,7 +238,9 @@ class PrimaryTextFormField extends StatelessWidget {
                 filled: true,
                 fillColor: fillColor ??
                     (enabled
-                        ? AppColors.textFieldBackground
+                        ? (Theme.of(context).brightness == Brightness.dark
+                            ? AppColors.textFieldBackground
+                            : AppColors.field2)
                         : AppColors.disabledButton),
                 suffixIcon: Padding(
                   padding: const EdgeInsets.all(14.0),
@@ -247,17 +258,20 @@ class PrimaryTextFormField extends StatelessWidget {
                 ),
                 enabledBorder: enabledBorder ??
                     OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(12),
+                      borderRadius: BorderRadius.circular(AppDimens.dafaultBorderRadius),
                       borderSide: greyedOut
                           ? BorderSide.none
-                          : const BorderSide(
-                              color: AppColors.primaryColor,
+                          : BorderSide(
+                              color: Theme.of(context).brightness ==
+                                      Brightness.dark
+                                  ? AppColors.primaryColor
+                                  : AppColors.grey200,
                               width: 1.2,
                             ),
                     ),
                 disabledBorder: disabledBorder ??
                     OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(12),
+                      borderRadius: BorderRadius.circular(AppDimens.dafaultBorderRadius),
                       borderSide: const BorderSide(
                         color: AppColors.lightFontGrey,
                         width: 1.2,
@@ -265,11 +279,15 @@ class PrimaryTextFormField extends StatelessWidget {
                     ),
                 focusedBorder: focusedBorder ??
                     OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(12),
+                      borderRadius: BorderRadius.circular(AppDimens.dafaultBorderRadius),
                       borderSide: greyedOut
                           ? BorderSide.none
                           : BorderSide(
-                              color: focusedColor ?? AppColors.primaryColor,
+                              color: focusedColor ??
+                                  (Theme.of(context).brightness ==
+                                          Brightness.dark
+                                      ? AppColors.primaryColor
+                                      : AppColors.grey200),
                               width: 1.2,
                             ),
                     ),
@@ -279,7 +297,9 @@ class PrimaryTextFormField extends StatelessWidget {
                       borderSide: greyedOut
                           ? BorderSide.none
                           : const BorderSide(
-                              color: AppColors.borderColor, width: 2.0),
+                              color: AppColors.borderColor,
+                              width: 2.0,
+                            ),
                     ),
               ),
               inputFormatters: inputFormatters,

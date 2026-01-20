@@ -10,7 +10,6 @@ import 'package:cgpa_calculator/ux/shared/view_models/auth_view_model.dart';
 import 'package:cgpa_calculator/ux/shared/view_models/cgpa_view_model.dart';
 import 'package:cgpa_calculator/ux/views/components/delete_course_button.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
 class AddCoursePage extends StatefulWidget {
@@ -98,10 +97,6 @@ class _AddCoursePageState extends State<AddCoursePage> {
       child: Scaffold(
         appBar: AppBar(
           title: const Text('Add Course'),
-          systemOverlayStyle: const SystemUiOverlayStyle(
-            statusBarColor: AppColors.transparent,
-            statusBarIconBrightness: Brightness.light,
-          ),
           actions: isEditMode
               ? [
                   DeleteCourseButton(
