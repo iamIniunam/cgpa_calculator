@@ -1,5 +1,5 @@
 class AppDimens {
   AppDimens._();
 
-  static const double dafaultBorderRadius = 24;
+  static const double defaultBorderRadius = 24;
 }

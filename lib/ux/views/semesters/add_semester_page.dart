@@ -1,6 +1,6 @@
 import 'package:cgpa_calculator/ux/shared/components/app_buttons.dart';
 import 'package:cgpa_calculator/ux/shared/components/app_form_fields.dart';
-import 'package:cgpa_calculator/ux/shared/extensions/extensions.dart';
+import 'package:cgpa_calculator/platform/extensions/extensions.dart';
 import 'package:cgpa_calculator/ux/shared/resources/app_colors.dart';
 import 'package:cgpa_calculator/ux/views/settings/components/settings_group.dart';
 import 'package:cgpa_calculator/ux/views/settings/components/settings_tile.dart';

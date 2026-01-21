@@ -30,13 +30,6 @@ void runAppWithZone() {
           return MultiProvider(
             providers: [
               ChangeNotifierProvider(create: (_) => AuthViewModel()),
-              ChangeNotifierProxyProvider<AuthViewModel, CGPAViewModel>(
-                create: (context) => CGPAViewModel(
-                  authViewModel: context.read<AuthViewModel>(),
-                ),
-                update: (context, authViewModel, previous) =>
-                    previous ?? CGPAViewModel(authViewModel: authViewModel),
-              ),
             ],
             child: const ScholrApp(),
           );
@@ -61,7 +54,7 @@ Future<SharedPreferences> initializeApp() async {
   }
 
   try {
-    await Future.wait([AppDi.init(sharedPreferences: sharedPreferences)]);
+    await Future.wait([AppDI.init(sharedPreferences: sharedPreferences)]);
   } catch (e) {
     if (kDebugMode) {
       print('Error during second services initialization: $e');

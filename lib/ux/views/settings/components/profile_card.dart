@@ -1,7 +1,10 @@
+import 'package:cgpa_calculator/platform/di/dependency_injection.dart';
+import 'package:cgpa_calculator/platform/firebase/auth/models/auth_response.dart';
 import 'package:cgpa_calculator/ux/navigation/navigation.dart';
 import 'package:cgpa_calculator/ux/shared/components/app_material.dart';
 import 'package:cgpa_calculator/ux/shared/resources/app_colors.dart';
 import 'package:cgpa_calculator/ux/shared/resources/app_images.dart';
+import 'package:cgpa_calculator/ux/shared/view_models/auth_view_model.dart';
 import 'package:cgpa_calculator/ux/views/settings/profile_page.dart';
 import 'package:flutter/material.dart';
 
@@ -40,28 +43,32 @@ class ProfileCard extends StatelessWidget {
                 ),
               ),
               const SizedBox(width: 12),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'John Doe',
-                      style: Theme.of(context)
-                          .textTheme
-                          .titleMedium
-                          ?.copyWith(fontSize: 16),
-                    ),
-                    const SizedBox(height: 2),
-                    Text(
-                      'student@university.edu',
-                      style: Theme.of(context)
-                          .textTheme
-                          .titleSmall
-                          ?.copyWith(fontWeight: FontWeight.w300),
-                    ),
-                  ],
-                ),
-              ),
+              ValueListenableBuilder<AppUser?>(
+                  valueListenable: AppDI.getIt<AuthViewModel>().currentUser,
+                  builder: (context, user, _) {
+                    return Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            user?.name ?? '',
+                            style: Theme.of(context)
+                                .textTheme
+                                .titleMedium
+                                ?.copyWith(fontSize: 16),
+                          ),
+                          const SizedBox(height: 2),
+                          Text(
+                            user?.email ?? '',
+                            style: Theme.of(context)
+                                .textTheme
+                                .titleSmall
+                                ?.copyWith(fontWeight: FontWeight.w300),
+                          ),
+                        ],
+                      ),
+                    );
+                  }),
               Padding(
                 padding: const EdgeInsets.only(right: 8),
                 child: Icon(

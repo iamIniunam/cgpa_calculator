@@ -53,7 +53,7 @@ class PrimaryButton extends StatelessWidget {
       ),
       shape: MaterialStateProperty.all(
         RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(AppDimens.dafaultBorderRadius),
+          borderRadius: BorderRadius.circular(AppDimens.defaultBorderRadius),
           side: const BorderSide(
             color: AppColors.transparent,
           ),
@@ -115,27 +115,32 @@ class PrimaryOutlinedButton extends StatelessWidget {
   final Color? overlayColor;
   final bool enabled;
   final EdgeInsets? contentPadding;
+  final double? borderWidth;
 
   const PrimaryOutlinedButton({
     super.key,
     required this.child,
     this.onTap,
-    this.backgroundColor = AppColors.white,
-    this.foregroundColor = AppColors.primary500,
-    this.borderColor = AppColors.primary500,
+    this.backgroundColor = AppColors.transparent,
+    this.foregroundColor = AppColors.primaryColor,
+    this.borderColor = AppColors.primaryColor,
     this.overlayColor,
     this.enabled = true,
     this.contentPadding,
+    this.borderWidth,
   });
 
-  ButtonStyle getStyle() {
+  ButtonStyle getStyle(BuildContext context) {
     return ButtonStyle(
       fixedSize: MaterialStateProperty.all(
-        const Size.fromHeight(45),
+        const Size.fromHeight(55),
       ),
       enableFeedback: true,
-      overlayColor: MaterialStateColor.resolveWith(
-          (states) => overlayColor ?? AppColors.backgroundGrey),
+      overlayColor: MaterialStateColor.resolveWith((states) =>
+          overlayColor ??
+          (Theme.of(context).brightness == Brightness.dark
+              ? AppColors.backgroundGrey.withOpacity(0.11)
+              : AppColors.backgroundGrey)),
       padding: MaterialStateProperty.all(
         contentPadding ??
             const EdgeInsets.symmetric(
@@ -151,10 +156,8 @@ class PrimaryOutlinedButton extends StatelessWidget {
       ),
       shape: MaterialStateProperty.all(
         RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(8),
-          side: BorderSide(
-            color: borderColor,
-          ),
+          borderRadius: BorderRadius.circular(AppDimens.defaultBorderRadius),
+          side: BorderSide(color: borderColor, width: borderWidth ?? 1),
         ),
       ),
       backgroundColor: MaterialStateProperty.resolveWith<Color?>(
@@ -181,7 +184,7 @@ class PrimaryOutlinedButton extends StatelessWidget {
       children: [
         Expanded(
             child: TextButton(
-          style: getStyle(),
+          style: getStyle(context),
           onPressed: enabled
               ? () {
                   onTap?.call();

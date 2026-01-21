@@ -46,80 +46,58 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    final viewModel = Provider.of<CGPAViewModel>(context);
-    final authViewModel = Provider.of<AuthViewModel>(context);
-    return ValueListenableBuilder<UIResult<CGPAData>>(
-      valueListenable: viewModel.cgpaDataResult,
-      builder: (context, result, child) {
-        if (result.isLoading && result.data == null) {
-          return const Scaffold(
-            body: Center(child: CircularProgressIndicator()),
-          );
-        }
-
-        final data = result.data ??
-            CGPAData(
-              semesters: [],
-              cgpa: 0.0,
-              selectedDuration: CourseDuration.fourYears,
-            );
-
-        final maxGrade =
-            GradeCalculator.getMaxGrade(authViewModel.gradingScale);
-        final totalCredits = viewModel.getTotalCredits();
-
-        return ListView(
-          children: [
-            CGPADisplay(
-              cgpa: data.cgpa,
-              maxGrade: maxGrade,
-              totalCredits: totalCredits,
-            ),
-            const GpaTrajectory(),
-            const SizedBox(height: 16),
-            const Padding(
-              padding: EdgeInsets.symmetric(horizontal: 16),
-              child: Column(
+    // final viewModel = Provider.of<CGPAViewModel>(context);
+    // final authViewModel = Provider.of<AuthViewModel>(context);
+    return ListView(
+      children: const [
+        CGPADisplay(
+          cgpa: 3.75,
+          maxGrade: 4.3,
+          totalCredits: 84,
+        ),
+        GpaTrajectory(),
+        SizedBox(height: 16),
+        Padding(
+          padding: EdgeInsets.symmetric(horizontal: 16),
+          child: Column(
+            children: [
+              Row(
                 children: [
-                  Row(
-                    children: [
-                      Expanded(
-                        child: StatsCard(
-                          icon: Icons.school_rounded,
-                          title: 'Total Credits',
-                          value: '84',
-                          iconColor: AppColors.purple,
-                          iconBackgroundColor: AppColors.purpleBackground,
-                        ),
-                      ),
-                      SizedBox(width: 20),
-                      Expanded(
-                        child: StatsCard(
-                          icon: Icons.bar_chart_rounded,
-                          title: 'Highest GPA',
-                          value: '3.90',
-                          iconColor: AppColors.green,
-                          iconBackgroundColor: AppColors.greenBackground,
-                        ),
-                      ),
-                    ],
+                  Expanded(
+                    child: StatsCard(
+                      icon: Icons.school_rounded,
+                      title: 'Total Credits',
+                      value: '84',
+                      iconColor: AppColors.purple,
+                      iconBackgroundColor: AppColors.purpleBackground,
+                    ),
                   ),
-                  SizedBox(height: 20),
-                  StatsCard(
-                    icon: Icons.track_changes_rounded,
-                    title: 'Target',
-                    value: '4.30',
-                    iconColor: AppColors.blue,
-                    iconBackgroundColor: AppColors.blueBackground,
-                    width: double.infinity,
+                  SizedBox(width: 20),
+                  Expanded(
+                    child: StatsCard(
+                      icon: Icons.bar_chart_rounded,
+                      title: 'Highest GPA',
+                      value: '3.90',
+                      iconColor: AppColors.green,
+                      iconBackgroundColor: AppColors.greenBackground,
+                    ),
                   ),
                 ],
               ),
-            ),
-            const SizedBox(height: 110),
-          ],
-        );
-      },
+              SizedBox(height: 20),
+              StatsCard(
+                icon: Icons.track_changes_rounded,
+                title: 'Target',
+                value: '4.30',
+                iconColor: AppColors.blue,
+                iconBackgroundColor: AppColors.blueBackground,
+                width: double.infinity,
+              ),
+            ],
+          ),
+        ),
+        SizedBox(height: 110),
+      ],
     );
   }
 }

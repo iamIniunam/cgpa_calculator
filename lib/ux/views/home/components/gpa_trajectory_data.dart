@@ -17,8 +17,8 @@ class GpaTrajectoryData extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final authViewModel = Provider.of<AuthViewModel>(context);
-    final maxGrade = GradeCalculator.getMaxGrade(authViewModel.gradingScale);
+    // final authViewModel = Provider.of<AuthViewModel>(context);
+    // final maxGrade = GradeCalculator.getMaxGrade(authViewModel.gradingScale);
 
     final List<FlSpot> gpaSpots = [];
 
@@ -72,7 +72,7 @@ class GpaTrajectoryData extends StatelessWidget {
             minX: 1,
             maxX: totalSemesters.toDouble(),
             minY: 0.0,
-            maxY: maxGrade,
+            maxY: 4.0,
             // gridData: FlGridData(
             //   show: true,
             //   drawVerticalLine: false,
@@ -96,7 +96,7 @@ class GpaTrajectoryData extends StatelessWidget {
                 sideTitles: SideTitles(
                   showTitles: true,
                   reservedSize: 35,
-                  interval: maxGrade / 5,
+                  interval: 4.0 / 5,
                   getTitlesWidget: (value, meta) {
                     return Text(
                       value.toStringAsFixed(1),

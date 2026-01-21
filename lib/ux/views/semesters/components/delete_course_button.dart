@@ -8,11 +8,9 @@ import 'package:flutter/material.dart';
 class DeleteCourseButton extends StatelessWidget {
   const DeleteCourseButton({
     super.key,
-    required this.cgpaViewModel,
     required this.widget,
   });
 
-  final CGPAViewModel cgpaViewModel;
   final AddCoursePage widget;
 
   @override
@@ -24,10 +22,6 @@ class DeleteCourseButton extends StatelessWidget {
         borderRadius: BorderRadius.circular(10),
         inkwellBorderRadius: BorderRadius.circular(10),
         onTap: () {
-          cgpaViewModel.removeCourseFromSemester(
-            widget.semesterNumber ?? 0,
-            widget.courseIndex ?? 0,
-          );
           Navigation.back(context: context);
         },
         child: Padding(

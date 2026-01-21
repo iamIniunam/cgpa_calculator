@@ -201,11 +201,11 @@ class AppTheme {
     fontFamily: fontFamily,
     useMaterial3: false,
     primarySwatch: Colors.blueGrey,
-    primaryColor: AppColors.dark,
+    primaryColor: AppColors.primaryColor,
     scaffoldBackgroundColor: AppColors.scaffoldBackground,
     colorScheme: const ColorScheme.dark(
       background: AppColors.dark,
-      primary: AppColors.dark,
+      primary: AppColors.primaryColor,
       secondary: AppColors.dark2,
     ),
     pageTransitionsTheme: const PageTransitionsTheme(

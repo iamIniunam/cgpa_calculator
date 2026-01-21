@@ -1,11 +1,18 @@
 import 'dart:io';
 
 import 'package:cgpa_calculator/platform/di/dependency_injection.dart';
+import 'package:cgpa_calculator/platform/firebase/auth/models/auth_request.dart';
+import 'package:cgpa_calculator/platform/firebase/auth/models/auth_response.dart';
 import 'package:cgpa_calculator/ux/navigation/navigation.dart';
 import 'package:cgpa_calculator/ux/shared/components/app_material.dart';
 import 'package:cgpa_calculator/ux/shared/resources/app_colors.dart';
+import 'package:cgpa_calculator/ux/shared/resources/app_dialogs.dart';
+import 'package:cgpa_calculator/ux/shared/resources/app_theme.dart';
+import 'package:cgpa_calculator/ux/shared/view_models/auth_view_model.dart';
 import 'package:cgpa_calculator/ux/shared/view_models/theme_view_model.dart';
 import 'package:cgpa_calculator/ux/views/onboarding/grading_system_selection_page.dart';
+import 'package:cgpa_calculator/ux/views/onboarding/login_page.dart';
+import 'package:cgpa_calculator/ux/views/settings/components/danger_buttons.dart';
 import 'package:cgpa_calculator/ux/views/settings/components/profile_card.dart';
 import 'package:cgpa_calculator/ux/views/settings/components/settings_group.dart';
 import 'package:cgpa_calculator/ux/views/settings/components/settings_tile.dart';
@@ -21,7 +28,8 @@ class SettingsPage extends StatefulWidget {
 }
 
 class _SettingsPageState extends State<SettingsPage> {
-  final ThemeViewModel themeViewModel = AppDi.getIt<ThemeViewModel>();
+  final ThemeViewModel themeViewModel = AppDI.getIt<ThemeViewModel>();
+  final AuthViewModel authViewModel = AppDI.getIt<AuthViewModel>();
 
   @override
   Widget build(BuildContext context) {
@@ -31,26 +39,31 @@ class _SettingsPageState extends State<SettingsPage> {
         ProfileCard(context: context),
         SettingsGroup(
           settingTiles: [
-            SettingTile(
-              title: 'Grading Scale',
-              icon: Icons.scale_rounded,
-              trailing: Text(
-                '4.3',
-                style: TextStyle(
-                  color: (Theme.of(context).appBarTheme.foregroundColor ??
-                      AppColors.white),
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              isFirst: true,
-              onTap: () {
-                Navigation.navigateToScreen(
-                  context: context,
-                  screen: const GradingSystemSelectionPage(isEditMode: true),
-                );
-              },
-            ),
+            ValueListenableBuilder<AppUser?>(
+                valueListenable: authViewModel.currentUser,
+                builder: (context, user, _) {
+                  return SettingTile(
+                    title: 'Grading Scale',
+                    icon: Icons.scale_rounded,
+                    trailing: Text(
+                      user?.gradingScale.toString() ?? '',
+                      style: TextStyle(
+                        color: (Theme.of(context).appBarTheme.foregroundColor ??
+                            AppColors.white),
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    isFirst: true,
+                    onTap: () {
+                      Navigation.navigateToScreen(
+                        context: context,
+                        screen:
+                            const GradingSystemSelectionPage(isEditMode: true),
+                      );
+                    },
+                  );
+                }),
             SettingTile(
               title: 'Target CGPA',
               icon: Icons.track_changes_rounded,
@@ -117,6 +130,11 @@ class _SettingsPageState extends State<SettingsPage> {
                         : (v) {
                             if (v) {
                               themeViewModel.setThemeMode(AppThemeMode.system);
+                              authViewModel.updateProfile(
+                                UpdateUserProfileRequest(
+                                  themePreference: AppThemeMode.system.name,
+                                ),
+                              );
                             }
                           },
                     activeColor: AppColors.primaryColor,
@@ -150,6 +168,7 @@ class _SettingsPageState extends State<SettingsPage> {
             ),
           ],
         ),
+        const DangerButtons()
       ],
     );
   }
@@ -164,6 +183,13 @@ class _SettingsPageState extends State<SettingsPage> {
       onTap: () {
         themeViewModel.setThemeMode(
           theme == 'Light' ? AppThemeMode.light : AppThemeMode.dark,
+        );
+        authViewModel.updateProfile(
+          UpdateUserProfileRequest(
+            themePreference: theme == 'Light'
+                ? AppThemeMode.light.name
+                : AppThemeMode.dark.name,
+          ),
         );
       },
       child: Container(

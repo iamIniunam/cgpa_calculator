@@ -258,7 +258,7 @@ class PrimaryTextFormField extends StatelessWidget {
                 enabledBorder: enabledBorder ??
                     OutlineInputBorder(
                       borderRadius:
-                          BorderRadius.circular(AppDimens.dafaultBorderRadius),
+                          BorderRadius.circular(AppDimens.defaultBorderRadius),
                       borderSide: greyedOut
                           ? BorderSide.none
                           : BorderSide(
@@ -272,7 +272,7 @@ class PrimaryTextFormField extends StatelessWidget {
                 disabledBorder: disabledBorder ??
                     OutlineInputBorder(
                       borderRadius:
-                          BorderRadius.circular(AppDimens.dafaultBorderRadius),
+                          BorderRadius.circular(AppDimens.defaultBorderRadius),
                       borderSide: const BorderSide(
                         color: AppColors.lightFontGrey,
                         width: 1.2,
@@ -281,7 +281,7 @@ class PrimaryTextFormField extends StatelessWidget {
                 focusedBorder: focusedBorder ??
                     OutlineInputBorder(
                       borderRadius:
-                          BorderRadius.circular(AppDimens.dafaultBorderRadius),
+                          BorderRadius.circular(AppDimens.defaultBorderRadius),
                       borderSide: greyedOut
                           ? BorderSide.none
                           : BorderSide(

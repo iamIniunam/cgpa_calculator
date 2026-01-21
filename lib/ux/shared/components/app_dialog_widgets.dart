@@ -1,4 +1,6 @@
-import 'package:cgpa_calculator/ux/shared/extensions/extensions.dart';
+import 'package:cgpa_calculator/platform/extensions/string_extensions.dart';
+import 'package:cgpa_calculator/ux/navigation/navigation.dart';
+import 'package:cgpa_calculator/ux/shared/components/app_buttons.dart';
 import 'package:cgpa_calculator/ux/shared/models/ui_models.dart';
 import 'package:cgpa_calculator/ux/shared/components/radio_list_tile.dart';
 import 'package:cgpa_calculator/ux/shared/resources/app_colors.dart';
@@ -104,7 +106,7 @@ class AppLoadingDialogWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return AlertDialog(
       shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.all(Radius.circular(16)),
+        borderRadius: BorderRadius.all(Radius.circular(32)),
       ),
       content: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
@@ -136,15 +138,18 @@ class AppLoadingDialogWidget extends StatelessWidget {
 }
 
 class AppSuccessDialogWidget extends StatelessWidget {
-  const AppSuccessDialogWidget({super.key, required this.successText});
+  const AppSuccessDialogWidget(
+      {super.key, required this.successText, this.title, this.onDismiss});
 
   final String successText;
+  final String? title;
+  final VoidCallback? onDismiss;
 
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
       shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.all(Radius.circular(16)),
+        borderRadius: BorderRadius.all(Radius.circular(32)),
       ),
       content: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
@@ -160,6 +165,17 @@ class AppSuccessDialogWidget extends StatelessWidget {
                 size: 40,
               ),
             ),
+            Visibility(
+              visible: title != null,
+              child: Padding(
+                padding: const EdgeInsets.only(top: 15),
+                child: Text(
+                  title ?? '',
+                  textAlign: TextAlign.center,
+                  style: Theme.of(context).textTheme.titleMedium,
+                ),
+              ),
+            ),
             Padding(
               padding: const EdgeInsets.only(top: 15),
               child: Text(
@@ -167,6 +183,19 @@ class AppSuccessDialogWidget extends StatelessWidget {
                 textAlign: TextAlign.center,
                 style: Theme.of(context).textTheme.bodyMedium,
               ),
+            ),
+            const SizedBox(height: 24),
+            PrimaryOutlinedButton(
+              foregroundColor: Theme.of(context).appBarTheme.foregroundColor ??
+                  AppColors.primaryColor,
+              borderColor: Theme.of(context).appBarTheme.foregroundColor ??
+                  AppColors.primaryColor,
+              borderWidth: 0.5,
+              onTap: onDismiss ??
+                  () {
+                    Navigation.back(context: context);
+                  },
+              child: const Text('Okay'),
             ),
           ],
         ),
@@ -184,7 +213,7 @@ class AppErrorDialogWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return AlertDialog(
       shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.all(Radius.circular(16)),
+        borderRadius: BorderRadius.all(Radius.circular(32)),
       ),
       content: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
@@ -207,6 +236,18 @@ class AppErrorDialogWidget extends StatelessWidget {
                 textAlign: TextAlign.center,
                 style: Theme.of(context).textTheme.bodyMedium,
               ),
+            ),
+            const SizedBox(height: 24),
+            PrimaryOutlinedButton(
+              foregroundColor: Theme.of(context).appBarTheme.foregroundColor ??
+                  AppColors.primaryColor,
+              borderColor: Theme.of(context).appBarTheme.foregroundColor ??
+                  AppColors.primaryColor,
+              borderWidth: 0.5,
+              onTap: () {
+                Navigation.back(context: context);
+              },
+              child: const Text('Okay'),
             ),
           ],
         ),

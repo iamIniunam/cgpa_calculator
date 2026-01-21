@@ -1,7 +1,7 @@
 import 'package:cgpa_calculator/ux/navigation/components/custom_bottom_nav.dart';
 import 'package:cgpa_calculator/ux/shared/components/app_bar.dart';
 import 'package:cgpa_calculator/ux/shared/components/bottom_dark_gradient.dart';
-import 'package:cgpa_calculator/ux/shared/extensions/extensions.dart';
+import 'package:cgpa_calculator/platform/extensions/extensions.dart';
 import 'package:cgpa_calculator/ux/views/home/home_page.dart';
 import 'package:cgpa_calculator/ux/views/semesters/semesters_page.dart';
 import 'package:cgpa_calculator/ux/views/settings/settings_page.dart';

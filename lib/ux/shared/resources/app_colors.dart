@@ -43,6 +43,8 @@ class AppColors {
   static Color transparentBackgroundDark = Colors.white.withOpacity(0.11);
   static Color transparentBackgroundLight =
       AppColors.primaryColor.withOpacity(0.1);
+  static Color transparentRed = Colors.red.withOpacity(0.11);
+  static Color transparentRed2 = Colors.red.withOpacity(0.2);
 }
 
 //This converts Hexadecimal color code to RGB or RGBA

@@ -1,4 +1,4 @@
-import 'package:cgpa_calculator/ux/shared/extensions/extensions.dart';
+import 'package:cgpa_calculator/platform/extensions/extensions.dart';
 import 'package:cgpa_calculator/ux/shared/resources/app_colors.dart';
 import 'package:cgpa_calculator/ux/shared/resources/app_images.dart';
 import 'package:cgpa_calculator/ux/shared/resources/app_strings.dart';

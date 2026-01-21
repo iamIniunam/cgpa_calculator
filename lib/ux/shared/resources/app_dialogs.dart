@@ -21,10 +21,16 @@ class AppDialogs {
   }
 
   static Future showSuccessDialog(BuildContext context,
-      {required String successMessage}) {
+      {required String successMessage,
+      String? title,
+      VoidCallback? onDismiss}) {
     return showDialog(
       context: context,
-      builder: (context) => AppSuccessDialogWidget(successText: successMessage),
+      builder: (context) => AppSuccessDialogWidget(
+        successText: successMessage,
+        title: title,
+        onDismiss: onDismiss,
+      ),
     );
   }
 }

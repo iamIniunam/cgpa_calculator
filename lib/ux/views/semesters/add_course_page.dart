@@ -2,13 +2,13 @@ import 'package:cgpa_calculator/ux/navigation/navigation.dart';
 import 'package:cgpa_calculator/ux/shared/components/app_buttons.dart';
 import 'package:cgpa_calculator/ux/shared/components/app_form_fields.dart';
 import 'package:cgpa_calculator/ux/shared/components/app_material.dart';
-import 'package:cgpa_calculator/ux/shared/extensions/extensions.dart';
+import 'package:cgpa_calculator/platform/extensions/extensions.dart';
 import 'package:cgpa_calculator/ux/shared/models/ui_models.dart';
 import 'package:cgpa_calculator/ux/shared/resources/app_colors.dart';
 import 'package:cgpa_calculator/ux/shared/resources/app_dialogs.dart';
 import 'package:cgpa_calculator/ux/shared/view_models/auth_view_model.dart';
 import 'package:cgpa_calculator/ux/shared/view_models/cgpa_view_model.dart';
-import 'package:cgpa_calculator/ux/views/home/components/delete_course_button.dart';
+import 'package:cgpa_calculator/ux/views/semesters/components/delete_course_button.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -39,45 +39,45 @@ class _AddCoursePageState extends State<AddCoursePage> {
   void initState() {
     super.initState();
 
-    if (isEditMode) {
-      courseCodeController =
-          TextEditingController(text: widget.existingCourse?.courseCode);
-      creditHours = widget.existingCourse?.creditHours ?? 0;
+    // if (isEditMode) {
+    //   courseCodeController =
+    //       TextEditingController(text: widget.existingCourse?.courseCode);
+    //   creditHours = widget.existingCourse?.creditHours ?? 0;
 
-      final authViewModel = Provider.of<AuthViewModel>(context, listen: false);
-      final gradeOptions =
-          GradeCalculator.getGradeOptions(authViewModel.gradingScale);
-      selectedGradeIndex = gradeOptions.indexWhere(
-        (option) => option.value == widget.existingCourse?.score,
-      );
-      if (selectedGradeIndex == -1) selectedGradeIndex = 0;
-    } else {
-      courseCodeController = TextEditingController();
-      creditHours = 3;
-      selectedGradeIndex = 0;
-    }
+    //   final authViewModel = Provider.of<AuthViewModel>(context, listen: false);
+    //   final gradeOptions =
+    //       GradeCalculator.getGradeOptions(authViewModel.gradingScale);
+    //   selectedGradeIndex = gradeOptions.indexWhere(
+    //     (option) => option.value == widget.existingCourse?.score,
+    //   );
+    //   if (selectedGradeIndex == -1) selectedGradeIndex = 0;
+    // } else {
+    //   courseCodeController = TextEditingController();
+    //   creditHours = 3;
+    //   selectedGradeIndex = 0;
+    // }
   }
 
-  void saveCourse() {
-    if (courseCodeController.text.trim().isEmpty) {
-      AppDialogs.showErrorDialog(context,
-          errorMessage: 'Please enter a course code');
-      return;
-    }
-    final viewModel = Provider.of<AuthViewModel>(context, listen: false);
-    final gradeOptions =
-        GradeCalculator.getGradeOptions(viewModel.gradingScale);
-    final selectedGrade = gradeOptions[selectedGradeIndex];
+  // void saveCourse() {
+  //   if (courseCodeController.text.trim().isEmpty) {
+  //     AppDialogs.showErrorDialog(context,
+  //         errorMessage: 'Please enter a course code');
+  //     return;
+  //   }
+  //   final viewModel = Provider.of<AuthViewModel>(context, listen: false);
+  //   // final gradeOptions =
+  //       // GradeCalculator.getGradeOptions(viewModel.gradingScale);
+  //   // final selectedGrade = gradeOptions[selectedGradeIndex];
 
-    final courseInput = CourseInput(
-      courseCode: courseCodeController.text.trim(),
-      creditHours: creditHours,
-      grade: selectedGrade.label,
-      score: selectedGrade.value,
-    );
+  //   final courseInput = CourseInput(
+  //     courseCode: courseCodeController.text.trim(),
+  //     creditHours: creditHours,
+  //     grade: selectedGrade.label,
+  //     score: selectedGrade.value,
+  //   );
 
-    Navigation.back(context: context, result: courseInput);
-  }
+  //   Navigation.back(context: context, result: courseInput);
+  // }
 
   @override
   void dispose() {
@@ -87,10 +87,6 @@ class _AddCoursePageState extends State<AddCoursePage> {
 
   @override
   Widget build(BuildContext context) {
-    final viewModel = Provider.of<AuthViewModel>(context);
-    final cgpaViewModel = Provider.of<CGPAViewModel>(context);
-    final gradeOptions =
-        GradeCalculator.getGradeOptions(viewModel.gradingScale);
 
     return GestureDetector(
       onTap: () => FocusScope.of(context).unfocus(),
@@ -100,7 +96,6 @@ class _AddCoursePageState extends State<AddCoursePage> {
           actions: isEditMode
               ? [
                   DeleteCourseButton(
-                    cgpaViewModel: cgpaViewModel,
                     widget: widget,
                   ),
                 ]
@@ -230,7 +225,7 @@ class _AddCoursePageState extends State<AddCoursePage> {
                                       Theme.of(context).textTheme.titleMedium,
                                 ),
                               ),
-                              if (gradeOptions.isNotEmpty)
+                              // if (gradeOptions.isNotEmpty)
                                 Container(
                                   padding: const EdgeInsets.symmetric(
                                       horizontal: 10, vertical: 8),
@@ -245,7 +240,7 @@ class _AddCoursePageState extends State<AddCoursePage> {
                                         color: Colors.white70, width: 0.3),
                                   ),
                                   child: Text(
-                                    gradeOptions[selectedGradeIndex].label,
+                                    'gradeOptions[selectedGradeIndex].label',
                                     style: Theme.of(context)
                                         .textTheme
                                         .titleMedium
@@ -262,12 +257,12 @@ class _AddCoursePageState extends State<AddCoursePage> {
                         SizedBox(
                           height: 74,
                           child: ListView.separated(
-                            itemCount: gradeOptions.length,
+                            itemCount: 5,
                             scrollDirection: Axis.horizontal,
                             separatorBuilder: (context, int index) =>
                                 const SizedBox(width: 10),
                             itemBuilder: (context, int index) {
-                              final option = gradeOptions[index];
+                              // final option = gradeOptions[index];
                               final isSelected = selectedGradeIndex == index;
                               return Column(
                                 children: [
@@ -296,7 +291,7 @@ class _AddCoursePageState extends State<AddCoursePage> {
                                         shape: BoxShape.circle,
                                       ),
                                       child: Text(
-                                        option.label,
+                                        'option.label',
                                         style: Theme.of(context)
                                             .textTheme
                                             .titleMedium
@@ -310,7 +305,7 @@ class _AddCoursePageState extends State<AddCoursePage> {
                                   ),
                                   const SizedBox(height: 4),
                                   Text(
-                                    option.gradePoint,
+                                    'option.gradePoint',
                                     style: Theme.of(context)
                                         .textTheme
                                         .titleMedium
@@ -333,7 +328,7 @@ class _AddCoursePageState extends State<AddCoursePage> {
             Padding(
               padding: const EdgeInsets.all(16),
               child: PrimaryButton(
-                onTap: saveCourse,
+                onTap: () {},
                 child: const Text('Add Course to Semester'),
               ),
             ),

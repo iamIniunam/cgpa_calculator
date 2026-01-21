@@ -1,9 +1,13 @@
+import 'package:cgpa_calculator/platform/di/dependency_injection.dart';
+import 'package:cgpa_calculator/platform/firebase/auth/models/auth_request.dart';
 import 'package:cgpa_calculator/ux/navigation/navigation.dart';
 import 'package:cgpa_calculator/ux/shared/components/app_buttons.dart';
 import 'package:cgpa_calculator/ux/shared/components/app_form_fields.dart';
 import 'package:cgpa_calculator/ux/shared/models/ui_models.dart';
 import 'package:cgpa_calculator/ux/shared/resources/app_colors.dart';
+import 'package:cgpa_calculator/ux/shared/resources/app_dialogs.dart';
 import 'package:cgpa_calculator/ux/shared/resources/app_strings.dart';
+import 'package:cgpa_calculator/ux/shared/view_models/auth_view_model.dart';
 import 'package:cgpa_calculator/ux/views/onboarding/components/grading_system_view.dart';
 import 'package:flutter/material.dart';
 
@@ -19,6 +23,9 @@ class GradingSystemSelectionPage extends StatefulWidget {
 
 class _GradingSystemSelectionPageState
     extends State<GradingSystemSelectionPage> {
+  final AuthViewModel _authViewModel = AppDI.getIt<AuthViewModel>();
+  final TextEditingController institutionController = TextEditingController();
+  final TextEditingController customScaleController = TextEditingController();
   List<GradingScale> gradingScales = GradingScale.values;
   GradingScale? selectedScale = GradingScale.scale43;
 
@@ -30,92 +37,173 @@ class _GradingSystemSelectionPageState
     'Five Point Scale',
   ];
 
+  void handleCompleteProfileResult() {
+    final result = _authViewModel.completeProfileResult.value;
+    if (result.isSuccess) {
+      // AppDialogs.showSuccessDialog(context,
+      //     successMessage: result.message ?? 'Profile updated successfully.');
+      Navigation.navigateToHomePage(context: context);
+    } else if (result.isError) {
+      AppDialogs.showErrorDialog(
+        context,
+        errorMessage:
+            result.message ?? 'Failed to create account. Please try again.',
+      );
+    }
+  }
+
+  void handleUpdateProfileResult() {
+    final result = _authViewModel.updateProfileResult.value;
+    if (result.isSuccess) {
+      Navigation.back(context: context);
+    } else if (result.isError) {
+      AppDialogs.showErrorDialog(
+        context,
+        errorMessage:
+            result.message ?? 'Failed to create account. Please try again.',
+      );
+    }
+  }
+
+  Future<void> handleCompleteProfile() async {
+    FocusScope.of(context).unfocus();
+    final institutionName = institutionController.text.trim();
+    final scale = selectedScale;
+
+    if (!widget.isEditMode && institutionName.isEmpty || scale == null) {
+      AppDialogs.showErrorDialog(
+        context,
+        errorMessage: 'Please fill in all the fields to continue.',
+      );
+      return;
+    }
+
+    AppDialogs.showLoadingDialog(context);
+
+    var completeProfileRequest = CompleteProfileRequest(
+      school: institutionName,
+      gradingScale: scale,
+    );
+
+    var updateProfileRequest =
+        UpdateUserProfileRequest(gradingScale: scale.value);
+
+    if (widget.isEditMode) {
+      await _authViewModel.updateProfile(updateProfileRequest);
+      if (!mounted) return;
+      Navigation.back(context: context);
+      handleUpdateProfileResult();
+    } else {
+      await _authViewModel.completeProfile(completeProfileRequest);
+      if (!mounted) return;
+      Navigation.back(context: context);
+      handleCompleteProfileResult();
+    }
+  }
+
+  @override
+  void dispose() {
+    institutionController.dispose();
+    customScaleController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(),
-      body: Column(
-        children: [
-          Expanded(
-            child: ListView(
-              padding: const EdgeInsets.symmetric(horizontal: 24),
-              children: [
-                Text(
-                  'Institution Name (optional)',
-                  style: Theme.of(context).textTheme.headlineLarge,
-                ),
-                const SizedBox(height: 16),
-                PrimaryTextFormField(
-                  hintText: 'e.g.Accra Institute of Technology',
-                  keyboardType: TextInputType.text,
-                  textInputAction: TextInputAction.done,
-                  onChanged: (value) {},
-                ),
-                const SizedBox(height: 18),
-                Text(
-                  'Grading System',
-                  style: Theme.of(context).textTheme.headlineLarge,
-                ),
-                const SizedBox(height: 2),
-                Text(
-                  'This determines how your CGPA is calculated.',
-                  style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                        color: AppColors.textGrey,
-                        fontSize: 18,
-                        fontWeight: FontWeight.w500,
-                      ),
-                ),
-                const SizedBox(height: 16),
-                ...gradingScales.map(
-                  (grade) => GradeSystemCard(
-                    grade: grade,
-                    gradeName: gradingScaleNames[grade.index],
-                    selected: selectedScale == grade && !scaleNotListed,
+    return GestureDetector(
+      onTap: () => FocusScope.of(context).unfocus(),
+      child: Scaffold(
+        appBar: AppBar(),
+        body: Column(
+          children: [
+            Expanded(
+              child: ListView(
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                children: [
+                  Visibility(
+                    visible: !widget.isEditMode,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Institution Name (optional)',
+                          style: Theme.of(context).textTheme.headlineLarge,
+                        ),
+                        const SizedBox(height: 16),
+                        PrimaryTextFormField(
+                          hintText: 'e.g.Accra Institute of Technology',
+                          keyboardType: TextInputType.text,
+                          textInputAction: TextInputAction.done,
+                          controller: institutionController,
+                          textCapitalization: TextCapitalization.words,
+                          onChanged: (value) {},
+                        ),
+                        const SizedBox(height: 18),
+                      ],
+                    ),
+                  ),
+                  Text(
+                    'Grading System',
+                    style: Theme.of(context).textTheme.headlineLarge,
+                  ),
+                  const SizedBox(height: 2),
+                  Text(
+                    'This determines how your CGPA is calculated.',
+                    style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                          color: AppColors.textGrey,
+                          fontSize: 18,
+                          fontWeight: FontWeight.w500,
+                        ),
+                  ),
+                  const SizedBox(height: 16),
+                  ...gradingScales.map(
+                    (grade) => GradeSystemCard(
+                      grade: grade,
+                      gradeName: gradingScaleNames[grade.index],
+                      selected: selectedScale == grade && !scaleNotListed,
+                      onTap: () {
+                        setState(() {
+                          selectedScale = grade;
+                          scaleNotListed = false;
+                        });
+                      },
+                    ),
+                  ),
+                  GradeSystemCard(
+                    title: 'Custom Scale',
+                    gradeName: 'My scale is not listed',
+                    selected: scaleNotListed,
                     onTap: () {
                       setState(() {
-                        selectedScale = grade;
-                        scaleNotListed = false;
+                        scaleNotListed = !scaleNotListed;
+                        if (scaleNotListed) {
+                          selectedScale = null;
+                        }
                       });
                     },
                   ),
-                ),
-                GradeSystemCard(
-                  title: 'Custom Scale',
-                  gradeName: 'My scale is not listed',
-                  selected: scaleNotListed,
-                  onTap: () {
-                    setState(() {
-                      scaleNotListed = !scaleNotListed;
-                      if (scaleNotListed) {
-                        selectedScale = null;
-                      }
-                    });
-                  },
-                ),
-                Visibility(
-                  visible: scaleNotListed,
-                  child: PrimaryTextFormField(
-                    hintText: 'Enter grade scale',
-                    keyboardType: TextInputType.visiblePassword,
-                    textInputAction: TextInputAction.done,
-                    onChanged: (value) {},
+                  Visibility(
+                    visible: scaleNotListed,
+                    child: PrimaryTextFormField(
+                      hintText: 'Enter grade scale',
+                      keyboardType: TextInputType.visiblePassword,
+                      textInputAction: TextInputAction.done,
+                      controller: customScaleController,
+                      onChanged: (value) {},
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
-            child: PrimaryButton(
-              onTap: () {
-                widget.isEditMode
-                    ? Navigation.back(context: context)
-                    : Navigation.navigateToHomePage(context: context);
-              },
-              child: Text(widget.isEditMode ? 'Save' : AppStrings.continueText),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+              child: PrimaryButton(
+                onTap: handleCompleteProfile,
+                child: Text(widget.isEditMode ? 'Save' : AppStrings.continueText),
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

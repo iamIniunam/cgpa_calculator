@@ -30,7 +30,6 @@ class CourseCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final viewModel = Provider.of<CGPAViewModel>(context, listen: false);
     return Card(
       margin: const EdgeInsets.only(bottom: 0),
       shape: border(context),
@@ -82,16 +81,16 @@ class CourseCard extends StatelessWidget {
             ),
           );
 
-          if (result != null && result is CourseInput) {
-            viewModel.updateCourse(
-              semesterNumber,
-              courseIndex,
-              courseCode: result.courseCode,
-              creditHours: result.creditHours,
-              grade: result.grade,
-              score: result.score,
-            );
-          }
+          // if (result != null && result is CourseInput) {
+          //   viewModel.updateCourse(
+          //     semesterNumber,
+          //     courseIndex,
+          //     courseCode: result.courseCode,
+          //     creditHours: result.creditHours,
+          //     grade: result.grade,
+          //     score: result.score,
+          //   );
+          // }
         },
       ),
     );

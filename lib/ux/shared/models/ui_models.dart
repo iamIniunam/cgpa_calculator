@@ -1,7 +1,10 @@
 enum GradingScale {
-  scale40,
-  scale43,
-  scale50,
+  scale40(4.0),
+  scale43(4.3),
+  scale50(5.0);
+
+  final double value;
+  const GradingScale(this.value);
 }
 
 enum CourseDuration {

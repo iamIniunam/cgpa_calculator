@@ -1,11 +1,15 @@
+import 'package:cgpa_calculator/platform/di/dependency_injection.dart';
+import 'package:cgpa_calculator/platform/firebase/auth/models/auth_request.dart';
 import 'package:cgpa_calculator/ux/navigation/navigation.dart';
 import 'package:cgpa_calculator/ux/shared/components/app_buttons.dart';
 import 'package:cgpa_calculator/ux/shared/components/app_form_fields.dart';
 import 'package:cgpa_calculator/ux/shared/components/app_logo_box.dart';
 import 'package:cgpa_calculator/ux/shared/components/app_material.dart';
 import 'package:cgpa_calculator/ux/shared/resources/app_colors.dart';
+import 'package:cgpa_calculator/ux/shared/resources/app_dialogs.dart';
 import 'package:cgpa_calculator/ux/shared/resources/app_dimens.dart';
 import 'package:cgpa_calculator/ux/shared/resources/app_images.dart';
+import 'package:cgpa_calculator/ux/shared/view_models/auth_view_model.dart';
 import 'package:cgpa_calculator/ux/views/onboarding/forgot_password_page.dart';
 import 'package:cgpa_calculator/ux/views/onboarding/sign_up_page.dart';
 import 'package:flutter/gestures.dart';
@@ -19,6 +23,7 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
+  final AuthViewModel _authViewModel = AppDI.getIt<AuthViewModel>();
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
 
@@ -28,6 +33,43 @@ class _LoginPageState extends State<LoginPage> {
     setState(() {
       isPasswordObscured = !isPasswordObscured;
     });
+  }
+
+  void handleLoginResult() {
+    final result = _authViewModel.loginResult.value;
+    if (result.isSuccess) {
+      Navigation.navigateToHomePage(context: context);
+    } else if (result.isError) {
+      AppDialogs.showErrorDialog(
+        context,
+        errorMessage: result.message ?? 'Login failed. Please try again.',
+      );
+    }
+  }
+
+  Future<void> handleLogin() async {
+    FocusScope.of(context).unfocus();
+    final email = emailController.text.trim();
+    final password = passwordController.text;
+
+    if (email.isEmpty || password.isEmpty) {
+      AppDialogs.showErrorDialog(
+        context,
+        errorMessage: 'Please fill in all the fields to continue.',
+      );
+      return;
+    }
+
+    AppDialogs.showLoadingDialog(context);
+    var request = LoginRequest(
+      email: email,
+      password: password,
+    );
+
+    await _authViewModel.login(request);
+    if (!mounted) return;
+    Navigation.back(context: context);
+    handleLoginResult();
   }
 
   @override
@@ -79,7 +121,7 @@ class _LoginPageState extends State<LoginPage> {
                     PrimaryTextFormField(
                       labelText: 'Password',
                       hintText: '∗∗∗∗∗∗∗∗∗',
-                      obscureText: true,
+                      obscureText: isPasswordObscured,
                       controller: passwordController,
                       keyboardType: TextInputType.visiblePassword,
                       textInputAction: TextInputAction.done,
@@ -121,9 +163,7 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                     const SizedBox(height: 16),
                     PrimaryButton(
-                      onTap: () {
-                        Navigation.navigateToHomePage(context: context);
-                      },
+                      onTap: handleLogin,
                       child: const Text('Sign In'),
                     ),
                   ],
@@ -172,14 +212,14 @@ class _LoginPageState extends State<LoginPage> {
                   const SizedBox(height: 32),
                   AppMaterial(
                     inkwellBorderRadius:
-                        BorderRadius.circular(AppDimens.dafaultBorderRadius),
+                        BorderRadius.circular(AppDimens.defaultBorderRadius),
                     onTap: () {},
                     child: Container(
                       padding: const EdgeInsets.symmetric(
                           horizontal: 16, vertical: 14),
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(
-                            AppDimens.dafaultBorderRadius),
+                            AppDimens.defaultBorderRadius),
                         border: Border.all(
                           color: Theme.of(context).brightness == Brightness.dark
                               ? AppColors.greyInputBorder
