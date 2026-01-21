@@ -1,6 +1,8 @@
+import 'package:cgpa_calculator/ux/navigation/navigation.dart';
 import 'package:cgpa_calculator/ux/shared/components/app_material.dart';
 import 'package:cgpa_calculator/ux/shared/resources/app_colors.dart';
 import 'package:cgpa_calculator/ux/shared/resources/app_images.dart';
+import 'package:cgpa_calculator/ux/views/settings/profile_page.dart';
 import 'package:flutter/material.dart';
 
 class ProfileCard extends StatelessWidget {
@@ -11,7 +13,7 @@ class ProfileCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(bottom: 12),
+      padding: const EdgeInsets.only(bottom: 20),
       child: AppMaterial(
         color: Theme.of(context).brightness == Brightness.dark
             ? AppColors.transparentBackgroundDark
@@ -19,19 +21,21 @@ class ProfileCard extends StatelessWidget {
         borderRadius: BorderRadius.circular(32),
         inkwellBorderRadius: BorderRadius.circular(32),
         onTap: () {
-          // Navigation.navigateToScreen(
-          //     context: context, screen: const EditProfilePage());
+          Navigation.navigateToScreen(
+            context: context,
+            screen: const ProfilePage(),
+          );
         },
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 6),
+          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
           child: Row(
             children: [
               ClipRRect(
-                borderRadius: BorderRadius.circular(16),
+                borderRadius: BorderRadius.circular(30),
                 child: Image(
-                  image: AppImages.appLogo,
-                  height: 58,
-                  width: 58,
+                  image: AppImages.sampleProfileImage,
+                  height: 64,
+                  width: 64,
                   fit: BoxFit.cover,
                 ),
               ),
@@ -58,10 +62,13 @@ class ProfileCard extends StatelessWidget {
                   ],
                 ),
               ),
-              Icon(
-                Icons.chevron_right_rounded,
-                color: Theme.of(context).appBarTheme.foregroundColor,
-                size: 24,
+              Padding(
+                padding: const EdgeInsets.only(right: 8),
+                child: Icon(
+                  Icons.chevron_right_rounded,
+                  color: Theme.of(context).appBarTheme.foregroundColor,
+                  size: 24,
+                ),
               ),
             ],
           ),

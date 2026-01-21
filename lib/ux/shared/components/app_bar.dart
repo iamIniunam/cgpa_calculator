@@ -14,7 +14,7 @@ class HomeAppBar extends StatelessWidget {
       title: Row(
         children: [
           Image(
-            image: AppImages.appLogo3,
+            image: AppImages.appLogo4,
             fit: BoxFit.cover,
             height: 35,
             width: 35,
@@ -35,7 +35,7 @@ class HomeAppBar extends StatelessWidget {
               backgroundColor: Theme.of(context).brightness == Brightness.dark
                   ? AppColors.transparentBackgroundDark
                   : AppColors.transparentBackgroundLight.withOpacity(0.4),
-              child: Image(image: AppImages.appLogo, height: 32, width: 32),
+              backgroundImage: AppImages.sampleProfileImage,
             ),
           ),
         ),

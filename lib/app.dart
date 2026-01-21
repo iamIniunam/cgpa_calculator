@@ -5,7 +5,7 @@ import 'package:cgpa_calculator/ux/navigation/navigation.dart';
 import 'package:cgpa_calculator/ux/shared/resources/app_strings.dart';
 import 'package:cgpa_calculator/ux/shared/resources/app_theme.dart';
 import 'package:cgpa_calculator/ux/shared/view_models/auth_view_model.dart';
-import 'package:cgpa_calculator/ux/view_models/theme_view_model.dart';
+import 'package:cgpa_calculator/ux/shared/view_models/theme_view_model.dart';
 import 'package:cgpa_calculator/ux/views/onboarding/login_page.dart';
 import 'package:cgpa_calculator/ux/views/splash_screen.dart';
 import 'package:flutter/material.dart';

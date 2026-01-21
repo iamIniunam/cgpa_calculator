@@ -1,4 +1,4 @@
-import 'package:cgpa_calculator/ux/view_models/theme_view_model.dart';
+import 'package:cgpa_calculator/ux/shared/view_models/theme_view_model.dart';
 import 'package:get_it/get_it.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 

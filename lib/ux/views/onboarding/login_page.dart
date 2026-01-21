@@ -52,12 +52,10 @@ class _LoginPageState extends State<LoginPage> {
                         width: 48,
                         padding: const EdgeInsets.all(6),
                         decoration: BoxDecoration(
-                          color: Theme.of(context).brightness == Brightness.dark
-                              ? AppColors.cardBackground
-                              : AppColors.field2,
+                          color: AppColors.field2,
                           borderRadius: BorderRadius.circular(12),
                         ),
-                        child: Image(image: AppImages.appLogo3),
+                        child: Image(image: AppImages.appLogo4),
                       ),
                     ),
                     const SizedBox(height: 20),
@@ -99,14 +97,17 @@ class _LoginPageState extends State<LoginPage> {
                       onChanged: (value) {
                         setState(() {});
                       },
-                      suffixWidget: AppMaterial(
-                        inkwellBorderRadius: BorderRadius.circular(8),
-                        onTap: togglePasswordVisibility,
-                        child: Icon(
-                          isPasswordObscured
-                              ? Icons.visibility_off
-                              : Icons.visibility,
-                          color: AppColors.textGrey.withOpacity(0.6),
+                      suffixWidget: Padding(
+                        padding: const EdgeInsets.only(right: 4),
+                        child: AppMaterial(
+                          inkwellBorderRadius: BorderRadius.circular(24),
+                          onTap: togglePasswordVisibility,
+                          child: Icon(
+                            isPasswordObscured
+                                ? Icons.visibility_off
+                                : Icons.visibility,
+                            color: AppColors.textGrey.withOpacity(0.6),
+                          ),
                         ),
                       ),
                       labelTrailing: GestureDetector(

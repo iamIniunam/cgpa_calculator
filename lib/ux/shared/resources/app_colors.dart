@@ -40,8 +40,9 @@ class AppColors {
   static const Color greenBackground = Color(0xFFECFDF5);
   static const Color blue = Color(0xFF3B82F6);
   static const Color blueBackground = Color(0xFFE0F2FE);
-  static  Color transparentBackgroundDark = Colors.white.withOpacity(0.11);
-  static  Color transparentBackgroundLight = AppColors.primaryColor.withOpacity(0.1);
+  static Color transparentBackgroundDark = Colors.white.withOpacity(0.11);
+  static Color transparentBackgroundLight =
+      AppColors.primaryColor.withOpacity(0.1);
 }
 
 //This converts Hexadecimal color code to RGB or RGBA
@@ -86,7 +87,16 @@ class AppGradients {
       Colors.transparent,
       AppColors.black.withOpacity(0.2),
       AppColors.black.withOpacity(0.4),
-      // AppColors.black.withOpacity(0.6),
+    ],
+  );
+
+  static const editImageBackground = LinearGradient(
+    begin: Alignment.bottomLeft,
+    end: Alignment.topRight,
+    colors: [
+      AppColors.black,
+      AppColors.primaryColor,
+      AppColors.primaryColorGradientLight,
     ],
   );
 }

@@ -22,11 +22,11 @@ class SplashScreen extends StatelessWidget {
                     width: 100,
                     padding: const EdgeInsets.all(18),
                     decoration: BoxDecoration(
-                      color: AppColors.cardBackground,
-                      borderRadius: BorderRadius.circular(14),
+                      color: AppColors.grey200,
+                      borderRadius: BorderRadius.circular(24),
                     ),
                     child: Image(
-                      image: AppImages.appLogo3,
+                      image: AppImages.appLogo4,
                       fit: BoxFit.cover,
                     ),
                   ),

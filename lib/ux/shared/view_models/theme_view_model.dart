@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 enum AppThemeMode { system, light, dark }
 
 class ThemeViewModel {
-  // Default to system
   ValueNotifier<AppThemeMode> themeMode =
       ValueNotifier<AppThemeMode>(AppThemeMode.system);
 

@@ -7,7 +7,7 @@ import 'package:cgpa_calculator/ux/shared/components/app_material.dart';
 import 'package:cgpa_calculator/ux/shared/components/bottom_dark_gradient.dart';
 import 'package:cgpa_calculator/ux/shared/extensions/extensions.dart';
 import 'package:cgpa_calculator/ux/shared/resources/app_colors.dart';
-import 'package:cgpa_calculator/ux/view_models/theme_view_model.dart';
+import 'package:cgpa_calculator/ux/shared/view_models/theme_view_model.dart';
 import 'package:cgpa_calculator/ux/views/onboarding/grading_system_selection_page.dart';
 import 'package:cgpa_calculator/ux/views/settings/components/profile_card.dart';
 import 'package:cgpa_calculator/ux/views/settings/components/settings_group.dart';
@@ -36,41 +36,43 @@ class _SettingsPageState extends State<SettingsPage> {
             padding: const EdgeInsets.fromLTRB(16, 16, 16, 74),
             children: [
               ProfileCard(context: context),
-              SettingsGroup(settingTiles: [
-                SettingTile(
-                  title: 'Grading Scale',
-                  icon: Icons.scale_rounded,
-                  trailing: Text(
-                    '4.3',
-                    style: TextStyle(
-                      color: (Theme.of(context).appBarTheme.foregroundColor ??
-                          AppColors.white),
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
+              SettingsGroup(
+                settingTiles: [
+                  SettingTile(
+                    title: 'Grading Scale',
+                    icon: Icons.scale_rounded,
+                    trailing: Text(
+                      '4.3',
+                      style: TextStyle(
+                        color: (Theme.of(context).appBarTheme.foregroundColor ??
+                            AppColors.white),
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
+                    isFirst: true,
+                    onTap: () {
+                      Navigation.navigateToScreen(
+                        context: context,
+                        screen:
+                            const GradingSystemSelectionPage(isEditMode: true),
+                      );
+                    },
                   ),
-                  isFirst: true,
-                  onTap: () {
-                    Navigation.navigateToScreen(
-                      context: context,
-                      screen:
-                          const GradingSystemSelectionPage(isEditMode: true),
-                    );
-                  },
-                ),
-                SettingTile(
-                  title: 'Target CGPA',
-                  icon: Icons.track_changes_rounded,
-                  showDivider: false,
-                  isLast: true,
-                  onTap: () {
-                    Navigation.navigateToScreen(
-                      context: context,
-                      screen: const TargetCGPAPage(),
-                    );
-                  },
-                ),
-              ]),
+                  SettingTile(
+                    title: 'Target CGPA',
+                    icon: Icons.track_changes_rounded,
+                    showDivider: false,
+                    isLast: true,
+                    onTap: () {
+                      Navigation.navigateToScreen(
+                        context: context,
+                        screen: const TargetCGPAPage(),
+                      );
+                    },
+                  ),
+                ],
+              ),
               SettingsGroup(
                 settingTiles: [
                   ValueListenableBuilder<AppThemeMode>(

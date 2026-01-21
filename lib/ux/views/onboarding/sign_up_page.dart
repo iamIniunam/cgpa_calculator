@@ -54,12 +54,10 @@ class _SignUpPageState extends State<SignUpPage> {
                         width: 48,
                         padding: const EdgeInsets.all(6),
                         decoration: BoxDecoration(
-                          color: Theme.of(context).brightness == Brightness.dark
-                              ? AppColors.cardBackground
-                              : AppColors.field2,
+                          color: AppColors.field2,
                           borderRadius: BorderRadius.circular(12),
                         ),
-                        child: Image(image: AppImages.appLogo3),
+                        child: Image(image: AppImages.appLogo4),
                       ),
                     ),
                     const SizedBox(height: 20),

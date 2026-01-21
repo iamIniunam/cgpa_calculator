@@ -244,10 +244,7 @@ class PrimaryTextFormField extends StatelessWidget {
                             ? AppColors.textFieldBackground
                             : AppColors.field2)
                         : AppColors.disabledButton),
-                suffixIcon: Padding(
-                  padding: const EdgeInsets.all(14.0),
-                  child: suffixWidget,
-                ),
+                suffixIcon: suffixWidget,
                 contentPadding: const EdgeInsets.symmetric(
                   horizontal: 16,
                   vertical: 18,
@@ -260,7 +257,8 @@ class PrimaryTextFormField extends StatelessWidget {
                 ),
                 enabledBorder: enabledBorder ??
                     OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(AppDimens.dafaultBorderRadius),
+                      borderRadius:
+                          BorderRadius.circular(AppDimens.dafaultBorderRadius),
                       borderSide: greyedOut
                           ? BorderSide.none
                           : BorderSide(
@@ -273,7 +271,8 @@ class PrimaryTextFormField extends StatelessWidget {
                     ),
                 disabledBorder: disabledBorder ??
                     OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(AppDimens.dafaultBorderRadius),
+                      borderRadius:
+                          BorderRadius.circular(AppDimens.dafaultBorderRadius),
                       borderSide: const BorderSide(
                         color: AppColors.lightFontGrey,
                         width: 1.2,
@@ -281,7 +280,8 @@ class PrimaryTextFormField extends StatelessWidget {
                     ),
                 focusedBorder: focusedBorder ??
                     OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(AppDimens.dafaultBorderRadius),
+                      borderRadius:
+                          BorderRadius.circular(AppDimens.dafaultBorderRadius),
                       borderSide: greyedOut
                           ? BorderSide.none
                           : BorderSide(
