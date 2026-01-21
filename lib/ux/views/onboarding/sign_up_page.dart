@@ -1,6 +1,7 @@
 import 'package:cgpa_calculator/ux/navigation/navigation.dart';
 import 'package:cgpa_calculator/ux/shared/components/app_buttons.dart';
 import 'package:cgpa_calculator/ux/shared/components/app_form_fields.dart';
+import 'package:cgpa_calculator/ux/shared/components/app_logo_box.dart';
 import 'package:cgpa_calculator/ux/shared/components/app_material.dart';
 import 'package:cgpa_calculator/ux/shared/resources/app_colors.dart';
 import 'package:cgpa_calculator/ux/shared/resources/app_dimens.dart';
@@ -47,19 +48,7 @@ class _SignUpPageState extends State<SignUpPage> {
                   padding: const EdgeInsets.symmetric(horizontal: 24),
                   shrinkWrap: true,
                   children: [
-                    Align(
-                      alignment: Alignment.centerLeft,
-                      child: Container(
-                        height: 48,
-                        width: 48,
-                        padding: const EdgeInsets.all(6),
-                        decoration: BoxDecoration(
-                          color: AppColors.field2,
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                        child: Image(image: AppImages.appLogo4),
-                      ),
-                    ),
+                    const AppLogoBox(),
                     const SizedBox(height: 20),
                     Text(
                       'Start tracking your progress.',

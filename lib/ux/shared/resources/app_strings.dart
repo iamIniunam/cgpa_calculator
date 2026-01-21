@@ -1,7 +1,7 @@
 class AppStrings {
   AppStrings._();
 
-  static const appName = 'MyCGPA';
+  static const appName = 'Scholr';
 
   static const whatShouldWeCallYou = 'What should we call you?';
   static const nameHintText = 'e.g. Alex';

@@ -1,6 +1,3 @@
-import 'package:cgpa_calculator/ux/shared/components/app_bar.dart';
-import 'package:cgpa_calculator/ux/shared/components/bottom_dark_gradient.dart';
-import 'package:cgpa_calculator/ux/shared/extensions/extensions.dart';
 import 'package:cgpa_calculator/ux/shared/models/cgpa_data.dart';
 import 'package:cgpa_calculator/ux/shared/models/ui_models.dart';
 import 'package:cgpa_calculator/ux/shared/resources/app_colors.dart';
@@ -71,69 +68,56 @@ class _HomePageState extends State<HomePage> {
             GradeCalculator.getMaxGrade(authViewModel.gradingScale);
         final totalCredits = viewModel.getTotalCredits();
 
-        return GestureDetector(
-          onTap: () => FocusScope.of(context).unfocus(),
-          child: Stack(
-            children: [
-              Scaffold(
-                appBar: const HomeAppBar().asPreferredSize(height: 58),
-                body: ListView(
-                  children: [
-                    CGPADisplay(
-                      cgpa: data.cgpa,
-                      maxGrade: maxGrade,
-                      totalCredits: totalCredits,
-                    ),
-                    const GpaTrajectory(),
-                    const SizedBox(height: 16),
-                    const Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 16),
-                      child: Column(
-                        children: [
-                          Row(
-                            children: [
-                              Expanded(
-                                child: StatsCard(
-                                  icon: Icons.school_rounded,
-                                  title: 'Total Credits',
-                                  value: '84',
-                                  iconColor: AppColors.purple,
-                                  iconBackgroundColor:
-                                      AppColors.purpleBackground,
-                                ),
-                              ),
-                              SizedBox(width: 20),
-                              Expanded(
-                                child: StatsCard(
-                                  icon: Icons.bar_chart_rounded,
-                                  title: 'Highest GPA',
-                                  value: '3.90',
-                                  iconColor: AppColors.green,
-                                  iconBackgroundColor:
-                                      AppColors.greenBackground,
-                                ),
-                              ),
-                            ],
-                          ),
-                          SizedBox(height: 20),
-                          StatsCard(
-                            icon: Icons.track_changes_rounded,
-                            title: 'Target',
-                            value: '4.30',
-                            iconColor: AppColors.blue,
-                            iconBackgroundColor: AppColors.blueBackground,
-                            width: double.infinity,
-                          ),
-                        ],
+        return ListView(
+          children: [
+            CGPADisplay(
+              cgpa: data.cgpa,
+              maxGrade: maxGrade,
+              totalCredits: totalCredits,
+            ),
+            const GpaTrajectory(),
+            const SizedBox(height: 16),
+            const Padding(
+              padding: EdgeInsets.symmetric(horizontal: 16),
+              child: Column(
+                children: [
+                  Row(
+                    children: [
+                      Expanded(
+                        child: StatsCard(
+                          icon: Icons.school_rounded,
+                          title: 'Total Credits',
+                          value: '84',
+                          iconColor: AppColors.purple,
+                          iconBackgroundColor: AppColors.purpleBackground,
+                        ),
                       ),
-                    ),
-                    const SizedBox(height: 110),
-                  ],
-                ),
+                      SizedBox(width: 20),
+                      Expanded(
+                        child: StatsCard(
+                          icon: Icons.bar_chart_rounded,
+                          title: 'Highest GPA',
+                          value: '3.90',
+                          iconColor: AppColors.green,
+                          iconBackgroundColor: AppColors.greenBackground,
+                        ),
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: 20),
+                  StatsCard(
+                    icon: Icons.track_changes_rounded,
+                    title: 'Target',
+                    value: '4.30',
+                    iconColor: AppColors.blue,
+                    iconBackgroundColor: AppColors.blueBackground,
+                    width: double.infinity,
+                  ),
+                ],
               ),
-              const BottomDarkGradient(),
-            ],
-          ),
+            ),
+            const SizedBox(height: 110),
+          ],
         );
       },
     );

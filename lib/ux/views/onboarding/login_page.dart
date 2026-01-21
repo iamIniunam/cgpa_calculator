@@ -1,10 +1,12 @@
 import 'package:cgpa_calculator/ux/navigation/navigation.dart';
 import 'package:cgpa_calculator/ux/shared/components/app_buttons.dart';
 import 'package:cgpa_calculator/ux/shared/components/app_form_fields.dart';
+import 'package:cgpa_calculator/ux/shared/components/app_logo_box.dart';
 import 'package:cgpa_calculator/ux/shared/components/app_material.dart';
 import 'package:cgpa_calculator/ux/shared/resources/app_colors.dart';
 import 'package:cgpa_calculator/ux/shared/resources/app_dimens.dart';
 import 'package:cgpa_calculator/ux/shared/resources/app_images.dart';
+import 'package:cgpa_calculator/ux/views/onboarding/forgot_password_page.dart';
 import 'package:cgpa_calculator/ux/views/onboarding/sign_up_page.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -45,19 +47,7 @@ class _LoginPageState extends State<LoginPage> {
                   padding: const EdgeInsets.symmetric(horizontal: 24),
                   shrinkWrap: true,
                   children: [
-                    Align(
-                      alignment: Alignment.centerLeft,
-                      child: Container(
-                        height: 48,
-                        width: 48,
-                        padding: const EdgeInsets.all(6),
-                        decoration: BoxDecoration(
-                          color: AppColors.field2,
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                        child: Image(image: AppImages.appLogo4),
-                      ),
-                    ),
+                    const AppLogoBox(),
                     const SizedBox(height: 20),
                     Text(
                       'Hello! 👋',
@@ -112,7 +102,10 @@ class _LoginPageState extends State<LoginPage> {
                       ),
                       labelTrailing: GestureDetector(
                         onTap: () {
-                          // Handle forgot password tap
+                          Navigation.navigateToScreen(
+                            context: context,
+                            screen: const ForgotPasswordPage(),
+                          );
                         },
                         child: Text(
                           'Forgot Password?',

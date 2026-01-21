@@ -2,10 +2,7 @@ import 'dart:io';
 
 import 'package:cgpa_calculator/platform/di/dependency_injection.dart';
 import 'package:cgpa_calculator/ux/navigation/navigation.dart';
-import 'package:cgpa_calculator/ux/shared/components/app_bar.dart';
 import 'package:cgpa_calculator/ux/shared/components/app_material.dart';
-import 'package:cgpa_calculator/ux/shared/components/bottom_dark_gradient.dart';
-import 'package:cgpa_calculator/ux/shared/extensions/extensions.dart';
 import 'package:cgpa_calculator/ux/shared/resources/app_colors.dart';
 import 'package:cgpa_calculator/ux/shared/view_models/theme_view_model.dart';
 import 'package:cgpa_calculator/ux/views/onboarding/grading_system_selection_page.dart';
@@ -28,142 +25,131 @@ class _SettingsPageState extends State<SettingsPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
+    return ListView(
+      padding: const EdgeInsets.fromLTRB(16, 16, 16, 74),
       children: [
-        Scaffold(
-          appBar: const HomeAppBar().asPreferredSize(height: 58),
-          body: ListView(
-            padding: const EdgeInsets.fromLTRB(16, 16, 16, 74),
-            children: [
-              ProfileCard(context: context),
-              SettingsGroup(
-                settingTiles: [
-                  SettingTile(
-                    title: 'Grading Scale',
-                    icon: Icons.scale_rounded,
-                    trailing: Text(
-                      '4.3',
-                      style: TextStyle(
-                        color: (Theme.of(context).appBarTheme.foregroundColor ??
-                            AppColors.white),
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    isFirst: true,
-                    onTap: () {
-                      Navigation.navigateToScreen(
-                        context: context,
-                        screen:
-                            const GradingSystemSelectionPage(isEditMode: true),
-                      );
-                    },
-                  ),
-                  SettingTile(
-                    title: 'Target CGPA',
-                    icon: Icons.track_changes_rounded,
-                    showDivider: false,
-                    isLast: true,
-                    onTap: () {
-                      Navigation.navigateToScreen(
-                        context: context,
-                        screen: const TargetCGPAPage(),
-                      );
-                    },
-                  ),
-                ],
+        ProfileCard(context: context),
+        SettingsGroup(
+          settingTiles: [
+            SettingTile(
+              title: 'Grading Scale',
+              icon: Icons.scale_rounded,
+              trailing: Text(
+                '4.3',
+                style: TextStyle(
+                  color: (Theme.of(context).appBarTheme.foregroundColor ??
+                      AppColors.white),
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
-              SettingsGroup(
-                settingTiles: [
-                  ValueListenableBuilder<AppThemeMode>(
-                    valueListenable: themeViewModel.themeMode,
-                    builder: (context, mode, _) {
-                      return SettingTile(
-                        title: 'Appearance',
-                        icon: mode == AppThemeMode.light
-                            ? Icons.wb_sunny_rounded
-                            : Icons.nights_stay_rounded,
-                        trailing: Container(
-                          padding: const EdgeInsets.all(4),
-                          decoration: BoxDecoration(
-                            color:
-                                Theme.of(context).brightness == Brightness.dark
-                                    ? AppColors.transparentBackgroundDark
-                                    : AppColors.primaryColor.withOpacity(0.4),
-                            borderRadius: BorderRadius.circular(20),
-                          ),
-                          child: Row(
-                            children: [
-                              themeToggleWidget(
-                                context: context,
-                                theme: 'Light',
-                                isActive: themeViewModel.isLightActive(context),
-                              ),
-                              themeToggleWidget(
-                                context: context,
-                                theme: 'Dark',
-                                isActive: themeViewModel.isDarkActive(context),
-                              ),
-                            ],
-                          ),
-                        ),
-                        dense: true,
-                      );
-                    },
-                  ),
-                  ValueListenableBuilder<AppThemeMode>(
-                    valueListenable: themeViewModel.themeMode,
-                    builder: (context, mode, _) {
-                      return SettingTile(
-                        title: 'Use System Theme',
-                        icon: Platform.isAndroid
-                            ? Icons.phone_android_rounded
-                            : Icons.phone_iphone_rounded,
-                        trailing: CupertinoSwitch(
-                          value: mode == AppThemeMode.system,
-                          onChanged: mode == AppThemeMode.system
-                              ? null
-                              : (v) {
-                                  if (v) {
-                                    themeViewModel
-                                        .setThemeMode(AppThemeMode.system);
-                                  }
-                                },
-                          activeColor: AppColors.primaryColor,
-                        ),
-                        dense: true,
-                        showDivider: false,
-                      );
-                    },
-                  ),
-                ],
-              ),
-              SettingsGroup(
-                settingTiles: [
-                  SettingTile(
-                    title: 'FAQ',
-                    icon: Icons.help_outline_rounded,
-                    isFirst: true,
-                    onTap: () {},
-                  ),
-                  SettingTile(
-                    title: 'Terms of service',
-                    icon: Icons.privacy_tip_outlined,
-                    onTap: () {},
-                  ),
-                  SettingTile(
-                    title: 'User policy',
-                    icon: Icons.info_outline_rounded,
-                    showDivider: false,
-                    isLast: true,
-                    onTap: () {},
-                  ),
-                ],
-              ),
-            ],
-          ),
+              isFirst: true,
+              onTap: () {
+                Navigation.navigateToScreen(
+                  context: context,
+                  screen: const GradingSystemSelectionPage(isEditMode: true),
+                );
+              },
+            ),
+            SettingTile(
+              title: 'Target CGPA',
+              icon: Icons.track_changes_rounded,
+              showDivider: false,
+              isLast: true,
+              onTap: () {
+                Navigation.navigateToScreen(
+                  context: context,
+                  screen: const TargetCGPAPage(),
+                );
+              },
+            ),
+          ],
         ),
-        const BottomDarkGradient(),
+        SettingsGroup(
+          settingTiles: [
+            ValueListenableBuilder<AppThemeMode>(
+              valueListenable: themeViewModel.themeMode,
+              builder: (context, mode, _) {
+                return SettingTile(
+                  title: 'Appearance',
+                  icon: mode == AppThemeMode.light
+                      ? Icons.wb_sunny_rounded
+                      : Icons.nights_stay_rounded,
+                  trailing: Container(
+                    padding: const EdgeInsets.all(4),
+                    decoration: BoxDecoration(
+                      color: Theme.of(context).brightness == Brightness.dark
+                          ? AppColors.transparentBackgroundDark
+                          : AppColors.primaryColor.withOpacity(0.4),
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                    child: Row(
+                      children: [
+                        themeToggleWidget(
+                          context: context,
+                          theme: 'Light',
+                          isActive: themeViewModel.isLightActive(context),
+                        ),
+                        themeToggleWidget(
+                          context: context,
+                          theme: 'Dark',
+                          isActive: themeViewModel.isDarkActive(context),
+                        ),
+                      ],
+                    ),
+                  ),
+                  dense: true,
+                );
+              },
+            ),
+            ValueListenableBuilder<AppThemeMode>(
+              valueListenable: themeViewModel.themeMode,
+              builder: (context, mode, _) {
+                return SettingTile(
+                  title: 'Use System Theme',
+                  icon: Platform.isAndroid
+                      ? Icons.phone_android_rounded
+                      : Icons.phone_iphone_rounded,
+                  trailing: CupertinoSwitch(
+                    value: mode == AppThemeMode.system,
+                    onChanged: mode == AppThemeMode.system
+                        ? null
+                        : (v) {
+                            if (v) {
+                              themeViewModel.setThemeMode(AppThemeMode.system);
+                            }
+                          },
+                    activeColor: AppColors.primaryColor,
+                  ),
+                  dense: true,
+                  showDivider: false,
+                );
+              },
+            ),
+          ],
+        ),
+        SettingsGroup(
+          settingTiles: [
+            SettingTile(
+              title: 'FAQ',
+              icon: Icons.help_outline_rounded,
+              isFirst: true,
+              onTap: () {},
+            ),
+            SettingTile(
+              title: 'Terms of service',
+              icon: Icons.privacy_tip_outlined,
+              onTap: () {},
+            ),
+            SettingTile(
+              title: 'User policy',
+              icon: Icons.info_outline_rounded,
+              showDivider: false,
+              isLast: true,
+              onTap: () {},
+            ),
+          ],
+        ),
       ],
     );
   }
