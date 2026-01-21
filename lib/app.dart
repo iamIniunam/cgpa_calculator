@@ -11,8 +11,8 @@ import 'package:cgpa_calculator/ux/views/splash_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class MyCGPAApp extends StatelessWidget {
-  const MyCGPAApp({super.key});
+class ScholrApp extends StatelessWidget {
+  const ScholrApp({super.key});
 
   ThemeViewModel get themeViewModel => AppDi.getIt<ThemeViewModel>();
 

@@ -2,18 +2,34 @@ import 'package:cgpa_calculator/ux/shared/components/app_logo_box.dart';
 import 'package:cgpa_calculator/ux/shared/resources/app_colors.dart';
 import 'package:cgpa_calculator/ux/shared/resources/app_strings.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 class SplashScreen extends StatelessWidget {
   const SplashScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(toolbarHeight: 0),
-      body: Center(
-        child: Column(
-          children: [
-            Expanded(
+    return Directionality(
+      textDirection: TextDirection.ltr,
+      child: AnnotatedRegion<SystemUiOverlayStyle>(
+        value: SystemUiOverlayStyle(
+          statusBarColor: AppColors.transparent,
+          statusBarIconBrightness:
+              Theme.of(context).brightness == Brightness.dark
+                  ? Brightness.light
+                  : Brightness.dark,
+          systemNavigationBarColor: Theme.of(context).scaffoldBackgroundColor,
+          systemNavigationBarIconBrightness:
+              Theme.of(context).brightness == Brightness.dark
+                  ? Brightness.light
+                  : Brightness.dark,
+        ),
+        child: Material(
+          color: Theme.of(context).scaffoldBackgroundColor,
+          child: SizedBox(
+            height: double.infinity,
+            width: double.infinity,
+            child: Center(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -38,35 +54,37 @@ class SplashScreen extends StatelessWidget {
                 ],
               ),
             ),
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 32),
-              child: Column(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 80, vertical: 12),
-                    child: LinearProgressIndicator(
-                      backgroundColor: Theme.of(context).dividerColor,
-                      valueColor: AlwaysStoppedAnimation<Color>(
-                        Theme.of(context).primaryColor,
-                      ),
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                  ),
-                  Text(
-                    'Loading Resources...'.toUpperCase(),
-                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                          color: AppColors.textGrey,
-                          fontSize: 12,
-                          letterSpacing: 1.2,
-                        ),
-                  ),
-                ],
-              ),
-            ),
-          ],
+          ),
         ),
       ),
     );
   }
 }
+
+
+          // Padding(
+          //   padding: const EdgeInsets.symmetric(vertical: 32),
+          //   child: Column(
+          //     children: [
+          //       Padding(
+          //         padding: const EdgeInsets.symmetric(
+          //             horizontal: 80, vertical: 12),
+          //         child: LinearProgressIndicator(
+          //           backgroundColor: Theme.of(context).dividerColor,
+          //           valueColor: AlwaysStoppedAnimation<Color>(
+          //             Theme.of(context).primaryColor,
+          //           ),
+          //           borderRadius: BorderRadius.circular(12),
+          //         ),
+          //       ),
+          //       Text(
+          //         'Loading Resources...'.toUpperCase(),
+          //         style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+          //               color: AppColors.textGrey,
+          //               fontSize: 12,
+          //               letterSpacing: 1.2,
+          //             ),
+          //       ),
+          //     ],
+          //   ),
+          // ),
