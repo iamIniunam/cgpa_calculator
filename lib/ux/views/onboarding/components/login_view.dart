@@ -32,7 +32,7 @@ class _LoginViewState extends State<LoginView> {
               borderRadius: BorderRadius.circular(12),
             ),
             child: Image(
-              image: AppImages.appLogo3,
+              image: AppImages.appLogo,
               fit: BoxFit.cover,
             ),
           ),

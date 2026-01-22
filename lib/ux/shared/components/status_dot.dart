@@ -12,8 +12,10 @@ class StatusDot extends StatelessWidget {
       child: Container(
         width: 8,
         height: 8,
-        decoration: const BoxDecoration(
-          color: AppColors.primaryColorLight,
+        decoration: BoxDecoration(
+          color: Theme.of(context).brightness == Brightness.dark
+              ? AppColors.primaryColorLight
+              : AppColors.primaryColor,
           shape: BoxShape.circle,
         ),
       )

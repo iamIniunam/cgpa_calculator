@@ -1,6 +1,9 @@
 class AppConstants {
   AppConstants._();
 
+  static const String userIdKey = 'user.id';
+  static const String themeKey = 'theme.mode';
+
   static const String userKey = 'user.data';
   static const String isLoggedInKey = 'is.logged.in';
 

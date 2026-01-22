@@ -2,11 +2,14 @@ import 'package:flutter/material.dart';
 
 class AppColors {
   AppColors._();
-  // static const Color primaryColorColor.fromRGBO(21, 101, 192, 1)C0);
-  static const Color primaryColor = Color(0xFF294F56);
+  // static const Color primaryColor = Color(0xFF294F56);
+  static const Color primaryColor = Color(0xFF00606B);
   static const Color primaryColorLight = Color(0xFF6FBAC9);
+  static const Color primaryColorGradientLight = Color(0xFF057C8A);
+  static const Color primaryColorGradientDark = Color(0xFF00616C);
   static const Color primary500 = Color(0xFF0D47A1);
-  static const Color scaffoldBackground = Color(0xFF303030);
+  static const Color scaffoldBackground2 = Color(0xFF303030);
+  static const Color scaffoldBackground = Color(0xFF19202E);
   static const Color disabledButton = Color(0xFF4A4A4A);
   static const Color transparent = Colors.transparent;
   static const Color white = Colors.white;
@@ -20,13 +23,38 @@ class AppColors {
   static const Color borderColor = Color(0xFFEAEAEA);
   static const Color grey200 = Color(0xFFE8E8E8);
   static const Color grey300 = Color(0xFF9D9D9D);
+  static const Color grey400 = Color(0xFF707070);
   static const Color disabledBorder = Color(0xFF616161);
 
   static const Color dark = Color(0xFF19191A);
   static const Color dark2 = Color(0xFF2E3B3D);
+  static const Color grey = Color(0xFF94A3B8);
   static const Color textGrey = Color(0xFFA0A0A0);
+  static const Color textGrey2 = Color(0xFFE6F0F1);
   static const Color textFieldBackground = Color(0xFF2E3B3D);
   static const Color cardBackground = Color(0xFF2C3033);
+
+  static const Color purple = Color(0xFF4F46E5);
+  static const Color purpleLight = Color(0xFFC7D2FE);
+  static const Color purpleBackground = Color(0xFFEEF2FF);
+  static const Color green = Color(0xFF059669);
+  static const Color greenLight = Color(0xFFA7F3D0);
+  static const Color greenBackground = Color(0xFFECFDF5);
+  static const Color blue = Color(0xFF3B82F6);
+  static const Color blueLight = Color(0xFFBFDBFE);
+  static const Color blueBackground = Color(0xFFE0F2FE);
+  static const Color red = Color(0xFFDC2626);
+  static const Color redLight = Color(0xFFFECACA);
+  static const Color redBackground = Color(0xFFFEF2F2);
+  static const Color orange = Color(0xFFF59E0B);
+  static const Color orangeLight = Color(0xFFFDE68A);
+  static const Color orangeBackground = Color(0xFFFFFBEB);
+
+  static Color transparentBackgroundDark = Colors.white.withOpacity(0.11);
+  static Color transparentBackgroundLight =
+      AppColors.primaryColor.withOpacity(0.1);
+  static Color transparentRed = Colors.red.withOpacity(0.11);
+  static Color transparentRed2 = Colors.red.withOpacity(0.2);
 }
 
 //This converts Hexadecimal color code to RGB or RGBA
@@ -40,4 +68,47 @@ class HexColor extends Color {
   }
 
   HexColor(final String hexColor) : super(_getColorFromHex(hexColor));
+}
+
+class AppGradients {
+  AppGradients._();
+
+  static LinearGradient primaryGradientDark = LinearGradient(
+    begin: Alignment.topLeft,
+    end: Alignment.bottomRight,
+    colors: [
+      AppColors.primaryColorGradientDark,
+      AppColors.primaryColorGradientDark.withOpacity(0.0),
+    ],
+  );
+
+  static LinearGradient primaryGradientLight = LinearGradient(
+    begin: Alignment.topLeft,
+    end: Alignment.bottomRight,
+    colors: [
+      AppColors.white,
+      AppColors.white,
+      AppColors.white.withOpacity(0.0),
+    ],
+  );
+
+  static LinearGradient bottomBackground = LinearGradient(
+    begin: Alignment.topCenter,
+    end: Alignment.bottomCenter,
+    colors: [
+      Colors.transparent,
+      AppColors.black.withOpacity(0.2),
+      AppColors.black.withOpacity(0.4),
+    ],
+  );
+
+  static const editImageBackground = LinearGradient(
+    begin: Alignment.bottomLeft,
+    end: Alignment.topRight,
+    colors: [
+      AppColors.black,
+      AppColors.primaryColor,
+      AppColors.primaryColorGradientLight,
+    ],
+  );
 }

@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "101914574231",
+    "project_id": "scholr-aef4f",
+    "storage_bucket": "scholr-aef4f.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:101914574231:android:8c04b109da3b2d508b98d2",
+        "android_client_info": {
+          "package_name": "com.iniunamid.scholr"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBVyqIJw-N-s5VeLbaOy2h4NcY3AmuuA_Y"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

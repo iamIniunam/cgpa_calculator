@@ -1,32 +1,55 @@
 import 'dart:ui';
 
+import 'package:cgpa_calculator/platform/di/dependency_injection.dart';
 import 'package:cgpa_calculator/ux/navigation/navigation.dart';
 import 'package:cgpa_calculator/ux/shared/resources/app_strings.dart';
 import 'package:cgpa_calculator/ux/shared/resources/app_theme.dart';
 import 'package:cgpa_calculator/ux/shared/view_models/auth_view_model.dart';
-import 'package:cgpa_calculator/ux/views/onboarding/walk_through_screen.dart';
+import 'package:cgpa_calculator/ux/shared/view_models/theme_view_model.dart';
+import 'package:cgpa_calculator/ux/views/onboarding/grading_system_selection_page.dart';
+import 'package:cgpa_calculator/ux/views/onboarding/login_page.dart';
 import 'package:cgpa_calculator/ux/views/splash_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
-class MyCGPAApp extends StatelessWidget {
-  const MyCGPAApp({super.key});
+class ScholrApp extends StatelessWidget {
+  const ScholrApp({super.key});
+
+  ThemeViewModel get themeViewModel => AppDI.getIt<ThemeViewModel>();
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: AppStrings.appName,
-      theme: AppTheme.appTheme,
-      navigatorKey: Navigation.navigatorKey,
-      scrollBehavior: const MaterialScrollBehavior().copyWith(
-        dragDevices: {
-          PointerDeviceKind.touch,
-          PointerDeviceKind.mouse,
-          PointerDeviceKind.trackpad,
-        },
-      ),
-      home: const EntryPage(),
+    return ValueListenableBuilder<AppThemeMode>(
+      valueListenable: themeViewModel.themeMode,
+      builder: (context, mode, _) {
+        ThemeMode themeMode;
+        switch (mode) {
+          case AppThemeMode.light:
+            themeMode = ThemeMode.light;
+            break;
+          case AppThemeMode.dark:
+            themeMode = ThemeMode.dark;
+            break;
+          case AppThemeMode.system:
+          default:
+            themeMode = ThemeMode.system;
+        }
+        return MaterialApp(
+          debugShowCheckedModeBanner: false,
+          title: AppStrings.appName,
+          theme: AppTheme.lightThemeData,
+          darkTheme: AppTheme.darkThemeData,
+          themeMode: themeMode,
+          navigatorKey: Navigation.navigatorKey,
+          scrollBehavior: const MaterialScrollBehavior().copyWith(
+            dragDevices: {
+              PointerDeviceKind.touch,
+              PointerDeviceKind.mouse,
+              PointerDeviceKind.trackpad,
+            },
+          ),
+          home: const EntryPage(),
+        );
+      },
     );
   }
 }
@@ -39,22 +62,48 @@ class EntryPage extends StatefulWidget {
 }
 
 class _EntryPageState extends State<EntryPage> {
+  final AuthViewModel _authViewModel = AppDI.getIt<AuthViewModel>();
+
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) async {
-      final authViewModel = Provider.of<AuthViewModel>(context, listen: false);
+      await _authViewModel.loadCurrentUser();
 
       await Future.delayed(const Duration(seconds: 2));
       if (!mounted) return;
 
-      if (authViewModel.appUser != null) {
-        Navigation.navigateToHomePage(context: context);
+      if (!_authViewModel.isLoggedIn()) {
+        Navigation.navigateToScreenAndClearAllPrevious(
+          context: context,
+          screen: const LoginPage(),
+        );
+        return;
+      }
+
+      // final user = _authViewModel.currentUser.value;
+      // if (user != null) {
+      //   await _authViewModel.checkUserExists(user.email);
+      //   if (!mounted) return;
+      //   final exists = _authViewModel.checkUserExistsResult.value.data;
+      //   if (exists != true) {
+      //     Navigation.navigateToScreenAndClearAllPrevious(
+      //       context: context,
+      //       screen: const SignUpPage(),
+      //     );
+      //     return;
+      //   }
+      // }
+
+      if (!mounted) return;
+
+      if (!_authViewModel.isProfileComplete()) {
+        Navigation.navigateToScreenAndClearAllPrevious(
+          context: context,
+          screen: const GradingSystemSelectionPage(),
+        );
       } else {
-      Navigation.navigateToScreenAndClearAllPrevious(
-        context: context,
-        screen: const WalkThroughScreen(),
-      );
+        Navigation.navigateToHomePage(context: context);
       }
     });
   }

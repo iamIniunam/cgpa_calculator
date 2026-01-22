@@ -1,5 +1,5 @@
+import 'package:cgpa_calculator/ux/navigation/navigation_host_page.dart';
 import 'package:cgpa_calculator/ux/shared/utils/utils.dart';
-import 'package:cgpa_calculator/ux/views/home_page.dart';
 import 'package:flutter/material.dart';
 
 class Navigation {
@@ -49,7 +49,7 @@ class Navigation {
     return Navigator.pushAndRemoveUntil(
       context,
       MaterialPageRoute(
-        builder: (BuildContext context) => const HomePage(),
+        builder: (BuildContext context) => const NavigationHostPage(),
       ),
       (route) => false,
     );
