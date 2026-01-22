@@ -1,6 +1,11 @@
+import 'package:cgpa_calculator/platform/di/dependency_injection.dart';
+import 'package:cgpa_calculator/ux/navigation/navigation.dart';
 import 'package:cgpa_calculator/ux/shared/components/app_buttons.dart';
 import 'package:cgpa_calculator/platform/extensions/extensions.dart';
 import 'package:cgpa_calculator/ux/shared/resources/app_colors.dart';
+import 'package:cgpa_calculator/ux/shared/resources/app_dialogs.dart';
+import 'package:cgpa_calculator/ux/shared/view_models/auth_view_model.dart';
+import 'package:cgpa_calculator/ux/views/settings/view_models/cgpa_view_model.dart';
 import 'package:flutter/material.dart';
 
 class TargetCGPAPage extends StatefulWidget {
@@ -11,12 +16,76 @@ class TargetCGPAPage extends StatefulWidget {
 }
 
 class _TargetCGPAPageState extends State<TargetCGPAPage> {
-  double _currentSliderValue = 3.60;
-  final double _minCgpa = 3.25;
-  final double _maxCgpa = 4.30;
+  final CGPAViewModel _cgpaViewModel = AppDI.getIt<CGPAViewModel>();
+  final AuthViewModel _authViewModel = AppDI.getIt<AuthViewModel>();
+
+  late double _currentSliderValue;
+  late double _currentCGPA;
+  late double _minCgpa;
+  late double _maxCgpa;
+
+  // For calculation (you can make these dynamic from user's course data)
+  final int _completedCredits = 60; // Example: completed credits
+  final int _upcomingCredits = 15; // Example: credits for next semester
+
+  @override
+  void initState() {
+    super.initState();
+    initializeValues();
+    _cgpaViewModel.setTargetCGPAResult.addListener(handleSetTargetResult);
+  }
+
+  void initializeValues() {
+    final user = _authViewModel.currentUser.value;
+    final gradingScale = user?.gradingScale ?? 5.0;
+    _currentCGPA = user?.currentCGPA ?? 3.45;
+    _currentSliderValue = user?.targetCGPA ?? 3.60;
+    _minCgpa = gradingScale == 4.0 ? 2.5 : 3.25;
+    _maxCgpa = gradingScale == 4.0 ? 4.0 : 4.30;
+  }
+
+  void handleSetTargetResult() {
+    final result = _cgpaViewModel.setTargetCGPAResult.value;
+    if (result.isLoading) {
+      AppDialogs.showLoadingDialog(context);
+    } else if (result.isSuccess) {
+      Navigation.back(context: context);
+      AppDialogs.showSuccessDialog(context,
+          successMessage: result.message ?? '');
+    } else if (result.isError) {
+      Navigation.back(context: context);
+      AppDialogs.showErrorDialog(context, errorMessage: result.message ?? '');
+    }
+  }
+
+  double calculateRequiredGPA() {
+    return _cgpaViewModel.calculateRequiredSemesterGPA(
+      currentCGPA: _currentCGPA,
+      targetCGPA: _currentSliderValue,
+      completedCredits: _completedCredits,
+      upcomingCredits: _upcomingCredits,
+    );
+  }
+
+  Future<void> handleSetTarget() async {
+    await _cgpaViewModel.setTargetCGPA(
+      currentCGPA: _currentCGPA,
+      targetCGPA: _currentSliderValue,
+    );
+  }
+
+  @override
+  void dispose() {
+    _cgpaViewModel.setTargetCGPAResult.removeListener(handleSetTarget);
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
+    final requiredGPA = calculateRequiredGPA();
+    final isAchievable =
+        requiredGPA <= (_authViewModel.currentUser.value?.gradingScale ?? 5.0);
+
     return GestureDetector(
       onTap: () => FocusScope.of(context).unfocus(),
       child: Scaffold(
@@ -62,7 +131,7 @@ class _TargetCGPAPageState extends State<TargetCGPAPage> {
                             ),
                             const SizedBox(height: 8),
                             Text(
-                              '3.45',
+                              _currentCGPA.toStringAsFixed(2),
                               style: Theme.of(context)
                                   .textTheme
                                   .headlineLarge
@@ -207,7 +276,7 @@ class _TargetCGPAPageState extends State<TargetCGPAPage> {
                         ),
                         const SizedBox(height: 10),
                         Text(
-                          '3.75',
+                          requiredGPA.toStringAsFixed(2),
                           style: Theme.of(context)
                               .textTheme
                               .headlineMedium
@@ -218,7 +287,9 @@ class _TargetCGPAPageState extends State<TargetCGPAPage> {
                         ),
                         const SizedBox(height: 20),
                         Text(
-                          'To reach your target CGPA of ${_currentSliderValue.toStringAsFixed(2)}, you need to achieve a semester GPA of 3.75 in your upcoming semester.',
+                          isAchievable
+                              ? 'To reach your target CGPA of ${_currentSliderValue.toStringAsFixed(2)}, you need to achieve a semester GPA of ${requiredGPA.toStringAsFixed(2)} in your upcoming semester.'
+                              : '⚠️ This target may not be achievable with the current grading scale. The required GPA exceeds the maximum possible grade.',
                           style:
                               Theme.of(context).textTheme.bodyLarge?.copyWith(
                                     color: Theme.of(context).brightness ==
@@ -232,13 +303,47 @@ class _TargetCGPAPageState extends State<TargetCGPAPage> {
                       ],
                     ),
                   ),
+                  const SizedBox(height: 16),
+                  Container(
+                    padding: const EdgeInsets.all(16),
+                    decoration: BoxDecoration(
+                      color: Colors.blue.withOpacity(0.1),
+                      borderRadius: BorderRadius.circular(16),
+                      border: Border.all(
+                        color: Colors.blue.withOpacity(0.3),
+                        width: 1,
+                      ),
+                    ),
+                    child: Row(
+                      children: [
+                        const Icon(
+                          Icons.info_outline,
+                          color: Colors.blue,
+                          size: 24,
+                        ),
+                        const SizedBox(width: 12),
+                        Expanded(
+                          child: Text(
+                            'This calculation assumes $_completedCredits completed credits and $_upcomingCredits upcoming credits.',
+                            style: Theme.of(context)
+                                .textTheme
+                                .bodyMedium
+                                ?.copyWith(
+                                  color: Colors.blue,
+                                ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
                 ],
               ),
             ),
+            // TODO: disable button after target is set and matches current
             Padding(
               padding: const EdgeInsets.all(16),
               child: PrimaryButton(
-                onTap: () {},
+                onTap: handleSetTarget,
                 child: const Text('Set target CGPA'),
               ),
             ),

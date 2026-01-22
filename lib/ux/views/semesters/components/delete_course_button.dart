@@ -1,7 +1,6 @@
 import 'package:cgpa_calculator/ux/navigation/navigation.dart';
 import 'package:cgpa_calculator/ux/shared/components/app_material.dart';
 import 'package:cgpa_calculator/ux/shared/resources/app_colors.dart';
-import 'package:cgpa_calculator/ux/shared/view_models/cgpa_view_model.dart';
 import 'package:cgpa_calculator/ux/views/semesters/add_course_page.dart';
 import 'package:flutter/material.dart';
 

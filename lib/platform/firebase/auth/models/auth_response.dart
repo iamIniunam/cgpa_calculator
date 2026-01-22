@@ -36,8 +36,8 @@ class AppUser implements Serializable {
         gradingScale: json['gradingScale']?.toDouble(),
         profileComplete: json['profileComplete'] ?? false,
         themePreference: json['themePreference'] ?? 'system',
-        targetCGPA: json['targetCGPA']?.toDouble(),
-        currentCGPA: json['currentCGPA']?.toDouble(),
+        targetCGPA: json['targetCGPA'] ?? 0.0,
+        currentCGPA: json['currentCGPA'] ?? 0.0,
         createdAt: json['createdAt'] is String
             ? DateTime.parse(json['createdAt'])
             : (json['createdAt'] is Timestamp

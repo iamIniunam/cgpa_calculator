@@ -11,18 +11,48 @@ class BottomDarkGradient extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Positioned(
-      bottom: 0,
       left: 0,
       right: 0,
-      child: ClipRRect(
-        child: BackdropFilter(
-          filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
-          child: Container(
-            height: height ?? 100,
-            decoration: BoxDecoration(
-              gradient: AppGradients.bottomBackground,
+      bottom: 0,
+      child: SizedBox(
+        height: height ?? 50,
+        child: Stack(
+          children: [
+            // Blur layer
+            ClipRect(
+              child: BackdropFilter(
+                filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+                child: Container(
+                  color: AppColors.transparent,
+                ),
+              ),
             ),
-          ),
+
+            // Fade overlay at the TOP only
+            Positioned(
+              left: 0,
+              top: 0,
+              right: 0,
+              height: 300, // controls fade strength
+              child: IgnorePointer(
+                child: Container(
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      begin: Alignment.topCenter,
+                      end: Alignment.bottomCenter,
+                      colors: [
+                        Theme.of(context)
+                            .scaffoldBackgroundColor, // blends into bg
+                        Theme.of(context)
+                            .scaffoldBackgroundColor
+                            .withOpacity(0.0),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ],
         ),
       ),
     );

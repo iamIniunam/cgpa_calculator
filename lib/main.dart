@@ -3,7 +3,6 @@ import 'dart:io';
 
 import 'package:cgpa_calculator/app.dart';
 import 'package:cgpa_calculator/ux/shared/view_models/auth_view_model.dart';
-import 'package:cgpa_calculator/ux/shared/view_models/cgpa_view_model.dart';
 import 'package:cgpa_calculator/ux/views/splash_screen.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';

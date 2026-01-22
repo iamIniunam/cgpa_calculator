@@ -35,11 +35,21 @@ class AppColors {
   static const Color cardBackground = Color(0xFF2C3033);
 
   static const Color purple = Color(0xFF4F46E5);
+  static const Color purpleLight = Color(0xFFC7D2FE);
   static const Color purpleBackground = Color(0xFFEEF2FF);
   static const Color green = Color(0xFF059669);
+  static const Color greenLight = Color(0xFFA7F3D0);
   static const Color greenBackground = Color(0xFFECFDF5);
   static const Color blue = Color(0xFF3B82F6);
+  static const Color blueLight = Color(0xFFBFDBFE);
   static const Color blueBackground = Color(0xFFE0F2FE);
+  static const Color red = Color(0xFFDC2626);
+  static const Color redLight = Color(0xFFFECACA);
+  static const Color redBackground = Color(0xFFFEF2F2);
+  static const Color orange = Color(0xFFF59E0B);
+  static const Color orangeLight = Color(0xFFFDE68A);
+  static const Color orangeBackground = Color(0xFFFFFBEB);
+
   static Color transparentBackgroundDark = Colors.white.withOpacity(0.11);
   static Color transparentBackgroundLight =
       AppColors.primaryColor.withOpacity(0.1);

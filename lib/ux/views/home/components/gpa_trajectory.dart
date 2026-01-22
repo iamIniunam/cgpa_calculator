@@ -2,7 +2,6 @@ import 'package:cgpa_calculator/ux/shared/components/status_dot.dart';
 import 'package:cgpa_calculator/ux/shared/models/cgpa_data.dart';
 import 'package:cgpa_calculator/ux/shared/models/ui_models.dart';
 import 'package:cgpa_calculator/ux/shared/resources/app_colors.dart';
-import 'package:cgpa_calculator/ux/shared/view_models/cgpa_view_model.dart';
 import 'package:cgpa_calculator/ux/views/home/components/gpa_trajectory_data.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
