@@ -1,7 +1,7 @@
 import 'package:cgpa_calculator/ux/navigation/navigation.dart';
 import 'package:cgpa_calculator/ux/shared/resources/app_colors.dart';
 import 'package:cgpa_calculator/ux/shared/resources/app_strings.dart';
-import 'package:cgpa_calculator/ux/views/home/components/semester_card.dart';
+import 'package:cgpa_calculator/ux/views/semesters/components/semester_card.dart';
 import 'package:cgpa_calculator/ux/views/semesters/add_semester_page.dart';
 import 'package:cgpa_calculator/ux/views/semesters/components/semester_stats_card.dart';
 import 'package:flutter/material.dart';

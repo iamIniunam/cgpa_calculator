@@ -13,6 +13,11 @@ extension StringExtension on String {
   }
 }
 
+String targetText(double? target) {
+  if (target == null) return 'Not set';
+  return 'Target: ${target.toStringAsFixed(2)}';
+}
+
 extension NullableStringExtension on String? {
   bool get isNullOrBlank {
     return this?.isBlank ?? true;

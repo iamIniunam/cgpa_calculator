@@ -25,7 +25,7 @@ class _AddSemesterPageState extends State<AddSemesterPage> {
       onTap: () => FocusScope.of(context).unfocus(),
       child: Scaffold(
         appBar: AppBar(
-          title: const Text('Add Course'),
+          title: const Text('Add Semester'),
           // actions: isEditMode
           //     ? [
           //         DeleteCourseButton(

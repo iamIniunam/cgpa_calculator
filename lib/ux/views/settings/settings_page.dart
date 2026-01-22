@@ -6,12 +6,9 @@ import 'package:cgpa_calculator/platform/firebase/auth/models/auth_response.dart
 import 'package:cgpa_calculator/ux/navigation/navigation.dart';
 import 'package:cgpa_calculator/ux/shared/components/app_material.dart';
 import 'package:cgpa_calculator/ux/shared/resources/app_colors.dart';
-import 'package:cgpa_calculator/ux/shared/resources/app_dialogs.dart';
-import 'package:cgpa_calculator/ux/shared/resources/app_theme.dart';
 import 'package:cgpa_calculator/ux/shared/view_models/auth_view_model.dart';
 import 'package:cgpa_calculator/ux/shared/view_models/theme_view_model.dart';
 import 'package:cgpa_calculator/ux/views/onboarding/grading_system_selection_page.dart';
-import 'package:cgpa_calculator/ux/views/onboarding/login_page.dart';
 import 'package:cgpa_calculator/ux/views/settings/components/danger_buttons.dart';
 import 'package:cgpa_calculator/ux/views/settings/components/profile_card.dart';
 import 'package:cgpa_calculator/ux/views/settings/components/settings_group.dart';
@@ -168,7 +165,8 @@ class _SettingsPageState extends State<SettingsPage> {
             ),
           ],
         ),
-        const DangerButtons()
+        const DangerButtons(),
+        const SizedBox(height: 35),
       ],
     );
   }

@@ -1,5 +1,7 @@
 import 'package:cgpa_calculator/platform/di/dependency_injection.dart';
 import 'package:cgpa_calculator/ux/navigation/navigation.dart';
+import 'package:cgpa_calculator/ux/shared/bottom_sheets/app_confirmation_botttom_sheet.dart';
+import 'package:cgpa_calculator/ux/shared/bottom_sheets/show_app_bottom_sheet.dart';
 import 'package:cgpa_calculator/ux/shared/components/app_buttons.dart';
 import 'package:cgpa_calculator/platform/extensions/extensions.dart';
 import 'package:cgpa_calculator/ux/shared/resources/app_colors.dart';
@@ -343,7 +345,20 @@ class _TargetCGPAPageState extends State<TargetCGPAPage> {
             Padding(
               padding: const EdgeInsets.all(16),
               child: PrimaryButton(
-                onTap: handleSetTarget,
+                onTap: () async {
+                  bool res = await showAppBottomSheet(
+                    context: context,
+                    showCloseButton: false,
+                    child: const AppConfirmationBotttomSheet(
+                      text:
+                          'Are you sure you want to set this as your target CGPA?',
+                      title: 'Confirm Target CGPA',
+                    ),
+                  );
+                  if (res == true) {
+                    handleSetTarget();
+                  }
+                },
                 child: const Text('Set target CGPA'),
               ),
             ),
