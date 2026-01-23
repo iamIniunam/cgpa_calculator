@@ -1,4 +1,4 @@
-import 'package:cgpa_calculator/platform/data_source/persistence/preference_manager.dart';
+import 'package:cgpa_calculator/platform/persistence/preference_manager.dart';
 import 'package:cgpa_calculator/platform/di/dependency_injection.dart';
 import 'package:cgpa_calculator/ux/shared/resources/app_constants.dart';
 import 'package:flutter/material.dart';

@@ -1,5 +1,5 @@
-import 'package:cgpa_calculator/platform/data_source/persistence/preference_manager.dart';
-import 'package:cgpa_calculator/platform/data_source/persistence/preference_manager_extensions.dart';
+import 'package:cgpa_calculator/platform/persistence/preference_manager.dart';
+import 'package:cgpa_calculator/platform/persistence/preference_manager_extensions.dart';
 import 'package:cgpa_calculator/platform/di/dependency_injection.dart';
 import 'package:cgpa_calculator/platform/firebase/auth/auth_service.dart';
 import 'package:cgpa_calculator/platform/firebase/auth/models/auth_request.dart';

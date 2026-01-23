@@ -1,4 +1,4 @@
-import 'package:cgpa_calculator/platform/data_source/persistence/preference_manager.dart';
+import 'package:cgpa_calculator/platform/persistence/preference_manager.dart';
 import 'package:cgpa_calculator/ux/shared/view_models/auth_view_model.dart';
 import 'package:cgpa_calculator/ux/shared/view_models/theme_view_model.dart';
 import 'package:cgpa_calculator/ux/views/semesters/view_models/course_view_model.dart';

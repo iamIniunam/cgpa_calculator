@@ -8,7 +8,7 @@ import 'package:cgpa_calculator/ux/shared/resources/app_colors.dart';
 import 'package:cgpa_calculator/ux/shared/resources/app_dialogs.dart';
 import 'package:cgpa_calculator/ux/shared/resources/app_strings.dart';
 import 'package:cgpa_calculator/ux/shared/view_models/auth_view_model.dart';
-import 'package:cgpa_calculator/ux/views/onboarding/components/grading_system_view.dart';
+import 'package:cgpa_calculator/ux/views/onboarding/components/grade_system_card.dart';
 import 'package:flutter/material.dart';
 
 class GradingSystemSelectionPage extends StatefulWidget {
@@ -41,8 +41,8 @@ class _GradingSystemSelectionPageState
   void initState() {
     super.initState();
     if (widget.isEditMode) {
-      final currentScale =
-          _authViewModel.currentUser.value?.gradingScale ?? GradingScale.scale4_3;
+      final currentScale = _authViewModel.currentUser.value?.gradingScale ??
+          GradingScale.scale4_3;
       if (gradingScales.contains(currentScale)) {
         selectedScale = currentScale;
       } else {
