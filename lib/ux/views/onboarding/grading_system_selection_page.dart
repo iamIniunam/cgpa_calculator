@@ -37,6 +37,22 @@ class _GradingSystemSelectionPageState
     'Five Point Scale',
   ];
 
+  @override
+  void initState() {
+    super.initState();
+    if (widget.isEditMode) {
+      final currentScale =
+          _authViewModel.currentUser.value?.gradingScale ?? GradingScale.scale4_3;
+      if (gradingScales.contains(currentScale)) {
+        selectedScale = currentScale;
+      } else {
+        scaleNotListed = true;
+        selectedScale = null;
+        customScaleController.text = currentScale.toString();
+      }
+    }
+  }
+
   void handleCompleteProfileResult() {
     final result = _authViewModel.completeProfileResult.value;
     if (result.isSuccess) {
@@ -171,29 +187,29 @@ class _GradingSystemSelectionPageState
                           },
                         ),
                       ),
-                  GradeSystemCard(
-                    title: 'Custom Scale',
-                    gradeName: 'My scale is not listed',
-                    selected: scaleNotListed,
-                    onTap: () {
-                      setState(() {
-                        scaleNotListed = !scaleNotListed;
-                        if (scaleNotListed) {
-                          selectedScale = null;
-                        }
-                      });
-                    },
-                  ),
-                  Visibility(
-                    visible: scaleNotListed,
-                    child: PrimaryTextFormField(
-                      hintText: 'Enter grade scale',
-                      keyboardType: TextInputType.visiblePassword,
-                      textInputAction: TextInputAction.done,
-                      controller: customScaleController,
-                      onChanged: (value) {},
-                    ),
-                  ),
+                  // GradeSystemCard(
+                  //   title: 'Custom Scale',
+                  //   gradeName: 'My scale is not listed',
+                  //   selected: scaleNotListed,
+                  //   onTap: () {
+                  //     setState(() {
+                  //       scaleNotListed = !scaleNotListed;
+                  //       if (scaleNotListed) {
+                  //         selectedScale = null;
+                  //       }
+                  //     });
+                  //   },
+                  // ),
+                  // Visibility(
+                  //   visible: scaleNotListed,
+                  //   child: PrimaryTextFormField(
+                  //     hintText: 'Enter grade scale',
+                  //     keyboardType: TextInputType.visiblePassword,
+                  //     textInputAction: TextInputAction.done,
+                  //     controller: customScaleController,
+                  //     onChanged: (value) {},
+                  //   ),
+                  // ),
                 ],
               ),
             ),

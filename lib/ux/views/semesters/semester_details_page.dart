@@ -53,14 +53,12 @@ class _SemesterDetailsPageState extends State<SemesterDetailsPage> {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () {
-        FocusScope.of(context).unfocus();
-      },
+      onTap: () => FocusScope.of(context).unfocus(),
       child: Scaffold(
         appBar: AppBar(
           title: Text(semester.semesterName ?? ''),
           actions: semester.status == SemesterStatus.inProgress
-              ? const [CompleteCourseButton()]
+              ? const [CompleteActionButton()]
               : null,
           bottom: const Divider(height: 2).asPreferredSize(height: 1),
         ),

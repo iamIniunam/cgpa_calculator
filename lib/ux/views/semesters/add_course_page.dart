@@ -1,5 +1,7 @@
 import 'package:cgpa_calculator/platform/di/dependency_injection.dart';
 import 'package:cgpa_calculator/ux/navigation/navigation.dart';
+import 'package:cgpa_calculator/ux/shared/bottom_sheets/app_confirmation_botttom_sheet.dart';
+import 'package:cgpa_calculator/ux/shared/bottom_sheets/show_app_bottom_sheet.dart';
 import 'package:cgpa_calculator/ux/shared/components/app_buttons.dart';
 import 'package:cgpa_calculator/ux/shared/components/app_form_fields.dart';
 import 'package:cgpa_calculator/ux/shared/components/app_material.dart';
@@ -15,11 +17,12 @@ import 'package:cgpa_calculator/ux/views/semesters/view_models/course_view_model
 import 'package:flutter/material.dart';
 
 class AddCoursePage extends StatefulWidget {
-  const AddCoursePage(
-      {super.key,
-      required this.semester,
-      this.course,
-      this.isEditMode = false});
+  const AddCoursePage({
+    super.key,
+    required this.semester,
+    this.course,
+    this.isEditMode = false,
+  });
 
   final Semester semester;
   final Course? course;
@@ -113,6 +116,86 @@ class _AddCoursePageState extends State<AddCoursePage> {
     handleAddCourseResult();
   }
 
+  Future<void> updateCourse() async {
+    final courseCode = courseCodeController.text.trim();
+    final gradingScale = authViewModel.currentUser.value?.gradingScale;
+
+    if (courseCode.isEmpty) {
+      AppDialogs.showErrorDialog(
+        context,
+        errorMessage: 'Please enter a valid course code.',
+      );
+      return;
+    }
+
+    final selectedGrade = gradeOptions[selectedGradeIndex].grade;
+    final gradePoint = gradingScale?.getGradePoint(selectedGrade) ?? 0.0;
+
+    AppDialogs.showLoadingDialog(context);
+    final updatedCourse = Course.create(
+      id: widget.course?.id ?? '',
+      courseCode: courseCode,
+      creditUnits: creditHours,
+      score: double.tryParse(scoreController.text.trim()),
+      grade: selectedGrade,
+      gradePoint: gradePoint,
+      createdAt: widget.course?.createdAt,
+    );
+
+    await courseViewModel.updateCourse(
+        semesterId: widget.semester.id ?? '', course: updatedCourse);
+    if (!mounted) return;
+    Navigation.back(context: context);
+    handleUpdateCourseResult();
+  }
+
+  void handleUpdateCourseResult() {
+    final result = courseViewModel.updateCourseResult.value;
+    if (result.isSuccess) {
+      AppDialogs.showSuccessDialog(
+        context,
+        successMessage: result.message ?? 'Course updated successfully.',
+        onDismiss: () {
+          Navigation.back(context: context);
+          Navigation.back(context: context, result: true);
+        },
+      );
+    } else if (result.isError) {
+      AppDialogs.showErrorDialog(
+        context,
+        errorMessage: result.message ?? 'Failed to update course.',
+      );
+    }
+  }
+
+  void deleteCourse() async {
+    AppDialogs.showLoadingDialog(context);
+
+    await courseViewModel.deleteCourse(
+      semesterId: widget.semester.id ?? '',
+      courseId: widget.course?.id ?? '',
+    );
+    if (!context.mounted) return;
+    Navigation.back(context: context);
+    final result = courseViewModel.deleteCourseResult.value;
+    if (result.isSuccess) {
+      AppDialogs.showSuccessDialog(
+        context,
+        successMessage: 'Course deleted successfully',
+        onDismiss: () {
+          Navigation.back(context: context);
+          Navigation.back(context: context);
+        },
+      );
+    } else if (result.isError) {
+      AppDialogs.showErrorDialog(
+        context,
+        errorMessage:
+            result.message ?? 'Failed to delete course. Please try again.',
+      );
+    }
+  }
+
   @override
   void dispose() {
     courseCodeController.dispose();
@@ -129,10 +212,20 @@ class _AddCoursePageState extends State<AddCoursePage> {
           title: Text(isEditMode ? 'Edit Course' : 'Add Course'),
           actions: (isEditMode && widget.course?.id != null)
               ? [
-                  DeleteCourseButton(
-                    courseViewModel: courseViewModel,
-                    semesterId: widget.semester.id ?? '',
-                    courseId: widget.course!.id,
+                  DeleteActionButton(
+                    onTap: () async {
+                      bool res = await showAppBottomSheet(
+                        context: context,
+                        showCloseButton: false,
+                        child: const AppConfirmationBotttomSheet(
+                          text: 'Are you sure you want to delete this course?',
+                          title: 'Delete Course',
+                        ),
+                      );
+                      if (res == true) {
+                        deleteCourse();
+                      }
+                    },
                   ),
                 ]
               : null,
@@ -365,7 +458,7 @@ class _AddCoursePageState extends State<AddCoursePage> {
             Padding(
               padding: const EdgeInsets.all(16),
               child: PrimaryButton(
-                onTap: addCourse,
+                onTap: isEditMode ? updateCourse : addCourse,
                 child: Text(
                     isEditMode ? 'Update Course' : 'Add Course to Semester'),
               ),

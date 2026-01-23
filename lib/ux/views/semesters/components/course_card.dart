@@ -31,7 +31,7 @@ class CourseCard extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Text(
-              course.courseCode.toUpperCase(),
+              course.courseCode?.toUpperCase() ?? '',
               style: Theme.of(context).textTheme.titleMedium?.copyWith(
                     fontWeight: FontWeight.bold,
                   ),
@@ -48,7 +48,7 @@ class CourseCard extends StatelessWidget {
             borderRadius: BorderRadius.circular(12),
           ),
           child: Text(
-            course.grade.toUpperCase(),
+            course.grade?.toUpperCase() ?? '',
             style: Theme.of(context).textTheme.titleMedium?.copyWith(
                   color: AppColors.white,
                   fontSize: 22,

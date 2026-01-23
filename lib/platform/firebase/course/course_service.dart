@@ -91,12 +91,12 @@ class CourseService {
 
       final totalCreditUnits = courses.fold<int>(
         0,
-        (sum, course) => sum + course.creditUnits,
+        (sum, course) => sum + (course.creditUnits ?? 0),
       );
 
       final totalGradePoints = courses.fold<double>(
         0.0,
-        (sum, course) => sum + course.gradePointsScored,
+        (sum, course) => sum + (course.gradePointsScored ?? 0),
       );
 
       final semesterGPA =

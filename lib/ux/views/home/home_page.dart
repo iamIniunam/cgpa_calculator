@@ -25,67 +25,72 @@ class _HomePageState extends State<HomePage> {
     return ListView(
       padding: const EdgeInsets.all(16),
       children: [
-        CGPADisplay(viewModel: semesterViewModel),
-        const SizedBox(height: 16),
         ValueListenableBuilder<List<Semester>>(
           valueListenable: semesterViewModel.semesters,
           builder: (context, semesters, _) {
-            return GpaTrajectory(
-              semesters: semesters,
-              totalSemesters: semesters.length,
-              maxGradePoint:
-                  authViewModel.currentUser.value?.gradingScale?.maxPoint ??
-                      5.0,
+            return Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                CGPADisplay(viewModel: semesterViewModel),
+                const SizedBox(height: 16),
+                GpaTrajectory(
+                  semesters: semesters,
+                  totalSemesters: semesters.length,
+                  maxGradePoint:
+                      authViewModel.currentUser.value?.gradingScale?.maxPoint ??
+                          5.0,
+                ),
+                const SizedBox(height: 8),
+                const ActionButtons(),
+                const SizedBox(height: 20),
+                Padding(
+                  padding: const EdgeInsets.only(left: 8),
+                  child: Text(
+                    'Statistics',
+                    style: Theme.of(context).textTheme.titleLarge,
+                  ),
+                ),
+                const SizedBox(height: 10),
+                Column(
+                  children: [
+                    Row(
+                      children: [
+                        Expanded(
+                          child: StatsCard(
+                            icon: Icons.school_rounded,
+                            title: 'Total Credits',
+                            value: semesterViewModel.totalCredits.toString(),
+                            iconColor: AppColors.purple,
+                            iconBackgroundColor:
+                                Theme.of(context).brightness == Brightness.dark
+                                    ? AppColors.purpleBackground
+                                    : AppColors.purpleLight,
+                          ),
+                        ),
+                        const SizedBox(width: 20),
+                        Expanded(
+                          child: StatsCard(
+                            icon: Icons.track_changes_rounded,
+                            title: 'Total Semesters',
+                            value: semesterViewModel.totalSemesters.toString(),
+                            iconColor: AppColors.green,
+                            iconBackgroundColor:
+                                Theme.of(context).brightness == Brightness.dark
+                                    ? AppColors.greenBackground
+                                    : AppColors.greenLight,
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 20),
+                    StatsCardBig(semesterViewModel: semesterViewModel),
+                  ],
+                ),
+                const SizedBox(height: 95),
+              ],
             );
           },
         ),
-        const SizedBox(height: 8),
-        const ActionButtons(),
-        const SizedBox(height: 20),
-        Padding(
-          padding: const EdgeInsets.only(left: 8),
-          child: Text(
-            'Statistics',
-            style: Theme.of(context).textTheme.titleLarge,
-          ),
-        ),
-        const SizedBox(height: 10),
-        Column(
-          children: [
-            Row(
-              children: [
-                Expanded(
-                  child: StatsCard(
-                    icon: Icons.school_rounded,
-                    title: 'Total Credits',
-                    value: semesterViewModel.totalCredits.toString(),
-                    iconColor: AppColors.purple,
-                    iconBackgroundColor:
-                        Theme.of(context).brightness == Brightness.dark
-                            ? AppColors.purpleBackground
-                            : AppColors.purpleLight,
-                  ),
-                ),
-                const SizedBox(width: 20),
-                Expanded(
-                  child: StatsCard(
-                    icon: Icons.track_changes_rounded,
-                    title: 'Total Semesters',
-                    value: semesterViewModel.totalSemesters.toString(),
-                    iconColor: AppColors.green,
-                    iconBackgroundColor:
-                        Theme.of(context).brightness == Brightness.dark
-                            ? AppColors.greenBackground
-                            : AppColors.greenLight,
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(height: 20),
-            StatsCardBig(semesterViewModel: semesterViewModel),
-          ],
-        ),
-        const SizedBox(height: 95),
       ],
     );
   }

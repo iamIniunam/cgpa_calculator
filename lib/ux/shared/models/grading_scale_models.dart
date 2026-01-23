@@ -1,4 +1,18 @@
+import 'package:flutter/foundation.dart';
+
 class GradeMapping {
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    return other is GradeMapping &&
+        grade == other.grade &&
+        gradePoint == other.gradePoint &&
+        minScore == other.minScore &&
+        maxScore == other.maxScore;
+  }
+
+  @override
+  int get hashCode => Object.hash(grade, gradePoint, minScore, maxScore);
   final String grade;
   final double gradePoint;
   final double minScore;
@@ -31,6 +45,18 @@ class GradeMapping {
 }
 
 class GradingScale {
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    return other is GradingScale &&
+        name == other.name &&
+        maxPoint == other.maxPoint &&
+        listEquals(gradeMappings, other.gradeMappings);
+  }
+
+  @override
+  int get hashCode =>
+      Object.hash(name, maxPoint, Object.hashAll(gradeMappings));
   final String name;
   final double maxPoint;
   final List<GradeMapping> gradeMappings;

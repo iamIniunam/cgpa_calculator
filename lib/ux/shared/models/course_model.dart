@@ -1,24 +1,24 @@
 class Course {
-  final String id;
-  final String courseCode;
-  final int creditUnits;
+  final String? id;
+  final String? courseCode;
+  final int? creditUnits;
   final double? score;
-  final String grade;
-  final double gradePoint;
-  final double gradePointsScored; // creditUnits × gradePoint
-  final DateTime createdAt;
-  final DateTime updatedAt;
+  final String? grade;
+  final double? gradePoint;
+  final double? gradePointsScored; // creditUnits × gradePoint
+  final DateTime? createdAt;
+  final DateTime? updatedAt;
 
   Course({
-    required this.id,
-    required this.courseCode,
-    required this.creditUnits,
+    this.id,
+    this.courseCode,
+    this.creditUnits,
     this.score,
-    required this.grade,
-    required this.gradePoint,
-    required this.gradePointsScored,
-    required this.createdAt,
-    required this.updatedAt,
+    this.grade,
+    this.gradePoint,
+    this.gradePointsScored,
+    this.createdAt,
+    this.updatedAt,
   });
 
   Map<String, dynamic> toMap() {
@@ -30,8 +30,8 @@ class Course {
       'grade': grade,
       'gradePoint': gradePoint,
       'gradePointsScored': gradePointsScored,
-      'createdAt': createdAt.toIso8601String(),
-      'updatedAt': updatedAt.toIso8601String(),
+      'createdAt': createdAt?.toIso8601String(),
+      'updatedAt': updatedAt?.toIso8601String(),
     };
   }
 
@@ -86,6 +86,7 @@ class Course {
     double? score,
     required String grade,
     required double gradePoint,
+    DateTime? createdAt,
   }) {
     final now = DateTime.now();
     final gradePointsScored = creditUnits * gradePoint;
@@ -98,7 +99,7 @@ class Course {
       grade: grade,
       gradePoint: gradePoint,
       gradePointsScored: gradePointsScored,
-      createdAt: now,
+      createdAt: createdAt ?? now,
       updatedAt: now,
     );
   }

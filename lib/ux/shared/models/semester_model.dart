@@ -2,6 +2,18 @@ import 'package:cgpa_calculator/ux/shared/models/course_model.dart';
 
 enum SemesterStatus { inProgress, completed }
 
+extension StatusX on SemesterStatus {
+  String get label {
+    switch (this) {
+      case SemesterStatus.completed:
+        return 'Completed';
+      case SemesterStatus.inProgress:
+        return 'In Progress';
+    }
+  }
+}
+
+
 class Semester {
   final String? id;
   final String? semesterName;
@@ -103,18 +115,19 @@ class Semester {
     double? targetGPA,
     List<Course>? courses,
     SemesterStatus status = SemesterStatus.inProgress,
+    DateTime? createdAt,
   }) {
     final now = DateTime.now();
     final courseList = courses ?? [];
 
     final totalCreditUnits = courseList.fold<int>(
       0,
-      (sum, course) => sum + course.creditUnits,
+      (sum, course) => sum + (course.creditUnits ?? 0),
     );
 
     final totalGradePoints = courseList.fold<double>(
       0.0,
-      (sum, course) => sum + course.gradePointsScored,
+      (sum, course) => sum + (course.gradePointsScored ?? 0),
     );
 
     final semesterGPA =
@@ -130,7 +143,7 @@ class Semester {
       semesterGPA: semesterGPA,
       targetGPA: targetGPA,
       status: status,
-      createdAt: now,
+      createdAt: createdAt ?? now,
       updatedAt: now,
     );
   }
@@ -139,16 +152,17 @@ class Semester {
   Semester recalculate() {
     final totalCreditUnits = courses?.fold<int>(
       0,
-      (sum, course) => sum + course.creditUnits,
+      (sum, course) => sum + (course.creditUnits ?? 0),
     );
 
     final totalGradePoints = courses?.fold<double>(
       0.0,
-      (sum, course) => sum + course.gradePointsScored,
+      (sum, course) => sum + (course.gradePointsScored ?? 0),
     );
 
-    final semesterGPA =
-        (totalCreditUnits ?? 0) > 0 ? (totalGradePoints ?? 0) / (totalCreditUnits ?? 0) : 0.0;
+    final semesterGPA = (totalCreditUnits ?? 0) > 0
+        ? (totalGradePoints ?? 0) / (totalCreditUnits ?? 0)
+        : 0.0;
 
     return copyWith(
       totalCreditUnits: totalCreditUnits,
