@@ -33,6 +33,8 @@ class SemestersPage extends StatelessWidget {
                     (course.courseCode?.toLowerCase().contains(q) ?? false));
                 return matchesSemester || matchesCourse;
               }).toList();
+
+        final reversedList = filtered.reversed.toList();
         return Column(
           children: [
             Padding(
@@ -107,10 +109,10 @@ class SemestersPage extends StatelessWidget {
                           left: 16, right: 16, bottom: 74),
                       children: [
                         ...List.generate(
-                          filtered.length,
+                          reversedList.length,
                           (index) {
                             return SemesterCard(
-                              semester: filtered[index],
+                              semester: reversedList[index],
                             );
                           },
                         ),

@@ -115,6 +115,7 @@ class GradingScale {
         GradeMapping(grade: 'A-', gradePoint: 3.7, minScore: 80, maxScore: 84),
         GradeMapping(grade: 'B+', gradePoint: 3.3, minScore: 75, maxScore: 79),
         GradeMapping(grade: 'B', gradePoint: 3.0, minScore: 70, maxScore: 74),
+        GradeMapping(grade: 'B-', gradePoint: 2.7, minScore: 65, maxScore: 69),
         GradeMapping(grade: 'C+', gradePoint: 2.3, minScore: 65, maxScore: 69),
         GradeMapping(grade: 'C', gradePoint: 2.0, minScore: 60, maxScore: 64),
         GradeMapping(grade: 'D', gradePoint: 1.0, minScore: 50, maxScore: 59),

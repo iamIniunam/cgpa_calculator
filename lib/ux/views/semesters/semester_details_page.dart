@@ -118,16 +118,21 @@ class _SemesterDetailsPageState extends State<SemesterDetailsPage> {
                               style: Theme.of(context).textTheme.titleLarge),
                         ),
                         Expanded(
-                          child: ListView.builder(
-                            padding: const EdgeInsets.all(16),
-                            itemCount: semester.courses?.length,
-                            itemBuilder: (context, index) {
-                              return CourseCard(
-                                course: (semester.courses ?? [])[index],
-                                semester: semester,
-                                isFirst: index == 0,
-                                isLast: index ==
-                                    (semester.courses ?? []).length - 1,
+                          child: Builder(
+                            builder: (context) {
+                              final courses =
+                                  (semester.courses ?? []).reversed.toList();
+                              return ListView.builder(
+                                padding: const EdgeInsets.all(16),
+                                itemCount: courses.length,
+                                itemBuilder: (context, index) {
+                                  return CourseCard(
+                                    course: courses[index],
+                                    semester: semester,
+                                    isFirst: index == 0,
+                                    isLast: index == courses.length - 1,
+                                  );
+                                },
                               );
                             },
                           ),

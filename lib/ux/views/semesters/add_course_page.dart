@@ -69,14 +69,7 @@ class _AddCoursePageState extends State<AddCoursePage> {
   void handleAddCourseResult() {
     final result = courseViewModel.addCourseResult.value;
     if (result.isSuccess) {
-      AppDialogs.showSuccessDialog(
-        context,
-        successMessage: result.message ?? 'Course added successfully.',
-        onDismiss: () {
-          Navigation.back(context: context);
-          Navigation.back(context: context, result: true);
-        },
-      );
+      Navigation.back(context: context, result: true);
     } else if (result.isError) {
       AppDialogs.showErrorDialog(
         context,
