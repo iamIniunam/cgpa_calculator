@@ -1,5 +1,6 @@
 import 'package:cgpa_calculator/platform/di/dependency_injection.dart';
 import 'package:cgpa_calculator/ux/navigation/navigation.dart';
+import 'package:cgpa_calculator/ux/navigation/navigation_host_page.dart';
 import 'package:cgpa_calculator/ux/shared/bottom_sheets/app_confirmation_botttom_sheet.dart';
 import 'package:cgpa_calculator/ux/shared/bottom_sheets/show_app_bottom_sheet.dart';
 import 'package:cgpa_calculator/ux/shared/components/app_buttons.dart';
@@ -9,7 +10,6 @@ import 'package:cgpa_calculator/ux/shared/models/semester_model.dart';
 import 'package:cgpa_calculator/ux/shared/resources/app_colors.dart';
 import 'package:cgpa_calculator/ux/shared/resources/app_dialogs.dart';
 import 'package:cgpa_calculator/ux/views/semesters/components/delete_course_button.dart';
-import 'package:cgpa_calculator/ux/views/semesters/semesters_page.dart';
 import 'package:cgpa_calculator/ux/views/semesters/view_models/semester_view_model.dart';
 import 'package:cgpa_calculator/ux/views/settings/components/settings_group.dart';
 import 'package:cgpa_calculator/ux/views/settings/components/settings_tile.dart';
@@ -88,7 +88,7 @@ class _AddSemesterPageState extends State<AddSemesterPage> {
     if (result.isSuccess) {
       Navigation.navigateToScreen(
         context: context,
-        screen: const SemestersPage(),
+        screen: const NavigationHostPage(initialIndex: 1),
       );
     } else if (result.isError) {
       AppDialogs.showErrorDialog(
@@ -257,7 +257,7 @@ class _AddSemesterPageState extends State<AddSemesterPage> {
                     hintText: 'e.g. Summer 2024',
                     controller: titleController,
                     keyboardType: TextInputType.text,
-                    textInputAction: TextInputAction.done,
+                    textInputAction: TextInputAction.next,
                     textCapitalization: TextCapitalization.words,
                   ),
                   const SizedBox(height: 8),

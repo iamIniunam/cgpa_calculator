@@ -1,4 +1,3 @@
-import 'package:cgpa_calculator/ux/navigation/navigation.dart';
 import 'package:cgpa_calculator/ux/shared/components/app_material.dart';
 import 'package:cgpa_calculator/ux/shared/resources/app_colors.dart';
 import 'package:flutter/material.dart';
@@ -34,7 +33,9 @@ class DeleteActionButton extends StatelessWidget {
 }
 
 class CompleteActionButton extends StatelessWidget {
-  const CompleteActionButton({super.key});
+  const CompleteActionButton({super.key, required this.onTap});
+
+  final VoidCallback onTap;
 
   @override
   Widget build(BuildContext context) {
@@ -44,9 +45,7 @@ class CompleteActionButton extends StatelessWidget {
         color: AppColors.primaryColor,
         borderRadius: BorderRadius.circular(10),
         inkwellBorderRadius: BorderRadius.circular(10),
-        onTap: () {
-          Navigation.back(context: context);
-        },
+        onTap: onTap,
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
           child: Text(

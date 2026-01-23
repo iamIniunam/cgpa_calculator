@@ -10,16 +10,24 @@ import 'package:cgpa_calculator/ux/views/settings/settings_page.dart';
 import 'package:flutter/material.dart';
 
 class NavigationHostPage extends StatefulWidget {
-  const NavigationHostPage({super.key});
+  const NavigationHostPage({super.key, this.initialIndex = 0});
+
+  final int initialIndex;
 
   @override
   State<NavigationHostPage> createState() => _NavigationHostPageState();
 }
 
 class _NavigationHostPageState extends State<NavigationHostPage> {
-  int currentIndex = 0;
+  late int currentIndex;
   bool isSearching = false;
   final TextEditingController searchController = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    currentIndex = widget.initialIndex;
+  }
 
   @override
   Widget build(BuildContext context) {

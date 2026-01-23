@@ -202,12 +202,40 @@ class AuthService {
 
   Future<void> deleteAccount() async {
     final user = _auth.currentUser;
-    if (user != null) {
-      await user.delete();
+    if (user == null) return;
+
+    final userId = user.uid;
+
+    try {
+      final semesterSnapshot = await _firestore
+          .collection(AppConstants.usersCollection)
+          .doc(userId)
+          .collection(AppConstants.semestersCollection)
+          .get();
+      for (var semesterDoc in semesterSnapshot.docs) {
+        final coursesSnapshot = await _firestore
+            .collection(AppConstants.usersCollection)
+            .doc(userId)
+            .collection(AppConstants.semestersCollection)
+            .doc(semesterDoc.id)
+            .collection(AppConstants.coursesCollection)
+            .get();
+
+        for (var courseDoc in coursesSnapshot.docs) {
+          await courseDoc.reference.delete();
+        }
+
+        await semesterDoc.reference.delete();
+      }
+
       await _firestore
           .collection(AppConstants.usersCollection)
-          .doc(user.uid)
+          .doc(userId)
           .delete();
+
+      return await user.delete();
+    } catch (e) {
+      throw Exception('Failed to delete account: ${e.toString()}');
     }
   }
 
