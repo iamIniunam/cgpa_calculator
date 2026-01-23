@@ -1,20 +1,14 @@
 import 'package:cgpa_calculator/ux/navigation/navigation.dart';
 import 'package:cgpa_calculator/ux/shared/components/app_material.dart';
+import 'package:cgpa_calculator/ux/shared/models/semester_model.dart';
 import 'package:cgpa_calculator/ux/shared/resources/app_colors.dart';
 import 'package:cgpa_calculator/ux/views/semesters/semester_details_page.dart';
 import 'package:flutter/material.dart';
 
 class SemesterCard extends StatelessWidget {
-  const SemesterCard({
-    super.key,
-    required this.semesterNumber,
-    required this.gpa,
-    required this.creditHours,
-  });
+  const SemesterCard({super.key, required this.semester});
 
-  final int semesterNumber;
-  final double gpa;
-  final int creditHours;
+  final Semester semester;
 
   @override
   Widget build(BuildContext context) {
@@ -43,11 +37,11 @@ class SemesterCard extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text(
-                          'Year 2, semester 1',
+                          semester.semesterName ?? '',
                           style: Theme.of(context).textTheme.headlineMedium,
                         ),
                         Text(
-                          'Summer 2024 • $creditHours credits',
+                          '${semester.academicYear} • ${semester.totalCreditUnits} credits',
                           style:
                               Theme.of(context).textTheme.bodySmall?.copyWith(
                                     color: Theme.of(context).brightness ==
@@ -62,11 +56,11 @@ class SemesterCard extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.end,
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        if (gpa > 0) ...[
+                        if ((semester.semesterGPA ?? 0.0) > 0) ...[
                           Text('GPA',
                               style: Theme.of(context).textTheme.bodySmall),
                           Text(
-                            gpa.toStringAsFixed(2),
+                            semester.formattedGPA,
                             style: Theme.of(context)
                                 .textTheme
                                 .titleMedium
@@ -95,7 +89,7 @@ class SemesterCard extends StatelessWidget {
                     borderRadius: BorderRadius.circular(12),
                   ),
                   child: Text(
-                    'Completed'.toUpperCase(),
+                    (semester.status?.name ?? '').toUpperCase(),
                     style: Theme.of(context).textTheme.bodySmall?.copyWith(
                           color: AppColors.white,
                           fontWeight: FontWeight.w600,
@@ -121,9 +115,7 @@ class SemesterCard extends StatelessWidget {
             onTap: () {
               Navigation.navigateToScreen(
                 context: context,
-                screen: SemesterDetailsPage(
-                  semesterNumber: semesterNumber,
-                ),
+                screen: SemesterDetailsPage(semester: semester),
               );
             },
             child: Padding(
@@ -132,7 +124,7 @@ class SemesterCard extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    '6 courses',
+                    '${semester.courses?.length} courses',
                     style: Theme.of(context).textTheme.titleMedium?.copyWith(
                           color: Theme.of(context).brightness == Brightness.dark
                               ? AppColors.grey300

@@ -1,12 +1,13 @@
+import 'package:cgpa_calculator/ux/shared/resources/app_constants.dart';
 import 'package:cgpa_calculator/ux/shared/view_models/theme_view_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
 class AuthService {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
-
-  static const String usersCollection = 'users';
+  final GoogleSignIn _googleSignIn = GoogleSignIn();
 
   User? get currentUser => _auth.currentUser;
 
@@ -27,7 +28,7 @@ class AuthService {
         await userCredential.user?.updateDisplayName(fullName);
 
         await _firestore
-            .collection(usersCollection)
+            .collection(AppConstants.usersCollection)
             .doc(userCredential.user?.uid)
             .set({
           'uid': userCredential.user?.uid,
@@ -37,13 +38,13 @@ class AuthService {
           'themePreference': AppThemeMode.system.name,
 
           // versioning
-          'appVersion': '1.0.0',
-          'onboardingVersion': 1,
+          // 'appVersion': '1.0.0',
+          // 'onboardingVersion': 1,
 
           //timestamps
           'createdAt': FieldValue.serverTimestamp(),
           'lastLogin': FieldValue.serverTimestamp(),
-          'lastActiveAt': FieldValue.serverTimestamp(),
+          // 'lastActiveAt': FieldValue.serverTimestamp(),
         });
       }
 
@@ -65,11 +66,11 @@ class AuthService {
 
       if (userCredential.user != null) {
         await _firestore
-            .collection(usersCollection)
+            .collection(AppConstants.usersCollection)
             .doc(userCredential.user?.uid)
             .update({
           'lastLogin': FieldValue.serverTimestamp(),
-          'lastActiveAt': FieldValue.serverTimestamp(),
+          // 'lastActiveAt': FieldValue.serverTimestamp(),
         });
       }
 
@@ -80,18 +81,65 @@ class AuthService {
   }
 
   Future<User?> signInWithGoogle() async {
-    // Implement Google Sign-In logic here
-    // This is a placeholder for the actual implementation
-    throw UnimplementedError('Google Sign-In not implemented yet.');
+    try {
+      final GoogleSignInAccount? googleUser = await _googleSignIn.signIn();
+
+      if (googleUser == null) return null;
+
+      final GoogleSignInAuthentication googleAuth =
+          await googleUser.authentication;
+      final credential = GoogleAuthProvider.credential(
+        accessToken: googleAuth.accessToken,
+        idToken: googleAuth.idToken,
+      );
+
+      final userCredential = await _auth.signInWithCredential(credential);
+
+      if (userCredential.user != null) {
+        final userDoc = await _firestore
+            .collection(AppConstants.usersCollection)
+            .doc(userCredential.user?.uid)
+            .get();
+
+        if (!userDoc.exists) {
+          await _firestore
+              .collection(AppConstants.usersCollection)
+              .doc(userCredential.user?.uid)
+              .set({
+            'uid': userCredential.user?.uid,
+            'name': userCredential.user?.displayName ?? '',
+            'email': userCredential.user?.email ?? '',
+            'profileComplete': false,
+            'themePreference': AppThemeMode.system.name,
+            'createdAt': FieldValue.serverTimestamp(),
+            'lastLogin': FieldValue.serverTimestamp(),
+          });
+        } else {
+          await _firestore
+              .collection(AppConstants.usersCollection)
+              .doc(userCredential.user?.uid)
+              .update({
+            'lastLogin': FieldValue.serverTimestamp(),
+          });
+        }
+      }
+
+      return userCredential.user;
+    } catch (e) {
+      throw Exception('Google sign-in failed: ${e.toString()}');
+    }
   }
 
   Future<void> completeProfile({
     required String userId,
     required String school,
-    required double gradingScale,
+    required Map<String, dynamic> gradingScale,
   }) async {
     try {
-      await _firestore.collection(usersCollection).doc(userId).update({
+      await _firestore
+          .collection(AppConstants.usersCollection)
+          .doc(userId)
+          .update({
         'school': school,
         'gradingScale': gradingScale,
         'profileComplete': true,
@@ -103,8 +151,10 @@ class AuthService {
 
   Future<Map<String, dynamic>?> getUserData(String userId) async {
     try {
-      final doc =
-          await _firestore.collection(usersCollection).doc(userId).get();
+      final doc = await _firestore
+          .collection(AppConstants.usersCollection)
+          .doc(userId)
+          .get();
       return doc.data();
     } catch (e) {
       throw Exception('Failed to get user data: ${e.toString()}');
@@ -116,14 +166,20 @@ class AuthService {
     required Map<String, dynamic> updates,
   }) async {
     try {
-      await _firestore.collection(usersCollection).doc(userId).update(updates);
+      await _firestore
+          .collection(AppConstants.usersCollection)
+          .doc(userId)
+          .update(updates);
     } catch (e) {
       throw Exception('Failed to update profile: ${e.toString()}');
     }
   }
 
   Future<void> updateLastActive(String userId) async {
-    await _firestore.collection(usersCollection).doc(userId).update({
+    await _firestore
+        .collection(AppConstants.usersCollection)
+        .doc(userId)
+        .update({
       'lastActiveAt': FieldValue.serverTimestamp(),
     });
   }
@@ -148,7 +204,10 @@ class AuthService {
     final user = _auth.currentUser;
     if (user != null) {
       await user.delete();
-      await _firestore.collection(usersCollection).doc(user.uid).delete();
+      await _firestore
+          .collection(AppConstants.usersCollection)
+          .doc(user.uid)
+          .delete();
     }
   }
 

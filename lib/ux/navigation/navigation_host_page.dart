@@ -31,9 +31,11 @@ class _NavigationHostPageState extends State<NavigationHostPage> {
         children: [
           Positioned.fill(
             child: Scaffold(
-              appBar: HomeAppBar(
-                showProfilePicture: currentIndex != pages.length - 1,
-              ).asPreferredSize(height: 58),
+              appBar: currentIndex != 1
+                  ? HomeAppBar(
+                      actions: currentIndex == 0 ? null : [],
+                    ).asPreferredSize(height: 58)
+                  : null,
               body: pages[currentIndex],
             ),
           ),

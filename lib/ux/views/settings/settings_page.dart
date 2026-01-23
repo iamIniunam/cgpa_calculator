@@ -43,7 +43,7 @@ class _SettingsPageState extends State<SettingsPage> {
                     title: 'Grading Scale',
                     icon: Icons.scale_rounded,
                     trailing: Text(
-                      user?.gradingScale.toString() ?? '',
+                      user?.gradingScale?.name ?? '',
                       style: TextStyle(
                         color: (Theme.of(context).appBarTheme.foregroundColor ??
                             AppColors.white),

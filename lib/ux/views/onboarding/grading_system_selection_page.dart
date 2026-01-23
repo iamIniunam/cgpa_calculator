@@ -3,7 +3,7 @@ import 'package:cgpa_calculator/platform/firebase/auth/models/auth_request.dart'
 import 'package:cgpa_calculator/ux/navigation/navigation.dart';
 import 'package:cgpa_calculator/ux/shared/components/app_buttons.dart';
 import 'package:cgpa_calculator/ux/shared/components/app_form_fields.dart';
-import 'package:cgpa_calculator/ux/shared/models/ui_models.dart';
+import 'package:cgpa_calculator/ux/shared/models/grading_scale_models.dart';
 import 'package:cgpa_calculator/ux/shared/resources/app_colors.dart';
 import 'package:cgpa_calculator/ux/shared/resources/app_dialogs.dart';
 import 'package:cgpa_calculator/ux/shared/resources/app_strings.dart';
@@ -26,8 +26,8 @@ class _GradingSystemSelectionPageState
   final AuthViewModel _authViewModel = AppDI.getIt<AuthViewModel>();
   final TextEditingController institutionController = TextEditingController();
   final TextEditingController customScaleController = TextEditingController();
-  List<GradingScale> gradingScales = GradingScale.values;
-  GradingScale? selectedScale = GradingScale.scale43;
+  List<GradingScale> gradingScales = GradingScale.predefinedScales;
+  GradingScale? selectedScale;
 
   bool scaleNotListed = false;
 
@@ -85,8 +85,7 @@ class _GradingSystemSelectionPageState
       gradingScale: scale,
     );
 
-    var updateProfileRequest =
-        UpdateUserProfileRequest(gradingScale: scale.value);
+    var updateProfileRequest = UpdateUserProfileRequest(gradingScale: scale);
 
     if (widget.isEditMode) {
       await _authViewModel.updateProfile(updateProfileRequest);
@@ -156,19 +155,22 @@ class _GradingSystemSelectionPageState
                         ),
                   ),
                   const SizedBox(height: 16),
-                  ...gradingScales.map(
-                    (grade) => GradeSystemCard(
-                      grade: grade,
-                      gradeName: gradingScaleNames[grade.index],
-                      selected: selectedScale == grade && !scaleNotListed,
-                      onTap: () {
-                        setState(() {
-                          selectedScale = grade;
-                          scaleNotListed = false;
-                        });
-                      },
-                    ),
-                  ),
+                  ...gradingScales.asMap().entries.map(
+                        (entry) => GradeSystemCard(
+                          grade: entry.value,
+                          gradeName: gradingScaleNames.length > entry.key
+                              ? gradingScaleNames[entry.key]
+                              : 'Custom',
+                          selected:
+                              selectedScale == entry.value && !scaleNotListed,
+                          onTap: () {
+                            setState(() {
+                              selectedScale = entry.value;
+                              scaleNotListed = false;
+                            });
+                          },
+                        ),
+                      ),
                   GradeSystemCard(
                     title: 'Custom Scale',
                     gradeName: 'My scale is not listed',
@@ -199,7 +201,8 @@ class _GradingSystemSelectionPageState
               padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
               child: PrimaryButton(
                 onTap: handleCompleteProfile,
-                child: Text(widget.isEditMode ? 'Save' : AppStrings.continueText),
+                child:
+                    Text(widget.isEditMode ? 'Save' : AppStrings.continueText),
               ),
             ),
           ],

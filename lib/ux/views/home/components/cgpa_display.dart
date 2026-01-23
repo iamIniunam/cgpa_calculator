@@ -1,21 +1,16 @@
 import 'package:cgpa_calculator/platform/extensions/string_extensions.dart';
 import 'package:cgpa_calculator/platform/di/dependency_injection.dart';
 import 'package:cgpa_calculator/platform/firebase/auth/models/auth_response.dart';
+import 'package:cgpa_calculator/ux/shared/models/semester_model.dart';
 import 'package:cgpa_calculator/ux/shared/resources/app_colors.dart';
 import 'package:cgpa_calculator/ux/shared/view_models/auth_view_model.dart';
+import 'package:cgpa_calculator/ux/views/semesters/view_models/semester_view_model.dart';
 import 'package:flutter/material.dart';
 
 class CGPADisplay extends StatelessWidget {
-  final double cgpa;
-  final double maxGrade;
-  final int totalCredits;
+  const CGPADisplay({super.key, required this.viewModel});
 
-  const CGPADisplay({
-    super.key,
-    required this.cgpa,
-    required this.maxGrade,
-    required this.totalCredits,
-  });
+  final SemesterViewModel viewModel;
 
   @override
   Widget build(BuildContext context) {
@@ -90,7 +85,7 @@ class CGPADisplay extends StatelessWidget {
                   textBaseline: TextBaseline.alphabetic,
                   children: [
                     Text(
-                      user?.currentCGPA?.toStringAsFixed(2) ?? '0.0',
+                      viewModel.currentCGPA.toStringAsFixed(2),
                       style:
                           Theme.of(context).textTheme.headlineLarge?.copyWith(
                                 color: AppColors.white,
@@ -99,8 +94,7 @@ class CGPADisplay extends StatelessWidget {
                               ),
                     ),
                     Text(
-                      // 'Target: ${user?.targetCGPA?.toStringAsFixed(2) ?? '0.0'}',
-                      targetText(user?.targetCGPA),
+                      'Target CGPA: ${targetText(user?.targetCGPA)}',
                       style: Theme.of(context).textTheme.titleSmall?.copyWith(
                             color: AppColors.textGrey2,
                           ),
@@ -115,14 +109,9 @@ class CGPADisplay extends StatelessWidget {
 }
 
 class GPADisplay extends StatelessWidget {
-  final double gpa;
-  final int maxcredits;
+  const GPADisplay({super.key, required this.semester});
 
-  const GPADisplay({
-    super.key,
-    required this.gpa,
-    required this.maxcredits,
-  });
+  final Semester semester;
 
   @override
   Widget build(BuildContext context) {
@@ -146,7 +135,7 @@ class GPADisplay extends StatelessWidget {
                             : AppColors.dark,
                       )),
               Text(
-                maxcredits.toString(),
+                semester.totalCreditUnits.toString(),
                 style: Theme.of(context).textTheme.headlineSmall?.copyWith(
                       color: Theme.of(context).brightness == Brightness.dark
                           ? Colors.white70
@@ -166,7 +155,7 @@ class GPADisplay extends StatelessWidget {
                     ),
               ),
               Text(
-                gpa.toStringAsFixed(2),
+                semester.formattedGPA,
                 style: Theme.of(context).textTheme.headlineMedium,
               ),
             ],
@@ -183,7 +172,9 @@ class GPADisplay extends StatelessWidget {
                     ),
               ),
               Text(
-                '4.30',
+                semester.targetGPA != null
+                    ? (semester.targetGPA?.toStringAsFixed(2) ?? '')
+                    : '--',
                 style: Theme.of(context).textTheme.headlineSmall?.copyWith(
                       color: Theme.of(context).brightness == Brightness.dark
                           ? Colors.white70

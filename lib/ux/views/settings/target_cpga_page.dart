@@ -4,9 +4,11 @@ import 'package:cgpa_calculator/ux/shared/bottom_sheets/app_confirmation_botttom
 import 'package:cgpa_calculator/ux/shared/bottom_sheets/show_app_bottom_sheet.dart';
 import 'package:cgpa_calculator/ux/shared/components/app_buttons.dart';
 import 'package:cgpa_calculator/platform/extensions/extensions.dart';
+import 'package:cgpa_calculator/ux/shared/models/ui_models.dart';
 import 'package:cgpa_calculator/ux/shared/resources/app_colors.dart';
 import 'package:cgpa_calculator/ux/shared/resources/app_dialogs.dart';
 import 'package:cgpa_calculator/ux/shared/view_models/auth_view_model.dart';
+import 'package:cgpa_calculator/ux/views/semesters/view_models/semester_view_model.dart';
 import 'package:cgpa_calculator/ux/views/settings/view_models/cgpa_view_model.dart';
 import 'package:flutter/material.dart';
 
@@ -20,15 +22,14 @@ class TargetCGPAPage extends StatefulWidget {
 class _TargetCGPAPageState extends State<TargetCGPAPage> {
   final CGPAViewModel _cgpaViewModel = AppDI.getIt<CGPAViewModel>();
   final AuthViewModel _authViewModel = AppDI.getIt<AuthViewModel>();
+  final SemesterViewModel _semesterViewModel = AppDI.getIt<SemesterViewModel>();
 
   late double _currentSliderValue;
   late double _currentCGPA;
   late double _minCgpa;
   late double _maxCgpa;
-
-  // For calculation (you can make these dynamic from user's course data)
-  final int _completedCredits = 60; // Example: completed credits
-  final int _upcomingCredits = 15; // Example: credits for next semester
+  late int _completedCredits;
+  late int _upcomingCredits;
 
   @override
   void initState() {
@@ -39,11 +40,23 @@ class _TargetCGPAPageState extends State<TargetCGPAPage> {
 
   void initializeValues() {
     final user = _authViewModel.currentUser.value;
-    final gradingScale = user?.gradingScale ?? 5.0;
-    _currentCGPA = user?.currentCGPA ?? 3.45;
-    _currentSliderValue = user?.targetCGPA ?? 3.60;
-    _minCgpa = gradingScale == 4.0 ? 2.5 : 3.25;
-    _maxCgpa = gradingScale == 4.0 ? 4.0 : 4.30;
+    final maxPoint = user?.maxGradePoint ?? 5.0;
+
+    _currentCGPA = _semesterViewModel.currentCGPA;
+    _currentSliderValue =
+        user?.targetCGPA ?? (_currentCGPA + 0.15).clamp(0.0, maxPoint);
+    _minCgpa = (_currentCGPA - 0.5).clamp(0.0, maxPoint);
+    _maxCgpa = maxPoint;
+    _completedCredits = _semesterViewModel.totalCredits;
+    _upcomingCredits = estimateUpcomingCredits();
+  }
+
+  int estimateUpcomingCredits() {
+    if (_semesterViewModel.completedSemestersCount == 0) return 15;
+
+    final avgCreditsPerSemester =
+        _completedCredits / _semesterViewModel.completedSemestersCount;
+    return avgCreditsPerSemester.round();
   }
 
   void handleSetTargetResult() {
@@ -69,24 +82,31 @@ class _TargetCGPAPageState extends State<TargetCGPAPage> {
     );
   }
 
-  Future<void> handleSetTarget() async {
-    await _cgpaViewModel.setTargetCGPA(
+  bool isTargetAchievable() {
+    final maxPoint = _authViewModel.currentUser.value?.maxGradePoint ?? 5.0;
+    return CGPACalculator.isTargetAchievable(
       currentCGPA: _currentCGPA,
       targetCGPA: _currentSliderValue,
+      completedCredits: _completedCredits,
+      upcomingCredits: _upcomingCredits,
+      maxGradePoint: maxPoint,
     );
+  }
+
+  Future<void> handleSetTarget() async {
+    await _cgpaViewModel.setTargetCGPA(targetCGPA: _currentSliderValue);
   }
 
   @override
   void dispose() {
-    _cgpaViewModel.setTargetCGPAResult.removeListener(handleSetTarget);
+    _cgpaViewModel.setTargetCGPAResult.removeListener(handleSetTargetResult);
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     final requiredGPA = calculateRequiredGPA();
-    final isAchievable =
-        requiredGPA <= (_authViewModel.currentUser.value?.gradingScale ?? 5.0);
+    final isAchievable = isTargetAchievable();
 
     return GestureDetector(
       onTap: () => FocusScope.of(context).unfocus(),
@@ -326,7 +346,7 @@ class _TargetCGPAPageState extends State<TargetCGPAPage> {
                         const SizedBox(width: 12),
                         Expanded(
                           child: Text(
-                            'This calculation assumes $_completedCredits completed credits and $_upcomingCredits upcoming credits.',
+                            'Based on $_completedCredits completed credits and estimated $_upcomingCredits upcoming credits.',
                             style: Theme.of(context)
                                 .textTheme
                                 .bodyMedium

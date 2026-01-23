@@ -93,7 +93,7 @@ class AuthViewModel extends ChangeNotifier {
       await _authService.completeProfile(
         userId: userId,
         school: request.school,
-        gradingScale: request.gradingScale.value,
+        gradingScale: request.gradingScale.toMap(),
       );
 
       final userData = await _authService.getUserData(userId);

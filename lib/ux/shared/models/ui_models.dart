@@ -1,231 +1,4 @@
-enum GradingScale {
-  scale40(4.0),
-  scale43(4.3),
-  scale50(5.0);
-
-  final double value;
-  const GradingScale(this.value);
-}
-
-enum CourseDuration {
-  fourYears,
-  fiveYears,
-  sixYears,
-  sevenYears,
-}
-
-class GradeOption {
-  final String label;
-  final String gradePoint;
-  final double value;
-
-  GradeOption(this.label, this.gradePoint, this.value);
-}
-
-class Course {
-  String? courseCode;
-  int? creditHours;
-  String? grade;
-  double? score;
-
-  Course({
-    this.courseCode,
-    this.creditHours,
-    this.grade,
-    this.score,
-  });
-
-  Map<String, dynamic> toMap() {
-    return {
-      'courseCode': courseCode,
-      'creditHours': creditHours,
-      'grade': grade?.toString(),
-      'score': score,
-    };
-  }
-
-  factory Course.fromMap(Map<String, dynamic>? map) {
-    return Course(
-      courseCode: map?['courseCode'] ?? '',
-      creditHours: map?['creditHours'] ?? 3,
-      grade: map?['grade']?.toString() ?? 'A',
-      score: map?['score'] ?? 0.0,
-    );
-  }
-}
-
-class Semester {
-  final int semesterNumber;
-  final List<Course> courses;
-  double gpa;
-
-  Semester({
-    required this.semesterNumber,
-    required this.courses,
-    this.gpa = 0.0,
-  });
-
-  Map<String, dynamic> toMap() {
-    return {
-      'semesterNumber': semesterNumber,
-      'courses': courses.map((course) => course.toMap()).toList(),
-      'gpa': gpa,
-    };
-  }
-
-  factory Semester.fromMap(Map<String, dynamic> map) {
-    return Semester(
-      semesterNumber: map['semesterNumber'] ?? 1,
-      courses: List<Course>.from(
-        (map['courses'] as List<dynamic>? ?? [])
-            .map((courseMap) => Course.fromMap(courseMap)),
-      ),
-      gpa: map['gpa'] ?? 0.0,
-    );
-  }
-}
-
-class GradeCalculator {
-  static List<GradeOption> getGradeOptions(GradingScale scale) {
-    switch (scale) {
-      case GradingScale.scale40:
-        return [
-          GradeOption('A', '4.0', 4.0),
-          GradeOption('A-', '3.7', 3.7),
-          GradeOption('B+', '3.3', 3.3),
-          GradeOption('B', '3.0', 3.0),
-          GradeOption('B-', '2.7', 2.7),
-          GradeOption('C+', '2.3', 2.3),
-          GradeOption('C', '2.0', 2.0),
-          GradeOption('C-', '1.7', 1.7),
-          GradeOption('D+', '1.3', 1.3),
-          GradeOption('D', '1.0', 1.0),
-          GradeOption('F', '0.0', 0.0),
-        ];
-      case GradingScale.scale43:
-        return [
-          GradeOption('A+', '4.3', 4.3),
-          GradeOption('A', '4.0', 4.0),
-          GradeOption('A-', '3.7', 3.7),
-          GradeOption('B+', '3.3', 3.3),
-          GradeOption('B', '3.0', 3.0),
-          GradeOption('B-', '2.7', 2.7),
-          GradeOption('C+', '2.3', 2.3),
-          GradeOption('C', '2.0', 2.0),
-          GradeOption('C-', '1.7', 1.7),
-          GradeOption('D+', '1.3', 1.3),
-          GradeOption('D', '1.0', 1.0),
-          GradeOption('F', '0.0', 0.0),
-        ];
-      case GradingScale.scale50:
-        return [
-          GradeOption('A+', '5.0', 5.0),
-          GradeOption('A', '4.5', 4.5),
-          GradeOption('B+', '4.0', 4.0),
-          GradeOption('B', '3.5', 3.5),
-          GradeOption('C+', '3.0', 3.0),
-          GradeOption('C', '2.5', 2.5),
-          GradeOption('D+', '2.0', 2.0),
-          GradeOption('D ', '1.5', 1.5),
-          GradeOption('E', '1.0', 1.0),
-          GradeOption('F', '0.0', 0.0),
-        ];
-    }
-  }
-
-  static double getMaxGrade(GradingScale scale) {
-    switch (scale) {
-      case GradingScale.scale40:
-        return 4.0;
-      case GradingScale.scale43:
-        return 4.3;
-      case GradingScale.scale50:
-        return 5.0;
-    }
-  }
-
-  static String getScaleText(GradingScale scale) {
-    switch (scale) {
-      case GradingScale.scale40:
-        return '4.0';
-      case GradingScale.scale43:
-        return '4.3';
-      case GradingScale.scale50:
-        return '5.0';
-    }
-  }
-
-  static double calculateGPA(List<Course> courses) {
-    if (courses.isEmpty) return 0.0;
-
-    double totalPoints = 0.0;
-    int totalCredits = 0;
-
-    for (var course in courses) {
-      totalPoints += (course.score ?? 0.0) * (course.creditHours ?? 0);
-      totalCredits += (course.creditHours ?? 0);
-    }
-
-    return totalCredits > 0 ? totalPoints / totalCredits : 0.0;
-  }
-
-  static double calculateCGPA(List<Semester> semesters) {
-    if (semesters.isEmpty) return 0.0;
-
-    double totalPoints = 0.0;
-    int totalCredits = 0;
-
-    for (var semester in semesters) {
-      for (var course in semester.courses) {
-        totalPoints += (course.score ?? 0.0) * (course.creditHours ?? 0);
-        totalCredits += (course.creditHours ?? 0);
-      }
-    }
-
-    return totalCredits > 0 ? totalPoints / totalCredits : 0.0;
-  }
-}
-
-extension GradeScaleExtension on GradingScale {
-  String get name {
-    switch (this) {
-      case GradingScale.scale40:
-        return '4.0';
-      case GradingScale.scale43:
-        return '4.3';
-      case GradingScale.scale50:
-        return '5.0';
-    }
-  }
-}
-
-extension CourseDurationExtension on CourseDuration {
-  int get semesterCount {
-    switch (this) {
-      case CourseDuration.fourYears:
-        return 8;
-      case CourseDuration.fiveYears:
-        return 10;
-      case CourseDuration.sixYears:
-        return 12;
-      case CourseDuration.sevenYears:
-        return 14;
-    }
-  }
-
-  String get yearsText {
-    switch (this) {
-      case CourseDuration.fourYears:
-        return '4';
-      case CourseDuration.fiveYears:
-        return '5';
-      case CourseDuration.sixYears:
-        return '6';
-      case CourseDuration.sevenYears:
-        return '7';
-    }
-  }
-}
+import 'package:cgpa_calculator/ux/shared/models/semester_model.dart';
 
 enum UIResultStatus { empty, loading, success, error }
 
@@ -276,4 +49,136 @@ class CourseInput {
     required this.grade,
     required this.score,
   });
+}
+
+class CGPACalculator {
+  /// Calculate CGPA from list of semesters
+  /// Only includes completed semesters in calculation
+  static double calculateCGPA(List<Semester> semesters) {
+    final completedSemesters =
+        semesters.where((s) => s.status == SemesterStatus.completed).toList();
+
+    if (completedSemesters.isEmpty) return 0.0;
+
+    final totalGradePoints = completedSemesters.fold<double>(
+      0.0,
+      (sum, semester) => sum + (semester.totalGradePoints ?? 0.0),
+    );
+
+    final totalCredits = completedSemesters.fold<int>(
+      0,
+      (sum, semester) => sum + (semester.totalCreditUnits ?? 0),
+    );
+
+    return totalCredits > 0 ? totalGradePoints / totalCredits : 0.0;
+  }
+
+  /// Calculate total credits earned (completed semesters only)
+  static int calculateTotalCredits(List<Semester> semesters) {
+    return semesters
+        .where((s) => s.status == SemesterStatus.completed)
+        .fold<int>(
+          0,
+          (sum, semester) => sum + (semester.totalCreditUnits ?? 0),
+        );
+  }
+
+  /// Get number of completed semesters
+  static int getCompletedSemestersCount(List<Semester> semesters) {
+    return semesters.where((s) => s.status == SemesterStatus.completed).length;
+  }
+
+  /// Calculate required semester GPA to reach target CGPA
+  /// Formula: Required GPA = [(Target CGPA × Total Credits) - (Current CGPA × Completed Credits)] / Upcoming Credits
+  static double calculateRequiredSemesterGPA({
+    required double currentCGPA,
+    required double targetCGPA,
+    required int completedCredits,
+    required int upcomingCredits,
+  }) {
+    if (upcomingCredits == 0) return 0.0;
+
+    final totalCredits = completedCredits + upcomingCredits;
+    final requiredGPA =
+        ((targetCGPA * totalCredits) - (currentCGPA * completedCredits)) /
+            upcomingCredits;
+
+    return requiredGPA < 0 ? 0.0 : requiredGPA;
+  }
+
+  /// Check if target CGPA is achievable with remaining credits
+  static bool isTargetAchievable({
+    required double currentCGPA,
+    required double targetCGPA,
+    required int completedCredits,
+    required int upcomingCredits,
+    required double maxGradePoint,
+  }) {
+    final requiredGPA = calculateRequiredSemesterGPA(
+      currentCGPA: currentCGPA,
+      targetCGPA: targetCGPA,
+      completedCredits: completedCredits,
+      upcomingCredits: upcomingCredits,
+    );
+
+    return requiredGPA <= maxGradePoint;
+  }
+
+  /// Get all semesters' GPA data for chart
+  static List<Map<String, dynamic>> getSemesterGPAData(
+      List<Semester> semesters) {
+    return semesters
+        .map((semester) => {
+              'semesterName': semester.semesterName,
+              'gpa': semester.semesterGPA,
+              'credits': semester.totalCreditUnits,
+              'status': semester.status?.name,
+            })
+        .toList();
+  }
+
+  /// Calculate GPA statistics
+  static Map<String, double> calculateStatistics(List<Semester> semesters) {
+    final completedSemesters =
+        semesters.where((s) => s.status == SemesterStatus.completed).toList();
+
+    if (completedSemesters.isEmpty) {
+      return {
+        'cgpa': 0.0,
+        'highestGPA': 0.0,
+        'lowestGPA': 0.0,
+        'averageGPA': 0.0,
+      };
+    }
+
+    final gpas = completedSemesters
+        .map((s) => s.semesterGPA)
+        .whereType<double>()
+        .toList();
+
+    return {
+      'cgpa': calculateCGPA(semesters),
+      'highestGPA':
+          gpas.isNotEmpty ? gpas.reduce((a, b) => a > b ? a : b) : 0.0,
+      'lowestGPA': gpas.isNotEmpty ? gpas.reduce((a, b) => a < b ? a : b) : 0.0,
+      'averageGPA':
+          gpas.isNotEmpty ? gpas.reduce((a, b) => a + b) / gpas.length : 0.0,
+    };
+  }
+
+  /// Format GPA to 2 decimal places
+  static String formatGPA(double gpa) {
+    return gpa.toStringAsFixed(2);
+  }
+
+  /// Get grade color based on GPA value
+  static String getGradeColor(double gpa, double maxPoint) {
+    final percentage = (gpa / maxPoint) * 100;
+
+    if (percentage >= 85) return 'excellent'; // A range
+    if (percentage >= 70) return 'good'; // B range
+    if (percentage >= 60) return 'average'; // C range
+    if (percentage >= 50) return 'below'; // D range
+    return 'fail'; // F range
+  }
 }

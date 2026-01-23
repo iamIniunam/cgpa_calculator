@@ -1,31 +1,23 @@
 import 'package:cgpa_calculator/ux/navigation/navigation.dart';
-import 'package:cgpa_calculator/ux/shared/models/ui_models.dart';
+import 'package:cgpa_calculator/ux/shared/models/course_model.dart';
+import 'package:cgpa_calculator/ux/shared/models/semester_model.dart';
 import 'package:cgpa_calculator/ux/shared/resources/app_colors.dart';
 import 'package:cgpa_calculator/ux/views/semesters/add_course_page.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 class CourseCard extends StatelessWidget {
-  final int creditHours;
-  final String grade;
-  final String courseCode;
-  final double score;
-  final int semesterNumber;
-  final int courseIndex;
-  final bool isFirst;
-  final bool isLast;
-
   const CourseCard({
     super.key,
-    required this.creditHours,
-    required this.grade,
-    required this.courseCode,
-    required this.score,
-    required this.semesterNumber,
-    required this.courseIndex,
+    required this.course,
+    required this.semester,
     this.isFirst = false,
     this.isLast = false,
   });
+
+  final Course course;
+  final Semester semester;
+  final bool isFirst;
+  final bool isLast;
 
   @override
   Widget build(BuildContext context) {
@@ -39,12 +31,12 @@ class CourseCard extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Text(
-              courseCode.toUpperCase(),
+              course.courseCode.toUpperCase(),
               style: Theme.of(context).textTheme.titleMedium?.copyWith(
                     fontWeight: FontWeight.bold,
                   ),
             ),
-            Text('$creditHours Credits',
+            Text('${course.creditUnits} Credits',
                 style: Theme.of(context).textTheme.bodySmall),
           ],
         ),
@@ -56,7 +48,7 @@ class CourseCard extends StatelessWidget {
             borderRadius: BorderRadius.circular(12),
           ),
           child: Text(
-            grade.toUpperCase(),
+            course.grade.toUpperCase(),
             style: Theme.of(context).textTheme.titleMedium?.copyWith(
                   color: AppColors.white,
                   fontSize: 22,
@@ -65,31 +57,15 @@ class CourseCard extends StatelessWidget {
           ),
         ),
         shape: border(context),
-        onTap: () async {
-          final result = await Navigation.navigateToScreen(
+        onTap: () {
+          Navigation.navigateToScreen(
             context: context,
             screen: AddCoursePage(
-              existingCourse: CourseInput(
-                courseCode: courseCode,
-                creditHours: creditHours,
-                grade: grade,
-                score: score,
-              ),
-              semesterNumber: semesterNumber,
-              courseIndex: courseIndex,
+              isEditMode: true,
+              semester: semester,
+              course: course,
             ),
           );
-
-          // if (result != null && result is CourseInput) {
-          //   viewModel.updateCourse(
-          //     semesterNumber,
-          //     courseIndex,
-          //     courseCode: result.courseCode,
-          //     creditHours: result.creditHours,
-          //     grade: result.grade,
-          //     score: result.score,
-          //   );
-          // }
         },
       ),
     );

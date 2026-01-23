@@ -15,8 +15,7 @@ class CGPAViewModel {
   ValueNotifier<UIResult<AppUser>> setTargetCGPAResult =
       ValueNotifier(UIResult.empty());
 
-  Future<void> setTargetCGPA(
-      {required double targetCGPA, required double currentCGPA}) async {
+  Future<void> setTargetCGPA({required double targetCGPA}) async {
     setTargetCGPAResult.value = UIResult.loading();
     try {
       final userId = _authService.currentUser?.uid;
@@ -27,7 +26,6 @@ class CGPAViewModel {
       await _cgpaService.setTargetCGPA(
         userId: userId,
         targetCGPA: targetCGPA,
-        currentCGPA: currentCGPA,
       );
 
       final userData = await _authService.getUserData(userId);
@@ -50,14 +48,11 @@ class CGPAViewModel {
       required double targetCGPA,
       required int completedCredits,
       required int upcomingCredits}) {
-    // Formula: Required GPA = [(Target CGPA × Total Credits) - (Current CGPA × Completed Credits)] / Upcoming Credits
-    final totalCredits = completedCredits + upcomingCredits;
-    final requiredGPA =
-        ((targetCGPA * totalCredits) - (currentCGPA * completedCredits)) /
-            upcomingCredits;
-
-    // Cap at max scale (adjust this based on your grading scale)
-    final maxScale = _authViewModel.currentUser.value?.gradingScale ?? 5.0;
-    return requiredGPA.clamp(0.0, maxScale);
+    return CGPACalculator.calculateRequiredSemesterGPA(
+      currentCGPA: currentCGPA,
+      targetCGPA: targetCGPA,
+      completedCredits: completedCredits,
+      upcomingCredits: upcomingCredits,
+    );
   }
 }

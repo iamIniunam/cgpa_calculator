@@ -8,6 +8,7 @@ import 'package:cgpa_calculator/ux/shared/view_models/auth_view_model.dart';
 import 'package:cgpa_calculator/ux/shared/view_models/theme_view_model.dart';
 import 'package:cgpa_calculator/ux/views/onboarding/grading_system_selection_page.dart';
 import 'package:cgpa_calculator/ux/views/onboarding/login_page.dart';
+import 'package:cgpa_calculator/ux/views/semesters/view_models/semester_view_model.dart';
 import 'package:cgpa_calculator/ux/views/splash_screen.dart';
 import 'package:flutter/material.dart';
 
@@ -63,6 +64,7 @@ class EntryPage extends StatefulWidget {
 
 class _EntryPageState extends State<EntryPage> {
   final AuthViewModel _authViewModel = AppDI.getIt<AuthViewModel>();
+  final SemesterViewModel _semesterViewModel = AppDI.getIt<SemesterViewModel>();
 
   @override
   void initState() {
@@ -72,6 +74,15 @@ class _EntryPageState extends State<EntryPage> {
 
       await Future.delayed(const Duration(seconds: 2));
       if (!mounted) return;
+
+      final user = _authViewModel.currentUser.value;
+      if (user == null) {
+        Navigation.navigateToScreenAndClearAllPrevious(
+          context: context,
+          screen: const LoginPage(),
+        );
+        return;
+      }
 
       if (!_authViewModel.isLoggedIn()) {
         Navigation.navigateToScreenAndClearAllPrevious(
@@ -103,6 +114,8 @@ class _EntryPageState extends State<EntryPage> {
           screen: const GradingSystemSelectionPage(),
         );
       } else {
+        await _semesterViewModel.loadSemesters();
+        if (!mounted) return;
         Navigation.navigateToHomePage(context: context);
       }
     });

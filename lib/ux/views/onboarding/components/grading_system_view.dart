@@ -1,60 +1,60 @@
 import 'package:cgpa_calculator/ux/shared/components/app_material.dart';
-import 'package:cgpa_calculator/ux/shared/models/ui_models.dart';
+import 'package:cgpa_calculator/ux/shared/models/grading_scale_models.dart';
 import 'package:cgpa_calculator/ux/shared/resources/app_colors.dart';
 import 'package:flutter/material.dart';
 
-class GradingSystemView extends StatelessWidget {
-  const GradingSystemView({
-    super.key,
-    required this.selectedScale,
-    required this.onScaleChanged,
-  });
+// class GradingSystemView extends StatelessWidget {
+//   const GradingSystemView({
+//     super.key,
+//     required this.selectedScale,
+//     required this.onScaleChanged,
+//   });
 
-  final GradingScale selectedScale;
-  final ValueChanged<GradingScale> onScaleChanged;
+//   final GradingScale selectedScale;
+//   final ValueChanged<GradingScale> onScaleChanged;
 
-  @override
-  Widget build(BuildContext context) {
-    const gradingScales = GradingScale.values;
-    final gradingScaleNames = [
-      'Standard GPA',
-      'Extended GPA',
-      'Five Point Scale',
-    ];
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 24),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Text(
-            'Grading System',
-            style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                  color: AppColors.white,
-                ),
-          ),
-          const SizedBox(height: 2),
-          Text(
-            'This determines how your CGPA is calculated.',
-            style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                  color: AppColors.textGrey,
-                  fontSize: 22,
-                ),
-          ),
-          const SizedBox(height: 16),
-          ...gradingScales.map(
-            (grade) => GradeSystemCard(
-              grade: grade,
-              gradeName: gradingScaleNames[grade.index],
-              selected: selectedScale == grade,
-              onTap: () => onScaleChanged(grade),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
+//   @override
+//   Widget build(BuildContext context) {
+//     const gradingScales = GradingScale.values;
+//     final gradingScaleNames = [
+//       'Standard GPA',
+//       'Extended GPA',
+//       'Five Point Scale',
+//     ];
+//     return Padding(
+//       padding: const EdgeInsets.symmetric(horizontal: 24),
+//       child: Column(
+//         crossAxisAlignment: CrossAxisAlignment.start,
+//         mainAxisAlignment: MainAxisAlignment.center,
+//         children: [
+//           Text(
+//             'Grading System',
+//             style: Theme.of(context).textTheme.headlineMedium?.copyWith(
+//                   color: AppColors.white,
+//                 ),
+//           ),
+//           const SizedBox(height: 2),
+//           Text(
+//             'This determines how your CGPA is calculated.',
+//             style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+//                   color: AppColors.textGrey,
+//                   fontSize: 22,
+//                 ),
+//           ),
+//           const SizedBox(height: 16),
+//           ...gradingScales.map(
+//             (grade) => GradeSystemCard(
+//               grade: grade,
+//               gradeName: gradingScaleNames[grade.index],
+//               selected: selectedScale == grade,
+//               onTap: () => onScaleChanged(grade),
+//             ),
+//           ),
+//         ],
+//       ),
+//     );
+//   }
+// }
 
 class GradeSystemCard extends StatelessWidget {
   const GradeSystemCard({
@@ -94,7 +94,7 @@ class GradeSystemCard extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                grade?.name.toString() ?? title ?? '',
+                grade?.name ?? title ?? '',
                 style: Theme.of(context).textTheme.displayMedium?.copyWith(
                       color:
                           (Theme.of(context).brightness == Brightness.light &&

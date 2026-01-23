@@ -1,37 +1,28 @@
-import 'package:cgpa_calculator/ux/shared/models/ui_models.dart';
+import 'package:cgpa_calculator/ux/shared/models/semester_model.dart';
 import 'package:cgpa_calculator/ux/shared/resources/app_colors.dart';
-import 'package:cgpa_calculator/ux/shared/view_models/auth_view_model.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 class GpaTrajectoryData extends StatelessWidget {
   const GpaTrajectoryData({
     super.key,
     required this.semesters,
     required this.totalSemesters,
+    this.maxGradePoint,
   });
 
   final List<Semester> semesters;
   final int totalSemesters;
+  final double? maxGradePoint;
 
   @override
   Widget build(BuildContext context) {
-    // final authViewModel = Provider.of<AuthViewModel>(context);
-    // final maxGrade = GradeCalculator.getMaxGrade(authViewModel.gradingScale);
-
     final List<FlSpot> gpaSpots = [];
 
-    for (int i = 1; i <= totalSemesters; i++) {
-      final semester = semesters.firstWhere(
-        (s) => s.semesterNumber == i,
-        orElse: () => Semester(semesterNumber: i, courses: []),
-      );
-
-      if (semester.courses.isNotEmpty) {
-        final gpa = GradeCalculator.calculateGPA(semester.courses);
-        gpaSpots.add(FlSpot(i.toDouble(), gpa));
-      }
+    for (int i = 0; i < semesters.length; i++) {
+      final semester = semesters[i];
+      double gpa = semester.semesterGPA ?? 0.0;
+      gpaSpots.add(FlSpot((i + 1).toDouble(), gpa));
     }
 
     if (gpaSpots.isEmpty) {
@@ -45,6 +36,10 @@ class GpaTrajectoryData extends StatelessWidget {
         ),
       );
     }
+
+    final double effectiveMaxGrade =
+        (maxGradePoint ?? 5.0) <= 0 ? 5.0 : maxGradePoint ?? 5.0;
+    final double yInterval = effectiveMaxGrade / 5;
 
     return Container(
       padding: const EdgeInsets.all(16),
@@ -69,22 +64,44 @@ class GpaTrajectoryData extends StatelessWidget {
                 },
               ),
             ),
-            minX: 1,
-            maxX: totalSemesters.toDouble(),
+            minX: 0,
+            maxX: totalSemesters.toDouble() + 1,
             minY: 0.0,
-            maxY: 4.0,
-            // gridData: FlGridData(
-            //   show: true,
-            //   drawVerticalLine: false,
-            //   horizontalInterval: maxGrade / 5,
-            //   getDrawingHorizontalLine: (value) {
-            //     return FlLine(
-            //       color: Colors.grey.shade800,
-            //       strokeWidth: 0.5,
-            //     );
-            //   },
-            // ),
-            borderData: FlBorderData(show: false),
+            maxY: effectiveMaxGrade,
+            gridData: FlGridData(
+              show: true,
+              drawVerticalLine: true,
+              drawHorizontalLine: true,
+              horizontalInterval: yInterval,
+              verticalInterval: 1,
+              getDrawingHorizontalLine: (value) {
+                return FlLine(
+                  color: Theme.of(context).brightness == Brightness.dark
+                      ? AppColors.greyInputBorder.withOpacity(0.3)
+                      : AppColors.greyInputBorder.withOpacity(0.5),
+                  strokeWidth: 1,
+                  dashArray: [5, 5],
+                );
+              },
+              getDrawingVerticalLine: (value) {
+                return FlLine(
+                  color: Theme.of(context).brightness == Brightness.dark
+                      ? AppColors.greyInputBorder.withOpacity(0.3)
+                      : AppColors.greyInputBorder.withOpacity(0.5),
+                  strokeWidth: 1,
+                  dashArray: [5, 5],
+                );
+              },
+            ),
+            borderData: FlBorderData(
+              show: false,
+              border: Border.all(
+                color: Theme.of(context).brightness == Brightness.dark
+                    ? AppColors.greyInputBorder.withOpacity(0.5)
+                    : AppColors.greyInputBorder,
+                width: 1,
+              ),
+            ),
             titlesData: FlTitlesData(
               rightTitles: const AxisTitles(
                 sideTitles: SideTitles(showTitles: false),
@@ -95,14 +112,24 @@ class GpaTrajectoryData extends StatelessWidget {
               leftTitles: AxisTitles(
                 sideTitles: SideTitles(
                   showTitles: true,
-                  reservedSize: 35,
-                  interval: 4.0 / 5,
+                  reservedSize: 30,
+                  interval: yInterval,
                   getTitlesWidget: (value, meta) {
-                    return Text(
-                      value.toStringAsFixed(1),
-                      style: const TextStyle(
-                        color: AppColors.textGrey,
-                        fontSize: 10,
+                    if (value < 0 || value > (effectiveMaxGrade)) {
+                      return const SizedBox.shrink();
+                    }
+                    return Padding(
+                      padding: const EdgeInsets.only(right: 8.0),
+                      child: Text(
+                        value.toStringAsFixed(1),
+                        style: TextStyle(
+                          color: Theme.of(context).brightness == Brightness.dark
+                              ? AppColors.textGrey
+                              : AppColors.grey400,
+                          fontSize: 11,
+                          fontWeight: FontWeight.w500,
+                        ),
+                        textAlign: TextAlign.right,
                       ),
                     );
                   },
@@ -112,6 +139,7 @@ class GpaTrajectoryData extends StatelessWidget {
                 sideTitles: SideTitles(
                   showTitles: true,
                   interval: 1,
+                  reservedSize: 30,
                   getTitlesWidget: (value, meta) {
                     if (value < 1 || value > totalSemesters) {
                       return const SizedBox.shrink();
@@ -120,9 +148,12 @@ class GpaTrajectoryData extends StatelessWidget {
                       padding: const EdgeInsets.only(top: 8.0),
                       child: Text(
                         'S${value.toInt()}',
-                        style: const TextStyle(
-                          color: AppColors.textGrey,
-                          fontSize: 10,
+                        style: TextStyle(
+                          color: Theme.of(context).brightness == Brightness.dark
+                              ? AppColors.textGrey
+                              : AppColors.grey400,
+                          fontSize: 11,
+                          fontWeight: FontWeight.w500,
                         ),
                       ),
                     );
@@ -136,14 +167,19 @@ class GpaTrajectoryData extends StatelessWidget {
                 isCurved: true,
                 curveSmoothness: 0.3,
                 barWidth: 3,
+                preventCurveOverShooting: true,
+                isStrokeCapRound: true,
                 dotData: FlDotData(
                   show: true,
                   getDotPainter: (spot, percent, barData, index) {
                     return FlDotCirclePainter(
-                      radius: 4,
+                      radius: 5,
                       color: AppColors.primaryColorLight,
-                      strokeWidth: 2,
-                      strokeColor: Colors.white70,
+                      strokeWidth: 2.5,
+                      strokeColor:
+                          Theme.of(context).brightness == Brightness.dark
+                              ? AppColors.white.withOpacity(0.9)
+                              : Colors.white,
                     );
                   },
                 ),
@@ -152,17 +188,21 @@ class GpaTrajectoryData extends StatelessWidget {
                   gradient: LinearGradient(
                     colors: [
                       AppColors.primaryColorLight.withOpacity(0.3),
+                      AppColors.primaryColorLight.withOpacity(0.1),
                       AppColors.transparent,
                     ],
                     begin: Alignment.topCenter,
                     end: Alignment.bottomCenter,
+                    stops: const [0.0, 0.5, 1.0],
                   ),
                 ),
                 gradient: const LinearGradient(
                   colors: [
-                    AppColors.primaryColorLight,
+                    AppColors.primaryColorGradientLight,
                     AppColors.primaryColorLight,
                   ],
+                  begin: Alignment.centerLeft,
+                  end: Alignment.centerRight,
                 ),
               ),
             ],
