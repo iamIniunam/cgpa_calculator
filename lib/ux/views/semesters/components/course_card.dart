@@ -42,6 +42,7 @@ class CourseCard extends StatelessWidget {
         ),
         contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 2),
         trailing: Container(
+          width: 54,
           padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
           decoration: BoxDecoration(
             color: AppColors.primaryColor,
@@ -49,6 +50,7 @@ class CourseCard extends StatelessWidget {
           ),
           child: Text(
             course.grade?.toUpperCase() ?? '',
+            textAlign: TextAlign.center,
             style: Theme.of(context).textTheme.titleMedium?.copyWith(
                   color: AppColors.white,
                   fontSize: 22,

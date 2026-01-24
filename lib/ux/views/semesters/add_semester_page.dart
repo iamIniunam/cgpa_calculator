@@ -74,7 +74,7 @@ class _AddSemesterPageState extends State<AddSemesterPage> {
   void handleSemesterCreationResult() {
     final result = semesterViewModel.createSemesterResult.value;
     if (result.isSuccess) {
-      Navigation.navigateToScreen(
+      Navigation.navigateToScreenAndClearOnePrevious(
         context: context,
         screen: SemesterDetailsPage(semester: result.data ?? Semester()),
       );
@@ -242,7 +242,7 @@ class _AddSemesterPageState extends State<AddSemesterPage> {
                 children: [
                   PrimaryTextFormField(
                     labelText: 'Semester Title',
-                    hintText: 'e.g. Summer 2024',
+                    hintText: 'e.g. Year 1, Semester 1',
                     controller: titleController,
                     keyboardType: TextInputType.text,
                     textInputAction: TextInputAction.next,
