@@ -329,31 +329,20 @@ class _TargetCGPAPageState extends State<TargetCGPAPage> {
                   Container(
                     padding: const EdgeInsets.all(16),
                     decoration: BoxDecoration(
-                      color: Colors.blue.withOpacity(0.1),
+                      color: Theme.of(context).brightness == Brightness.dark
+                          ? AppColors.transparentBackgroundDark
+                          : AppColors.transparentBackgroundLight,
                       borderRadius: BorderRadius.circular(16),
-                      border: Border.all(
-                        color: Colors.blue.withOpacity(0.3),
-                        width: 1,
-                      ),
+                      border: Border.all(color: AppColors.primaryColor),
                     ),
                     child: Row(
                       children: [
-                        const Icon(
-                          Icons.info_outline,
-                          color: Colors.blue,
-                          size: 24,
-                        ),
+                        const Icon(Icons.info_outline, size: 24),
                         const SizedBox(width: 12),
                         Expanded(
                           child: Text(
-                            'Based on $_completedCredits completed credits and estimated $_upcomingCredits upcoming credits.',
-                            style: Theme.of(context)
-                                .textTheme
-                                .bodyMedium
-                                ?.copyWith(
-                                  color: Colors.blue,
-                                ),
-                          ),
+                              'Based on $_completedCredits completed credits and estimated $_upcomingCredits upcoming credits.',
+                              style: Theme.of(context).textTheme.bodyMedium),
                         ),
                       ],
                     ),
