@@ -181,4 +181,8 @@ class CGPACalculator {
     if (percentage >= 50) return 'below'; // D range
     return 'fail'; // F range
   }
+
+  static double calculateCGPAChange(double currentCGPA, double previousCGPA) {
+    return currentCGPA - previousCGPA;
+  }
 }

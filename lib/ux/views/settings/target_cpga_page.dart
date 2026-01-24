@@ -59,14 +59,15 @@ class _TargetCGPAPageState extends State<TargetCGPAPage> {
     return avgCreditsPerSemester.round();
   }
 
-  void handleSetTargetResult() {
+  void handleSetTargetResult() async {
     final result = _cgpaViewModel.setTargetCGPAResult.value;
     if (result.isLoading) {
       AppDialogs.showLoadingDialog(context);
     } else if (result.isSuccess) {
       Navigation.back(context: context);
-      AppDialogs.showSuccessDialog(context,
+      await AppDialogs.showSuccessDialog(context,
           successMessage: result.message ?? '');
+      setState(() {});
     } else if (result.isError) {
       Navigation.back(context: context);
       AppDialogs.showErrorDialog(context, errorMessage: result.message ?? '');
@@ -101,6 +102,15 @@ class _TargetCGPAPageState extends State<TargetCGPAPage> {
   void dispose() {
     _cgpaViewModel.setTargetCGPAResult.removeListener(handleSetTargetResult);
     super.dispose();
+  }
+
+  bool isButtonDisabled() {
+    final user = _authViewModel.currentUser.value;
+    final targetCGPA = user?.targetCGPA;
+
+    // Disable button if target is set and matches current slider value
+    return targetCGPA != null &&
+        (_currentSliderValue - targetCGPA).abs() < 0.01;
   }
 
   @override
@@ -329,20 +339,15 @@ class _TargetCGPAPageState extends State<TargetCGPAPage> {
                   Container(
                     padding: const EdgeInsets.all(16),
                     decoration: BoxDecoration(
-                      color: Colors.blue.withOpacity(0.1),
+                      color: Theme.of(context).brightness == Brightness.dark
+                          ? AppColors.transparentBackgroundDark
+                          : AppColors.transparentBackgroundLight,
                       borderRadius: BorderRadius.circular(16),
-                      border: Border.all(
-                        color: Colors.blue.withOpacity(0.3),
-                        width: 1,
-                      ),
+                      border: Border.all(color: Theme.of(context).dividerColor),
                     ),
                     child: Row(
                       children: [
-                        const Icon(
-                          Icons.info_outline,
-                          color: Colors.blue,
-                          size: 24,
-                        ),
+                        const Icon(Icons.info_outline, size: 24),
                         const SizedBox(width: 12),
                         Expanded(
                           child: Text(
@@ -350,9 +355,7 @@ class _TargetCGPAPageState extends State<TargetCGPAPage> {
                             style: Theme.of(context)
                                 .textTheme
                                 .bodyMedium
-                                ?.copyWith(
-                                  color: Colors.blue,
-                                ),
+                                ?.copyWith(fontWeight: FontWeight.w600),
                           ),
                         ),
                       ],
@@ -361,10 +364,11 @@ class _TargetCGPAPageState extends State<TargetCGPAPage> {
                 ],
               ),
             ),
-            // TODO: disable button after target is set and matches current
+            // Disable button after target is set and matches current
             Padding(
               padding: const EdgeInsets.all(16),
               child: PrimaryButton(
+                enabled: !isButtonDisabled(),
                 onTap: () async {
                   bool res = await showAppBottomSheet(
                     context: context,

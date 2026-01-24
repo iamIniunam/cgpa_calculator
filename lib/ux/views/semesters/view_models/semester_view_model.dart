@@ -22,6 +22,16 @@ class SemesterViewModel extends ChangeNotifier {
       CGPACalculator.getCompletedSemestersCount(semesters.value);
   int get totalSemesters => semesters.value.length;
 
+  double get previousCGPA {
+    if (semesters.value.length < 2) return 0.0;
+    final previousSemesters =
+        semesters.value.sublist(0, semesters.value.length - 1);
+    return CGPACalculator.calculateCGPA(previousSemesters);
+  }
+
+  double get cgpaChange =>
+      CGPACalculator.calculateCGPAChange(currentCGPA, previousCGPA);
+
   List<Map<String, dynamic>> get semesterGPAData =>
       CGPACalculator.getSemesterGPAData(semesters.value);
 

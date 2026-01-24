@@ -30,7 +30,8 @@ class AuthBottomSection extends StatelessWidget {
   void handleAuthResult(BuildContext context) {
     final result = _authViewModel.googleSignInResult.value;
     if (result.isSuccess) {
-      if (isLogin) {
+      if (isLogin &&
+          _authViewModel.currentUser.value?.profileComplete == true) {
         Navigation.navigateToHomePage(context: context);
       } else {
         Navigation.navigateToScreen(
