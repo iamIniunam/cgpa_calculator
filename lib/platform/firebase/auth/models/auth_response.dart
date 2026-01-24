@@ -1,3 +1,4 @@
+import 'package:cgpa_calculator/platform/extensions/string_extensions.dart';
 import 'package:cgpa_calculator/platform/extensions/extensions.dart';
 import 'package:cgpa_calculator/ux/shared/models/grading_scale_models.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -16,6 +17,8 @@ class AppUser implements Serializable {
   final DateTime createdAt;
   final DateTime lastLogin;
   final DateTime? lastActive;
+  final String? profilePicture;
+  final String? googleImageUrl;
 
   AppUser({
     required this.id,
@@ -31,7 +34,25 @@ class AppUser implements Serializable {
     required this.createdAt,
     required this.lastLogin,
     this.lastActive,
+    this.profilePicture,
+    this.googleImageUrl,
   });
+
+  bool hasProfilePicture() {
+    return profilePicture.isNullOrBlank == false ||
+        googleImageUrl.isNullOrBlank == false;
+  }
+
+  String? displayProfileImageUrl() {
+    return profilePicture ?? googleImageUrl;
+  }
+
+  String? displayProfileImageBaseUrl() {
+    if (profilePicture == null) {
+      return '';
+    }
+    return null;
+  }
 
   factory AppUser.fromJson(Map<String, dynamic> json) => AppUser(
         id: json['id'] ?? '',
@@ -61,6 +82,8 @@ class AppUser implements Serializable {
                 ? DateTime.parse(json['lastActive'])
                 : (json['lastActive'] as Timestamp).toDate())
             : null,
+        profilePicture: json['profilePicture'],
+        googleImageUrl: json['googleImageUrl'],
       );
 
   @override
@@ -78,6 +101,8 @@ class AppUser implements Serializable {
         'createdAt': createdAt.toIso8601String(),
         'lastLogin': lastLogin.toIso8601String(),
         'lastActive': lastActive?.toIso8601String(),
+        'profilePicture': profilePicture,
+        'googleImageUrl': googleImageUrl,
       };
 
   AppUser copyWith({
@@ -94,6 +119,8 @@ class AppUser implements Serializable {
     DateTime? createdAt,
     DateTime? lastLogin,
     DateTime? lastActive,
+    String? profilePicture,
+    String? googleImageUrl,
   }) {
     return AppUser(
       id: id ?? this.id,
@@ -109,6 +136,8 @@ class AppUser implements Serializable {
       createdAt: createdAt ?? this.createdAt,
       lastLogin: lastLogin ?? this.lastLogin,
       lastActive: lastActive ?? this.lastActive,
+      profilePicture: profilePicture ?? this.profilePicture,
+      googleImageUrl: googleImageUrl ?? this.googleImageUrl,
     );
   }
 

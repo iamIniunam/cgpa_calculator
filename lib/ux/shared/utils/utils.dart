@@ -2,6 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class Utils {
   Utils._();
@@ -28,5 +29,18 @@ class Utils {
     if (kDebugMode) {
       print(message);
     }
+  }
+}
+
+
+class UiUtils {
+  UiUtils._();
+
+  static void showToast(
+      {required String message, Toast toastLength = Toast.LENGTH_SHORT}) {
+    Fluttertoast.showToast(
+      msg: message,
+      toastLength: toastLength,
+    );
   }
 }

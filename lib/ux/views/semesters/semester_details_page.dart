@@ -8,6 +8,7 @@ import 'package:cgpa_calculator/platform/extensions/extensions.dart';
 import 'package:cgpa_calculator/ux/shared/components/empty_state.dart';
 import 'package:cgpa_calculator/ux/shared/models/semester_model.dart';
 import 'package:cgpa_calculator/ux/shared/resources/app_strings.dart';
+import 'package:cgpa_calculator/ux/shared/utils/utils.dart';
 import 'package:cgpa_calculator/ux/views/semesters/add_course_page.dart';
 import 'package:cgpa_calculator/ux/views/home/components/cgpa_display.dart';
 import 'package:cgpa_calculator/ux/views/semesters/components/course_card.dart';
@@ -15,7 +16,6 @@ import 'package:cgpa_calculator/ux/views/semesters/components/delete_course_butt
 import 'package:flutter/material.dart';
 import 'package:cgpa_calculator/platform/di/dependency_injection.dart';
 import 'package:cgpa_calculator/ux/views/semesters/view_models/semester_view_model.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 
 class SemesterDetailsPage extends StatefulWidget {
   const SemesterDetailsPage({super.key, required this.semester});
@@ -81,17 +81,9 @@ class _SemesterDetailsPageState extends State<SemesterDetailsPage> {
                         ),
                       );
                       if (res == true) {
-                        Fluttertoast.showToast(
-                          msg: "Updating status...",
-                          toastLength: Toast.LENGTH_SHORT,
-                          gravity: ToastGravity.BOTTOM,
-                        );
+                        UiUtils.showToast(message: "Updating status...");
                         await updateSemesterStatus();
-                        Fluttertoast.showToast(
-                          msg: "Semester status updated",
-                          toastLength: Toast.LENGTH_SHORT,
-                          gravity: ToastGravity.BOTTOM,
-                        );
+                        UiUtils.showToast(message: "Semester status updated");
                         await Future.delayed(const Duration(milliseconds: 800));
                         if (!mounted) return;
                         Navigation.back(context: context);

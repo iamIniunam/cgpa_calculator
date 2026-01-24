@@ -113,6 +113,8 @@ class AuthService {
             'themePreference': AppThemeMode.system.name,
             'createdAt': FieldValue.serverTimestamp(),
             'lastLogin': FieldValue.serverTimestamp(),
+            'profilePicture': userCredential.user?.photoURL,
+            'googleImageUrl': userCredential.user?.photoURL,
           });
         } else {
           await _firestore
@@ -120,6 +122,8 @@ class AuthService {
               .doc(userCredential.user?.uid)
               .update({
             'lastLogin': FieldValue.serverTimestamp(),
+            'profilePicture': userCredential.user?.photoURL,
+            'googleImageUrl': userCredential.user?.photoURL,
           });
         }
       }
@@ -196,7 +200,7 @@ class AuthService {
   Future<void> logout() async {
     await Future.wait([
       _auth.signOut(),
-      // _googleSignIn.signOut(),
+      _googleSignIn.signOut(),
     ]);
   }
 

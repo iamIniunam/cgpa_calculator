@@ -1,6 +1,5 @@
 import 'package:cgpa_calculator/platform/di/dependency_injection.dart';
 import 'package:cgpa_calculator/ux/navigation/navigation.dart';
-import 'package:cgpa_calculator/ux/navigation/navigation_host_page.dart';
 import 'package:cgpa_calculator/ux/shared/bottom_sheets/app_confirmation_botttom_sheet.dart';
 import 'package:cgpa_calculator/ux/shared/bottom_sheets/show_app_bottom_sheet.dart';
 import 'package:cgpa_calculator/ux/shared/components/app_buttons.dart';
@@ -9,11 +8,12 @@ import 'package:cgpa_calculator/platform/extensions/extensions.dart';
 import 'package:cgpa_calculator/ux/shared/models/semester_model.dart';
 import 'package:cgpa_calculator/ux/shared/resources/app_colors.dart';
 import 'package:cgpa_calculator/ux/shared/resources/app_dialogs.dart';
+import 'package:cgpa_calculator/ux/shared/utils/utils.dart';
 import 'package:cgpa_calculator/ux/views/semesters/components/delete_course_button.dart';
+import 'package:cgpa_calculator/ux/views/semesters/semester_details_page.dart';
 import 'package:cgpa_calculator/ux/views/semesters/view_models/semester_view_model.dart';
 import 'package:cgpa_calculator/ux/views/settings/components/settings_group.dart';
 import 'package:cgpa_calculator/ux/views/settings/components/settings_tile.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -57,27 +57,15 @@ class _AddSemesterPageState extends State<AddSemesterPage> {
       status = value ? SemesterStatus.inProgress : SemesterStatus.completed;
     });
     if (widget.isEditMode) {
-      Fluttertoast.showToast(
-        msg: "Updating status...",
-        toastLength: Toast.LENGTH_SHORT,
-        gravity: ToastGravity.BOTTOM,
-      );
+      UiUtils.showToast(message: "Updating status...");
       try {
         await updateSemesterStatus();
         if (mounted) {
-          Fluttertoast.showToast(
-            msg: "Semester status updated",
-            toastLength: Toast.LENGTH_SHORT,
-            gravity: ToastGravity.BOTTOM,
-          );
+          UiUtils.showToast(message: "Semester status updated");
         }
       } catch (e) {
         if (mounted) {
-          Fluttertoast.showToast(
-            msg: "Failed to update status",
-            toastLength: Toast.LENGTH_SHORT,
-            gravity: ToastGravity.BOTTOM,
-          );
+          UiUtils.showToast(message: "Failed to update status");
         }
       }
     }
@@ -88,7 +76,7 @@ class _AddSemesterPageState extends State<AddSemesterPage> {
     if (result.isSuccess) {
       Navigation.navigateToScreen(
         context: context,
-        screen: const NavigationHostPage(initialIndex: 1),
+        screen: SemesterDetailsPage(semester: result.data ?? Semester()),
       );
     } else if (result.isError) {
       AppDialogs.showErrorDialog(

@@ -7,6 +7,8 @@ class AppImages {
   static AssetImage appLogo = const AssetImage('assets/images/logo.png');
   static AssetImage sampleProfileImage =
       const AssetImage('assets/images/jcole.png');
+  static AssetImage profilePlaceholder =
+      const AssetImage('assets/images/profile_placeholder.png');
 
   // SVGS
 
