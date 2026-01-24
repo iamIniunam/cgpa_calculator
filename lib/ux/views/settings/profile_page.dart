@@ -111,8 +111,9 @@ class _ProfilePageState extends State<ProfilePage> {
                             PrimaryTextFormField(
                               labelText: 'Institution Name',
                               controller: schoolController,
-                              keyboardType: TextInputType.emailAddress,
+                              keyboardType: TextInputType.name,
                               textInputAction: TextInputAction.done,
+                              textCapitalization: TextCapitalization.words,
                             ),
                           ],
                         ),

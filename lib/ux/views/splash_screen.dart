@@ -60,31 +60,3 @@ class SplashScreen extends StatelessWidget {
     );
   }
 }
-
-
-          // Padding(
-          //   padding: const EdgeInsets.symmetric(vertical: 32),
-          //   child: Column(
-          //     children: [
-          //       Padding(
-          //         padding: const EdgeInsets.symmetric(
-          //             horizontal: 80, vertical: 12),
-          //         child: LinearProgressIndicator(
-          //           backgroundColor: Theme.of(context).dividerColor,
-          //           valueColor: AlwaysStoppedAnimation<Color>(
-          //             Theme.of(context).primaryColor,
-          //           ),
-          //           borderRadius: BorderRadius.circular(12),
-          //         ),
-          //       ),
-          //       Text(
-          //         'Loading Resources...'.toUpperCase(),
-          //         style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-          //               color: AppColors.textGrey,
-          //               fontSize: 12,
-          //               letterSpacing: 1.2,
-          //             ),
-          //       ),
-          //     ],
-          //   ),
-          // ),

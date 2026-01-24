@@ -92,20 +92,6 @@ class _EntryPageState extends State<EntryPage> {
         return;
       }
 
-      // final user = _authViewModel.currentUser.value;
-      // if (user != null) {
-      //   await _authViewModel.checkUserExists(user.email);
-      //   if (!mounted) return;
-      //   final exists = _authViewModel.checkUserExistsResult.value.data;
-      //   if (exists != true) {
-      //     Navigation.navigateToScreenAndClearAllPrevious(
-      //       context: context,
-      //       screen: const SignUpPage(),
-      //     );
-      //     return;
-      //   }
-      // }
-
       if (!mounted) return;
 
       if (!_authViewModel.isProfileComplete()) {
