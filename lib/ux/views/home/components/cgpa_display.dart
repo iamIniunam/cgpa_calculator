@@ -29,83 +29,76 @@ class CGPADisplay extends StatelessWidget {
         ),
       ),
       child: ValueListenableBuilder<AppUser?>(
-          valueListenable: AppDI.getIt<AuthViewModel>().currentUser,
-          builder: (context, user, _) {
-            return Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      'Current CGPA'.toUpperCase(),
-                      style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                            color: AppColors.textGrey2,
-                            letterSpacing: 1.2,
-                          ),
+        valueListenable: AppDI.getIt<AuthViewModel>().currentUser,
+        builder: (context, user, _) {
+          return Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    'Current CGPA'.toUpperCase(),
+                    style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                        color: AppColors.textGrey2, letterSpacing: 1.2),
+                  ),
+                  Container(
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+                    decoration: BoxDecoration(
+                      color: AppColors.textGrey2.withOpacity(0.5),
+                      borderRadius: BorderRadius.circular(18),
+                      border: Border.all(
+                          color: AppColors.greyInputBorder, width: 0.3),
                     ),
-                    Container(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 12, vertical: 4),
-                      decoration: BoxDecoration(
-                        color: AppColors.textGrey2.withOpacity(0.5),
-                        borderRadius: BorderRadius.circular(18),
-                        border: Border.all(
-                          color: AppColors.greyInputBorder,
-                          width: 0.3,
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Icon(
+                          viewModel.cgpaChange >= 0
+                              ? Icons.trending_up_rounded
+                              : Icons.trending_down_rounded,
+                          color: AppColors.white.withOpacity(0.7),
+                          size: 20,
                         ),
-                      ),
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Icon(
-                            viewModel.cgpaChange >= 0
-                                ? Icons.trending_up_rounded
-                                : Icons.trending_down_rounded,
-                            color: AppColors.white.withOpacity(0.7),
-                            size: 20,
-                          ),
-                          const SizedBox(width: 8),
-                          Text(
-                            viewModel.cgpaChange >= 0
-                                ? '+${viewModel.cgpaChange.toStringAsFixed(2)}'
-                                : viewModel.cgpaChange.toStringAsFixed(2),
-                            style: Theme.of(context)
-                                .textTheme
-                                .titleMedium
-                                ?.copyWith(color: AppColors.white),
-                          ),
-                        ],
-                      ),
+                        const SizedBox(width: 8),
+                        Text(
+                          viewModel.cgpaChange >= 0
+                              ? '+${viewModel.cgpaChange.toStringAsFixed(2)}'
+                              : viewModel.cgpaChange.toStringAsFixed(2),
+                          style: Theme.of(context)
+                              .textTheme
+                              .titleMedium
+                              ?.copyWith(color: AppColors.white),
+                        ),
+                      ],
                     ),
-                  ],
-                ),
-                const SizedBox(height: 16),
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  textBaseline: TextBaseline.alphabetic,
-                  children: [
-                    Text(
-                      viewModel.currentCGPA.toStringAsFixed(2),
-                      style:
-                          Theme.of(context).textTheme.headlineLarge?.copyWith(
-                                color: AppColors.white,
-                                fontSize: 60,
-                                height: 1,
-                              ),
-                    ),
-                    Text(
-                      targetCGPAText(user?.targetCGPA),
-                      style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                            color: AppColors.textGrey2,
-                          ),
-                    ),
-                  ],
-                ),
-              ],
-            );
-          }),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 16),
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.end,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                textBaseline: TextBaseline.alphabetic,
+                children: [
+                  Text(
+                    viewModel.currentCGPA.toStringAsFixed(2),
+                    style: Theme.of(context).textTheme.headlineLarge?.copyWith(
+                        color: AppColors.white, fontSize: 60, height: 1),
+                  ),
+                  Text(
+                    'Target CGPA: ${targetCGPAText(user?.targetCGPA)}',
+                    style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                          color: AppColors.textGrey2,
+                        ),
+                  ),
+                ],
+              ),
+            ],
+          );
+        },
+      ),
     );
   }
 }

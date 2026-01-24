@@ -1,3 +1,4 @@
+
 import 'package:cgpa_calculator/ux/shared/resources/app_constants.dart';
 import 'package:cgpa_calculator/ux/shared/view_models/theme_view_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -36,15 +37,13 @@ class AuthService {
           'email': email,
           'profileComplete': false,
           'themePreference': AppThemeMode.system.name,
-
           // versioning
           // 'appVersion': '1.0.0',
           // 'onboardingVersion': 1,
-
           //timestamps
           'createdAt': FieldValue.serverTimestamp(),
           'lastLogin': FieldValue.serverTimestamp(),
-          // 'lastActiveAt': FieldValue.serverTimestamp(),
+          'lastActiveAt': FieldValue.serverTimestamp(),
         });
       }
 
@@ -70,7 +69,7 @@ class AuthService {
             .doc(userCredential.user?.uid)
             .update({
           'lastLogin': FieldValue.serverTimestamp(),
-          // 'lastActiveAt': FieldValue.serverTimestamp(),
+          'lastActiveAt': FieldValue.serverTimestamp(),
         });
       }
 
@@ -113,6 +112,7 @@ class AuthService {
             'themePreference': AppThemeMode.system.name,
             'createdAt': FieldValue.serverTimestamp(),
             'lastLogin': FieldValue.serverTimestamp(),
+            'lastActiveAt': FieldValue.serverTimestamp(),
             'profilePicture': userCredential.user?.photoURL,
             'googleImageUrl': userCredential.user?.photoURL,
           });
@@ -122,6 +122,7 @@ class AuthService {
               .doc(userCredential.user?.uid)
               .update({
             'lastLogin': FieldValue.serverTimestamp(),
+            'lastActiveAt': FieldValue.serverTimestamp(),
             'profilePicture': userCredential.user?.photoURL,
             'googleImageUrl': userCredential.user?.photoURL,
           });
@@ -250,6 +251,7 @@ class AuthService {
       throw handleAuthException(e);
     }
   }
+
 
   String handleAuthException(FirebaseAuthException e) {
     switch (e.code) {

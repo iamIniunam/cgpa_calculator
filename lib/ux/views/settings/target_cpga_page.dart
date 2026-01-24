@@ -98,12 +98,6 @@ class _TargetCGPAPageState extends State<TargetCGPAPage> {
     await _cgpaViewModel.setTargetCGPA(targetCGPA: _currentSliderValue);
   }
 
-  @override
-  void dispose() {
-    _cgpaViewModel.setTargetCGPAResult.removeListener(handleSetTargetResult);
-    super.dispose();
-  }
-
   bool isButtonDisabled() {
     final user = _authViewModel.currentUser.value;
     final targetCGPA = user?.targetCGPA;
@@ -111,6 +105,12 @@ class _TargetCGPAPageState extends State<TargetCGPAPage> {
     // Disable button if target is set and matches current slider value
     return targetCGPA != null &&
         (_currentSliderValue - targetCGPA).abs() < 0.01;
+  }
+
+  @override
+  void dispose() {
+    _cgpaViewModel.setTargetCGPAResult.removeListener(handleSetTargetResult);
+    super.dispose();
   }
 
   @override

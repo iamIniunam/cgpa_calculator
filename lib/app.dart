@@ -76,6 +76,11 @@ class _EntryPageState extends State<EntryPage> {
       if (!mounted) return;
 
       final user = _authViewModel.currentUser.value;
+      if (user != null && user.id.isNotEmpty) {
+        await _authViewModel.updateLastActive(user.id);
+      }
+
+      if (!mounted) return;
       if (user == null) {
         Navigation.navigateToScreenAndClearAllPrevious(
           context: context,

@@ -15,7 +15,7 @@ extension StringExtension on String {
 
 String targetCGPAText(double? target) {
   if (target == null) return 'Not set';
-  return 'Target CGPA: ${target.toStringAsFixed(2)}';
+  return target.toStringAsFixed(2);
 }
 
 extension NullableStringExtension on String? {

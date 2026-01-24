@@ -55,6 +55,12 @@ class AppColors {
       AppColors.primaryColor.withOpacity(0.1);
   static Color transparentRed = Colors.red.withOpacity(0.11);
   static Color transparentRed2 = Colors.red.withOpacity(0.2);
+
+  static const Color disabledButtonBgLight = Color(0xFFE5E7EB);
+  static const Color disabledButtonFgLight = Color(0xFF9CA3AF);
+
+  static const Color disabledButtonBgDark = Color(0xFF2A3242);
+  static const Color disabledButtonFgDark = Color(0xFF6B7280);
 }
 
 //This converts Hexadecimal color code to RGB or RGBA

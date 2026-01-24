@@ -55,7 +55,7 @@ class AppUser implements Serializable {
   }
 
   factory AppUser.fromJson(Map<String, dynamic> json) => AppUser(
-        id: json['id'] ?? '',
+        id: json['uid'] ?? ['id'] ?? '',
         name: json['name'] ?? '',
         email: json['email'] ?? '',
         school: json['school'],
@@ -88,7 +88,7 @@ class AppUser implements Serializable {
 
   @override
   Map<String, dynamic> toMap() => {
-        'id': id,
+        'uid': id,
         'name': name,
         'email': email,
         'school': school,

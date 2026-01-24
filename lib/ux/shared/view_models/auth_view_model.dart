@@ -146,6 +146,8 @@ class AuthViewModel extends ChangeNotifier {
         updates: request.toMap(),
       );
 
+      await updateLastActive(userId);
+
       final userData = await _authService.getUserData(userId);
       if (userData != null) {
         final appUser = AppUser.fromJson(userData);
@@ -232,6 +234,10 @@ class AuthViewModel extends ChangeNotifier {
     } catch (e) {
       forgotPasswordResult.value = UIResult.error(message: e.toString());
     }
+  }
+
+  Future<void> updateLastActive(String userId) async {
+    await _authService.updateLastActive(userId);
   }
 
   void listenToAuthStateChanges() {

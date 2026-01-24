@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:cgpa_calculator/platform/di/dependency_injection.dart';
+import 'package:cgpa_calculator/platform/extensions/string_extensions.dart';
 import 'package:cgpa_calculator/platform/firebase/auth/models/auth_request.dart';
 import 'package:cgpa_calculator/platform/firebase/auth/models/auth_response.dart';
 import 'package:cgpa_calculator/ux/navigation/navigation.dart';
@@ -34,12 +35,12 @@ class _SettingsPageState extends State<SettingsPage> {
       padding: const EdgeInsets.fromLTRB(16, 16, 16, 74),
       children: [
         ProfileCard(context: context),
-        SettingsGroup(
-          settingTiles: [
-            ValueListenableBuilder<AppUser?>(
-                valueListenable: authViewModel.currentUser,
-                builder: (context, user, _) {
-                  return SettingTile(
+        ValueListenableBuilder<AppUser?>(
+            valueListenable: authViewModel.currentUser,
+            builder: (context, user, _) {
+              return SettingsGroup(
+                settingTiles: [
+                  SettingTile(
                     title: 'Grading Scale',
                     icon: Icons.scale_rounded,
                     trailing: Text(
@@ -59,22 +60,31 @@ class _SettingsPageState extends State<SettingsPage> {
                             const GradingSystemSelectionPage(isEditMode: true),
                       );
                     },
-                  );
-                }),
-            SettingTile(
-              title: 'Target CGPA',
-              icon: Icons.track_changes_rounded,
-              showDivider: false,
-              isLast: true,
-              onTap: () {
-                Navigation.navigateToScreen(
-                  context: context,
-                  screen: const TargetCGPAPage(),
-                );
-              },
-            ),
-          ],
-        ),
+                  ),
+                  SettingTile(
+                    title: 'Target CGPA',
+                    icon: Icons.track_changes_rounded,
+                    trailing: Text(
+                      targetCGPAText(user?.targetCGPA),
+                      style: TextStyle(
+                        color: (Theme.of(context).appBarTheme.foregroundColor ??
+                            AppColors.white),
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    showDivider: false,
+                    isLast: true,
+                    onTap: () {
+                      Navigation.navigateToScreen(
+                        context: context,
+                        screen: const TargetCGPAPage(),
+                      );
+                    },
+                  ),
+                ],
+              );
+            }),
         SettingsGroup(
           settingTiles: [
             ValueListenableBuilder<AppThemeMode>(
