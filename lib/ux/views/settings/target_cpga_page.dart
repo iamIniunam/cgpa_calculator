@@ -106,10 +106,10 @@ class _TargetCGPAPageState extends State<TargetCGPAPage> {
   bool isButtonDisabled() {
     final user = _authViewModel.currentUser.value;
     final targetCGPA = user?.targetCGPA;
-    
+
     // Disable button if target is set and matches current slider value
-    return targetCGPA != null && 
-           (_currentSliderValue - targetCGPA).abs() < 0.01;
+    return targetCGPA != null &&
+        (_currentSliderValue - targetCGPA).abs() < 0.01;
   }
 
   @override
@@ -342,7 +342,7 @@ class _TargetCGPAPageState extends State<TargetCGPAPage> {
                           ? AppColors.transparentBackgroundDark
                           : AppColors.transparentBackgroundLight,
                       borderRadius: BorderRadius.circular(16),
-                      border: Border.all(color: AppColors.primaryColor),
+                      border: Border.all(color: Theme.of(context).dividerColor),
                     ),
                     child: Row(
                       children: [
@@ -350,8 +350,12 @@ class _TargetCGPAPageState extends State<TargetCGPAPage> {
                         const SizedBox(width: 12),
                         Expanded(
                           child: Text(
-                              'Based on $_completedCredits completed credits and estimated $_upcomingCredits upcoming credits.',
-                              style: Theme.of(context).textTheme.bodyMedium),
+                            'Based on $_completedCredits completed credits and estimated $_upcomingCredits upcoming credits.',
+                            style: Theme.of(context)
+                                .textTheme
+                                .bodyMedium
+                                ?.copyWith(fontWeight: FontWeight.w600),
+                          ),
                         ),
                       ],
                     ),
