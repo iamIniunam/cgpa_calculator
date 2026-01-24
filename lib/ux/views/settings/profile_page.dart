@@ -2,13 +2,10 @@ import 'package:cgpa_calculator/platform/di/dependency_injection.dart';
 import 'package:cgpa_calculator/platform/firebase/auth/models/auth_response.dart';
 import 'package:cgpa_calculator/ux/shared/components/app_buttons.dart';
 import 'package:cgpa_calculator/ux/shared/components/app_form_fields.dart';
-import 'package:cgpa_calculator/ux/shared/components/app_material.dart';
 import 'package:cgpa_calculator/platform/extensions/extensions.dart';
-import 'package:cgpa_calculator/ux/shared/resources/app_colors.dart';
-import 'package:cgpa_calculator/ux/shared/resources/app_images.dart';
+import 'package:cgpa_calculator/ux/shared/components/user_profile_picture.dart';
 import 'package:cgpa_calculator/ux/shared/view_models/auth_view_model.dart';
 import 'package:flutter/material.dart';
-import 'package:iconsax/iconsax.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
@@ -51,37 +48,33 @@ class _ProfilePageState extends State<ProfilePage> {
                         Stack(
                           alignment: Alignment.center,
                           children: [
-                            Container(
-                              height: 140,
-                              width: 140,
-                              decoration: BoxDecoration(
-                                shape: BoxShape.circle,
-                                image: DecorationImage(
-                                  image: AppImages.sampleProfileImage,
-                                  fit: BoxFit.cover,
-                                ),
-                              ),
-                            ),
-                            Positioned(
-                              bottom: 8,
-                              right: 106,
-                              child: AppMaterial(
-                                inkwellBorderRadius: BorderRadius.circular(16),
-                                onTap: () {},
-                                child: Container(
-                                  padding: const EdgeInsets.all(6),
-                                  decoration: const BoxDecoration(
-                                    shape: BoxShape.circle,
-                                    gradient: AppGradients.editImageBackground,
-                                  ),
-                                  child: const Icon(
-                                    Iconsax.gallery_edit,
-                                    size: 20,
-                                    color: Colors.white,
-                                  ),
-                                ),
-                              ),
-                            ),
+                            UserProfilePicture(size: 140),
+                            // Positioned(
+                            //   bottom: 8,
+                            //   right: 106,
+                            //   child: AppMaterial(
+                            //     inkwellBorderRadius: BorderRadius.circular(16),
+                            //     onTap: () {
+                            //       Navigation.navigateToScreen(
+                            //         context: context,
+                            //         screen: const ViewProfileImagePage(
+                            //             isEditMode: true),
+                            //       );
+                            //     },
+                            //     child: Container(
+                            //       padding: const EdgeInsets.all(6),
+                            //       decoration: const BoxDecoration(
+                            //         shape: BoxShape.circle,
+                            //         gradient: AppGradients.editImageBackground,
+                            //       ),
+                            //       child: const Icon(
+                            //         Iconsax.gallery_edit,
+                            //         size: 20,
+                            //         color: Colors.white,
+                            //       ),
+                            //     ),
+                            //   ),
+                            // ),
                           ],
                         ),
                         const SizedBox(height: 10),

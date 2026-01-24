@@ -14,4 +14,6 @@ class AppImages {
 
   static SvgPicture svgGoogleLogo =
       SvgPicture.asset('assets/svgs/google_logo.svg');
+  static SvgPicture svgCloseBottomSheetIcon =
+      SvgPicture.asset('assets/svgs/close_bottom_sheet_icon.svg');
 }

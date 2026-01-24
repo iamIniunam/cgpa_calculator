@@ -114,14 +114,12 @@ class UpdateUserProfileRequest implements Serializable {
   final String? school;
   final GradingScale? gradingScale;
   final String? themePreference;
-  final String? profilePicture;
 
   UpdateUserProfileRequest({
     this.fullName,
     this.school,
     this.gradingScale,
     this.themePreference,
-    this.profilePicture,
   });
 
   @override
@@ -131,7 +129,6 @@ class UpdateUserProfileRequest implements Serializable {
     if (school != null) map['school'] = school;
     if (gradingScale != null) map['gradingScale'] = gradingScale!.toMap();
     if (themePreference != null) map['themePreference'] = themePreference;
-    if (profilePicture != null) map['profilePicture'] = profilePicture;
     return map;
   }
 
@@ -143,7 +140,6 @@ class UpdateUserProfileRequest implements Serializable {
             ? GradingScale.fromJson(json['gradingScale'])
             : null,
         themePreference: json['themePreference'],
-        profilePicture: json['profilePicture'],
       );
 }
 

@@ -119,48 +119,49 @@ class AppImageWidget extends StatelessWidget {
       child: Stack(
         children: [
           ClipRRect(
-              borderRadius: BorderRadius.circular(borderRadius ?? 8),
-              child: imageUrl.isNullOrBlank == false
-                  ? CachedNetworkImage(
-                      fit: boxFit,
-                      imageUrl:
-                          ((baseUrl?.isNotEmpty == true ? baseUrl : '') ?? '') +
-                              (imageUrl ?? ''),
-                      width: width,
-                      height: height,
-                      placeholder: showPlaceHolder
-                          ? (
-                              context,
-                              o,
-                            ) {
-                              return Image(
-                                image:
-                                    placeHolder ?? AppImages.profilePlaceholder,
-                                fit: boxFit,
-                                width: width,
-                                height: height,
-                              );
-                            }
-                          : null,
-                      errorWidget: (context, o, s) {
-                        return Image(
-                          image: errorImage ?? AppImages.profilePlaceholder,
-                          fit: boxFit,
-                          width: width,
-                          height: height,
-                        );
-                      },
-                      errorListener: (value) {
-                        if (kDebugMode) {
-                          print('Error loading image: $baseUrl$imageUrl');
-                        }
-                      })
-                  : Image(
-                      image: errorImage ?? AppImages.profilePlaceholder,
-                      fit: boxFit,
-                      width: width,
-                      height: height,
-                    )),
+            borderRadius: BorderRadius.circular(borderRadius ?? 8),
+            child: imageUrl.isNullOrBlank == false
+                ? CachedNetworkImage(
+                    fit: boxFit,
+                    imageUrl:
+                        ((baseUrl?.isNotEmpty == true ? baseUrl : '') ?? '') +
+                            (imageUrl ?? ''),
+                    width: width,
+                    height: height,
+                    placeholder: showPlaceHolder
+                        ? (
+                            context,
+                            o,
+                          ) {
+                            return Image(
+                              image:
+                                  placeHolder ?? AppImages.profilePlaceholder,
+                              fit: boxFit,
+                              width: width,
+                              height: height,
+                            );
+                          }
+                        : null,
+                    errorWidget: (context, o, s) {
+                      return Image(
+                        image: errorImage ?? AppImages.profilePlaceholder,
+                        fit: boxFit,
+                        width: width,
+                        height: height,
+                      );
+                    },
+                    errorListener: (value) {
+                      if (kDebugMode) {
+                        print('Error loading image: $baseUrl$imageUrl');
+                      }
+                    })
+                : Image(
+                    image: errorImage ?? AppImages.profilePlaceholder,
+                    fit: boxFit,
+                    width: width,
+                    height: height,
+                  ),
+          ),
           child ?? const SizedBox.shrink(),
         ],
       ),

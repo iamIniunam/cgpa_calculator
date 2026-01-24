@@ -1,6 +1,7 @@
 import 'package:cgpa_calculator/ux/navigation/navigation.dart';
 import 'package:cgpa_calculator/ux/shared/resources/app_colors.dart';
 import 'package:cgpa_calculator/ux/shared/resources/app_dimens.dart';
+import 'package:cgpa_calculator/ux/shared/resources/app_images.dart';
 import 'package:flutter/material.dart';
 
 Future showAppBottomSheet({
@@ -68,9 +69,9 @@ Future showAppBottomSheet({
                                     maxLines: 1,
                                     overflow: TextOverflow.ellipsis,
                                     style: const TextStyle(
-                                        fontSize: 14,
-                                        color: AppColors.grey200,
-                                        fontWeight: FontWeight.bold),
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.bold,
+                                    ),
                                   ),
                                 ),
                               ),
@@ -86,10 +87,11 @@ Future showAppBottomSheet({
                                       onTap: () {
                                         Navigation.back(context: context);
                                       },
-                                      // child: Padding(
-                                      //   padding: const EdgeInsets.all(10.0),
-                                      //   child: AppImages.svgCloseBottomSheetIcon,
-                                      // )
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(10.0),
+                                        child:
+                                            AppImages.svgCloseBottomSheetIcon,
+                                      ),
                                     ),
                                   ),
                                 ),

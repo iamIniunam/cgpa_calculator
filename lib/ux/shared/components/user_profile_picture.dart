@@ -17,6 +17,13 @@ class UserProfilePicture extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: onTap,
+      // ??
+      //     () {
+      //       Navigation.navigateToScreen(
+      //         context: context,
+      //         screen: const ViewProfileImagePage(),
+      //       );
+      //     },
       child: ValueListenableBuilder(
         valueListenable: _authViewModel.currentUser,
         builder: (context, user, _) {
@@ -26,6 +33,8 @@ class UserProfilePicture extends StatelessWidget {
                   image: AppImages.profilePlaceholder,
                   height: size,
                   width: size,
+                  boxFit: BoxFit.cover,
+                  borderRadius: 100,
                 );
           } else {
             return AppImageWidget(
@@ -36,6 +45,7 @@ class UserProfilePicture extends StatelessWidget {
               height: size,
               width: size,
               borderRadius: 100,
+              boxFit: BoxFit.cover,
             );
           }
         },

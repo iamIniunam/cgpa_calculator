@@ -45,6 +45,10 @@
 	<true/>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>To enable you select a picture from your gallery to use in this feature</string>
+	<key>NSCameraUsageDescription</key>
+	<string>Your camera will be used to take a picture that you can use in this feature</string>
 	<key>LSApplicationQueriesSchemes</key>
 	<array>
 	  <string>sms</string>

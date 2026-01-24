@@ -46,4 +46,7 @@ class AppStrings {
   static const fivePointZeroScale = '5.0 Scale';
 
   static const noDataAvailable = 'No data available at the moment.';
+
+  static const uploadFromGallery = 'Upload from gallery';
+  static const takePicture = 'Take picture';
 }
