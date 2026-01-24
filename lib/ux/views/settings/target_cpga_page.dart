@@ -59,14 +59,15 @@ class _TargetCGPAPageState extends State<TargetCGPAPage> {
     return avgCreditsPerSemester.round();
   }
 
-  void handleSetTargetResult() {
+  void handleSetTargetResult() async {
     final result = _cgpaViewModel.setTargetCGPAResult.value;
     if (result.isLoading) {
       AppDialogs.showLoadingDialog(context);
     } else if (result.isSuccess) {
       Navigation.back(context: context);
-      AppDialogs.showSuccessDialog(context,
+      await AppDialogs.showSuccessDialog(context,
           successMessage: result.message ?? '');
+      setState(() {});
     } else if (result.isError) {
       Navigation.back(context: context);
       AppDialogs.showErrorDialog(context, errorMessage: result.message ?? '');

@@ -59,19 +59,21 @@ class CGPADisplay extends StatelessWidget {
                         mainAxisSize: MainAxisSize.min,
                         children: [
                           Icon(
-                            Icons.trending_up_rounded,
+                            viewModel.cgpaChange >= 0
+                                ? Icons.trending_up_rounded
+                                : Icons.trending_down_rounded,
                             color: AppColors.white.withOpacity(0.7),
                             size: 20,
                           ),
                           const SizedBox(width: 8),
                           Text(
-                            '+0.12',
+                            viewModel.cgpaChange >= 0
+                                ? '+${viewModel.cgpaChange.toStringAsFixed(2)}'
+                                : viewModel.cgpaChange.toStringAsFixed(2),
                             style: Theme.of(context)
                                 .textTheme
                                 .titleMedium
-                                ?.copyWith(
-                                  color: AppColors.white,
-                                ),
+                                ?.copyWith(color: AppColors.white),
                           ),
                         ],
                       ),
@@ -94,8 +96,8 @@ class CGPADisplay extends StatelessWidget {
                               ),
                     ),
                     Text(
-                      'Target CGPA: ${targetText(user?.targetCGPA)}',
-                      style: Theme.of(context).textTheme.titleSmall?.copyWith(
+                      targetCGPAText(user?.targetCGPA),
+                      style: Theme.of(context).textTheme.titleMedium?.copyWith(
                             color: AppColors.textGrey2,
                           ),
                     ),
