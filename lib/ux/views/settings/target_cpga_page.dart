@@ -103,6 +103,15 @@ class _TargetCGPAPageState extends State<TargetCGPAPage> {
     super.dispose();
   }
 
+  bool isButtonDisabled() {
+    final user = _authViewModel.currentUser.value;
+    final targetCGPA = user?.targetCGPA;
+    
+    // Disable button if target is set and matches current slider value
+    return targetCGPA != null && 
+           (_currentSliderValue - targetCGPA).abs() < 0.01;
+  }
+
   @override
   Widget build(BuildContext context) {
     final requiredGPA = calculateRequiredGPA();
@@ -350,10 +359,11 @@ class _TargetCGPAPageState extends State<TargetCGPAPage> {
                 ],
               ),
             ),
-            // TODO: disable button after target is set and matches current
+            // Disable button after target is set and matches current
             Padding(
               padding: const EdgeInsets.all(16),
               child: PrimaryButton(
+                enabled: !isButtonDisabled(),
                 onTap: () async {
                   bool res = await showAppBottomSheet(
                     context: context,
