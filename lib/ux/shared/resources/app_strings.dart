@@ -7,6 +7,8 @@ class AppStrings {
   static const nameHintText = 'e.g. Alex';
   static const continueText = 'Continue';
 
+  static const emailHint = 'john@example.com';
+
   static const scale = 'Scale';
   static const semesters = 'Semesters';
   static const years = 'Years';

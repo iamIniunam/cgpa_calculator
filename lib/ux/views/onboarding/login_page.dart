@@ -7,6 +7,7 @@ import 'package:cgpa_calculator/ux/shared/components/app_logo_box.dart';
 import 'package:cgpa_calculator/ux/shared/components/app_material.dart';
 import 'package:cgpa_calculator/ux/shared/resources/app_colors.dart';
 import 'package:cgpa_calculator/ux/shared/resources/app_dialogs.dart';
+import 'package:cgpa_calculator/ux/shared/resources/app_strings.dart';
 import 'package:cgpa_calculator/ux/shared/view_models/auth_view_model.dart';
 import 'package:cgpa_calculator/ux/views/onboarding/components/auth_bottom_section.dart';
 import 'package:cgpa_calculator/ux/views/onboarding/forgot_password_page.dart';
@@ -105,7 +106,7 @@ class _LoginPageState extends State<LoginPage> {
                     const SizedBox(height: 36),
                     PrimaryTextFormField(
                       labelText: 'Email',
-                      hintText: 'student@university.edu',
+                      hintText: AppStrings.emailHint,
                       controller: emailController,
                       keyboardType: TextInputType.emailAddress,
                       textInputAction: TextInputAction.next,
