@@ -9,6 +9,7 @@ import 'package:cgpa_calculator/ux/shared/view_models/auth_view_model.dart';
 import 'package:cgpa_calculator/ux/views/onboarding/grading_system_selection_page.dart';
 import 'package:cgpa_calculator/ux/views/onboarding/login_page.dart';
 import 'package:cgpa_calculator/ux/views/onboarding/sign_up_page.dart';
+import 'package:cgpa_calculator/ux/views/semesters/view_models/semester_view_model.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
@@ -17,23 +18,28 @@ class AuthBottomSection extends StatelessWidget {
 
   final bool isLogin;
   final AuthViewModel _authViewModel = AppDI.getIt<AuthViewModel>();
+  final SemesterViewModel _semesterViewModel = AppDI.getIt<SemesterViewModel>();
 
   Future<void> signInWithGoogle(BuildContext context) async {
     AppDialogs.showLoadingDialog(context);
 
     await _authViewModel.signInWithGoogle();
     if (!context.mounted) return;
-    Navigation.back(context: context);
+
     handleAuthResult(context);
   }
 
-  void handleAuthResult(BuildContext context) {
+  void handleAuthResult(BuildContext context) async {
     final result = _authViewModel.googleSignInResult.value;
     if (result.isSuccess) {
       if (isLogin &&
           _authViewModel.currentUser.value?.profileComplete == true) {
+        await _semesterViewModel.loadSemesters();
+        if (!context.mounted) return;
+        Navigation.back(context: context);
         Navigation.navigateToHomePage(context: context);
       } else {
+        Navigation.back(context: context);
         Navigation.navigateToScreen(
           context: context,
           screen: const GradingSystemSelectionPage(),
@@ -90,9 +96,7 @@ class AuthBottomSection extends StatelessWidget {
         AppMaterial(
           inkwellBorderRadius:
               BorderRadius.circular(AppDimens.defaultBorderRadius),
-          onTap: () {
-            signInWithGoogle(context);
-          },
+          onTap: () => signInWithGoogle(context),
           child: Container(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
             decoration: BoxDecoration(

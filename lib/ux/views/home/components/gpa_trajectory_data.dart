@@ -78,7 +78,7 @@ class GpaTrajectoryData extends StatelessWidget {
                 return FlLine(
                   color: Theme.of(context).brightness == Brightness.dark
                       ? AppColors.greyInputBorder.withOpacity(0.3)
-                      : AppColors.greyInputBorder.withOpacity(0.5),
+                      : AppColors.grey400.withOpacity(0.5),
                   strokeWidth: 1,
                   dashArray: [5, 5],
                 );
@@ -87,7 +87,7 @@ class GpaTrajectoryData extends StatelessWidget {
                 return FlLine(
                   color: Theme.of(context).brightness == Brightness.dark
                       ? AppColors.greyInputBorder.withOpacity(0.3)
-                      : AppColors.greyInputBorder.withOpacity(0.5),
+                      : AppColors.grey400.withOpacity(0.5),
                   strokeWidth: 1,
                   dashArray: [5, 5],
                 );

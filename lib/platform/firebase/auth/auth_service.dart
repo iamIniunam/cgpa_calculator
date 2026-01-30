@@ -1,14 +1,15 @@
-
 import 'package:cgpa_calculator/ux/shared/resources/app_constants.dart';
 import 'package:cgpa_calculator/ux/shared/view_models/theme_view_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:firebase_analytics/firebase_analytics.dart';
 
 class AuthService {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final GoogleSignIn _googleSignIn = GoogleSignIn();
+  final FirebaseAnalytics _analytics = FirebaseAnalytics.instance;
 
   User? get currentUser => _auth.currentUser;
 
@@ -45,6 +46,16 @@ class AuthService {
           'lastLogin': FieldValue.serverTimestamp(),
           'lastActiveAt': FieldValue.serverTimestamp(),
         });
+
+        await _analytics.logSignUp(signUpMethod: 'email');
+        await _analytics.logEvent(
+          name: 'sign_up',
+          parameters: {
+            'method': 'email',
+            'user_id': userCredential.user?.uid,
+            'email': email,
+          },
+        );
       }
 
       return userCredential.user;
@@ -71,6 +82,16 @@ class AuthService {
           'lastLogin': FieldValue.serverTimestamp(),
           'lastActiveAt': FieldValue.serverTimestamp(),
         });
+
+        await _analytics.logLogin(loginMethod: 'email');
+        await _analytics.logEvent(
+          name: 'login',
+          parameters: {
+            'method': 'email',
+            'user_id': userCredential.user?.uid,
+            'email': email,
+          },
+        );
       }
 
       return userCredential.user;
@@ -116,6 +137,16 @@ class AuthService {
             'profilePicture': userCredential.user?.photoURL,
             'googleImageUrl': userCredential.user?.photoURL,
           });
+
+          await _analytics.logSignUp(signUpMethod: 'google');
+          await _analytics.logEvent(
+            name: 'sign_up',
+            parameters: {
+              'method': 'google',
+              'user_id': userCredential.user?.uid,
+              'email': userCredential.user?.email ?? '',
+            },
+          );
         } else {
           await _firestore
               .collection(AppConstants.usersCollection)
@@ -126,6 +157,16 @@ class AuthService {
             'profilePicture': userCredential.user?.photoURL,
             'googleImageUrl': userCredential.user?.photoURL,
           });
+
+          await _analytics.logLogin(loginMethod: 'google');
+          await _analytics.logEvent(
+            name: 'login',
+            parameters: {
+              'method': 'google',
+              'user_id': userCredential.user?.uid,
+              'email': userCredential.user?.email ?? '',
+            },
+          );
         }
       }
 
@@ -251,7 +292,6 @@ class AuthService {
       throw handleAuthException(e);
     }
   }
-
 
   String handleAuthException(FirebaseAuthException e) {
     switch (e.code) {

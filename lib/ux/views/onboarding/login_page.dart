@@ -11,6 +11,7 @@ import 'package:cgpa_calculator/ux/shared/resources/app_strings.dart';
 import 'package:cgpa_calculator/ux/shared/view_models/auth_view_model.dart';
 import 'package:cgpa_calculator/ux/views/onboarding/components/auth_bottom_section.dart';
 import 'package:cgpa_calculator/ux/views/onboarding/forgot_password_page.dart';
+import 'package:cgpa_calculator/ux/views/semesters/view_models/semester_view_model.dart';
 import 'package:flutter/material.dart';
 
 class LoginPage extends StatefulWidget {
@@ -22,6 +23,7 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
   final AuthViewModel _authViewModel = AppDI.getIt<AuthViewModel>();
+  final SemesterViewModel _semesterViewModel = AppDI.getIt<SemesterViewModel>();
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
 
@@ -33,9 +35,11 @@ class _LoginPageState extends State<LoginPage> {
     });
   }
 
-  void handleLoginResult() {
+  void handleLoginResult() async {
     final result = _authViewModel.loginResult.value;
     if (result.isSuccess) {
+      await _semesterViewModel.loadSemesters();
+      if (!mounted) return;
       Navigation.navigateToHomePage(context: context);
     } else if (result.isError) {
       AppDialogs.showErrorDialog(

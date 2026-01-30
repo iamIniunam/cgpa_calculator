@@ -55,7 +55,7 @@ class AppUser implements Serializable {
   }
 
   factory AppUser.fromJson(Map<String, dynamic> json) => AppUser(
-        id: json['uid'] ?? ['id'] ?? '',
+        id: json['uid'] ?? json['id'] ?? '',
         name: json['name'] ?? '',
         email: json['email'] ?? '',
         school: json['school'],

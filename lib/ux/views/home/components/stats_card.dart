@@ -126,11 +126,11 @@ class StatsCardBig extends StatelessWidget {
                     icon: Icons.trending_up_rounded,
                     title: 'Highest GPA',
                     value: stats['highestGPA']?.toStringAsFixed(2) ?? '',
-                    iconColor: AppColors.red,
+                    iconColor: AppColors.green,
                     iconBackgroundColor:
                         Theme.of(context).brightness == Brightness.dark
-                            ? AppColors.redBackground
-                            : AppColors.redLight,
+                            ? AppColors.greenBackground
+                            : AppColors.greenLight,
                     crossAxisAlignment: CrossAxisAlignment.start,
                   ),
                   StatsDetails(
@@ -147,11 +147,11 @@ class StatsCardBig extends StatelessWidget {
                     icon: Icons.trending_down_rounded,
                     title: 'Lowest GPA',
                     value: stats['lowestGPA']?.toStringAsFixed(2) ?? '',
-                    iconColor: AppColors.orange,
+                    iconColor: AppColors.red,
                     iconBackgroundColor:
                         Theme.of(context).brightness == Brightness.dark
-                            ? AppColors.orangeBackground
-                            : AppColors.orangeLight,
+                            ? AppColors.redBackground
+                            : AppColors.redLight,
                     crossAxisAlignment: CrossAxisAlignment.end,
                   ),
                 ],

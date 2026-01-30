@@ -10,6 +10,7 @@ import 'package:cgpa_calculator/ux/views/onboarding/grading_system_selection_pag
 import 'package:cgpa_calculator/ux/views/onboarding/login_page.dart';
 import 'package:cgpa_calculator/ux/views/semesters/view_models/semester_view_model.dart';
 import 'package:cgpa_calculator/ux/views/splash_screen.dart';
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
 
 class ScholrApp extends StatelessWidget {
@@ -41,6 +42,9 @@ class ScholrApp extends StatelessWidget {
           darkTheme: AppTheme.darkThemeData,
           themeMode: themeMode,
           navigatorKey: Navigation.navigatorKey,
+          navigatorObservers: [
+            FirebaseAnalyticsObserver(analytics: FirebaseAnalytics.instance),
+          ],
           scrollBehavior: const MaterialScrollBehavior().copyWith(
             dragDevices: {
               PointerDeviceKind.touch,

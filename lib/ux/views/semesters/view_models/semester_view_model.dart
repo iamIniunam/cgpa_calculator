@@ -47,6 +47,7 @@ class SemesterViewModel extends ChangeNotifier {
 
       final loadedSemesters = await _semesterService.getSemesters(userId);
       semesters.value = loadedSemesters;
+      debugPrint('Semesters loaded: ${loadedSemesters.length}');
     } catch (e) {
       debugPrint('Error loading semesters: $e');
     }

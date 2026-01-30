@@ -73,11 +73,11 @@ class _HomePageState extends State<HomePage> {
                             icon: Icons.track_changes_rounded,
                             title: 'Total Semesters',
                             value: semesterViewModel.totalSemesters.toString(),
-                            iconColor: AppColors.green,
+                            iconColor: AppColors.orange,
                             iconBackgroundColor:
                                 Theme.of(context).brightness == Brightness.dark
-                                    ? AppColors.greenBackground
-                                    : AppColors.greenLight,
+                                    ? AppColors.orangeBackground
+                                    : AppColors.orangeLight,
                           ),
                         ),
                       ],
