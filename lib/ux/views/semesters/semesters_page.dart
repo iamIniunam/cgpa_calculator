@@ -21,18 +21,19 @@ class SemestersPage extends StatelessWidget {
     return ValueListenableBuilder<List<Semester>>(
       valueListenable: semesterViewModel.semesters,
       builder: (context, semeters, _) {
-        // Filter semesters by search query
         final filtered = searchQuery.isEmpty
             ? semeters
-            : semeters.where((s) {
-                final q = searchQuery.toLowerCase();
-                final matchesSemester =
-                    (s.semesterName?.toLowerCase().contains(q) ?? false) ||
-                        (s.academicYear?.toLowerCase().contains(q) ?? false);
-                final matchesCourse = (s.courses ?? []).any((course) =>
-                    (course.courseCode?.toLowerCase().contains(q) ?? false));
-                return matchesSemester || matchesCourse;
-              }).toList();
+            : semeters.where(
+                (s) {
+                  final q = searchQuery.toLowerCase();
+                  final matchesSemester =
+                      (s.semesterName?.toLowerCase().contains(q) ?? false) ||
+                          (s.academicYear?.toLowerCase().contains(q) ?? false);
+                  final matchesCourse = (s.courses ?? []).any((course) =>
+                      (course.courseCode?.toLowerCase().contains(q) ?? false));
+                  return matchesSemester || matchesCourse;
+                },
+              ).toList();
 
         final reversedList = filtered.reversed.toList();
         return Column(
@@ -69,8 +70,10 @@ class SemestersPage extends StatelessWidget {
                   Row(
                     children: [
                       Expanded(
-                        child: Text(AppStrings.semesters,
-                            style: Theme.of(context).textTheme.titleLarge),
+                        child: Text(
+                          AppStrings.semesters,
+                          style: Theme.of(context).textTheme.titleLarge,
+                        ),
                       ),
                       Padding(
                         padding: const EdgeInsets.only(right: 8),

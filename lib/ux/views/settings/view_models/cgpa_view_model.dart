@@ -1,4 +1,5 @@
 import 'package:cgpa_calculator/platform/di/dependency_injection.dart';
+import 'package:cgpa_calculator/platform/firebase/analytics_logger.dart';
 import 'package:cgpa_calculator/platform/firebase/auth/auth_service.dart';
 import 'package:cgpa_calculator/platform/firebase/auth/models/auth_response.dart';
 import 'package:cgpa_calculator/platform/firebase/cgpa/cgpa_service.dart';
@@ -9,6 +10,7 @@ import 'package:flutter/foundation.dart';
 class CGPAViewModel {
   final CGPAService _cgpaService = CGPAService();
   final AuthService _authService = AuthService();
+  final AnalyticsLogger _analytics = AppDI.getIt<AnalyticsLogger>();
 
   final AuthViewModel _authViewModel = AppDI.getIt<AuthViewModel>();
 
@@ -32,6 +34,10 @@ class CGPAViewModel {
       if (userData != null) {
         final appUser = AppUser.fromJson(userData);
         _authViewModel.currentUser.value = appUser;
+
+        await _analytics.logTargetCGPASet(
+            userId: userId, targetCGPA: targetCGPA);
+
         setTargetCGPAResult.value = UIResult.success(
           data: appUser,
           message: 'Target CGPA set successfully',

@@ -1,3 +1,5 @@
+import 'package:cgpa_calculator/platform/di/dependency_injection.dart';
+import 'package:cgpa_calculator/platform/firebase/analytics_logger.dart';
 import 'package:cgpa_calculator/platform/firebase/auth/auth_service.dart';
 import 'package:cgpa_calculator/platform/firebase/semester/semester_service.dart';
 import 'package:cgpa_calculator/ux/shared/models/semester_model.dart';
@@ -7,6 +9,7 @@ import 'package:flutter/cupertino.dart';
 class SemesterViewModel extends ChangeNotifier {
   final SemesterService _semesterService = SemesterService();
   final AuthService _authService = AuthService();
+  final AnalyticsLogger _analytics = AppDI.getIt<AnalyticsLogger>();
 
   ValueNotifier<List<Semester>> semesters = ValueNotifier([]);
   ValueNotifier<UIResult<Semester>> createSemesterResult =
@@ -68,6 +71,25 @@ class SemesterViewModel extends ChangeNotifier {
 
       await loadSemesters();
 
+      if (semester.id != null) {
+        final String loggedSemesterName =
+            (semester.semesterName == null || semester.semesterName!.isEmpty)
+                ? 'unnamed_semester'
+                : semester.semesterName!;
+        await _analytics.logSemesterCreated(
+          userId: userId,
+          semesterId: semester.id!,
+          semesterName: loggedSemesterName,
+        );
+      } else {
+        debugPrint(
+          'Semester ID is null after creation; skipping analytics logging for created semester. '
+          'This is unexpected and may indicate an issue with semester ID assignment in the SemesterService '
+          'or the backing store (e.g., missing or failed document creation). Verify that createSemester '
+          'returns a persisted Semester with a non-null ID for userId=$userId and semesterName="${semester.semesterName ?? ''}".',
+        );
+      }
+
       createSemesterResult.value = UIResult.success(
         data: semester,
         message: 'Semester created successfully',
@@ -115,6 +137,14 @@ class SemesterViewModel extends ChangeNotifier {
       );
 
       await loadSemesters();
+
+      await _analytics.logCustomEvent(
+        eventName: 'semester_deleted',
+        parameters: {
+          'user_id': userId,
+          'semester_id': semesterId,
+        },
+      );
 
       deleteSemesterResult.value = UIResult.success(
         data: semesterId,

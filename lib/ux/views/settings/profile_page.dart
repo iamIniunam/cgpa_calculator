@@ -1,4 +1,5 @@
 import 'package:cgpa_calculator/platform/di/dependency_injection.dart';
+import 'package:cgpa_calculator/platform/firebase/analytics_logger.dart';
 import 'package:cgpa_calculator/platform/firebase/auth/models/auth_request.dart';
 import 'package:cgpa_calculator/platform/firebase/auth/models/auth_response.dart';
 import 'package:cgpa_calculator/ux/navigation/navigation.dart';
@@ -19,6 +20,8 @@ class ProfilePage extends StatefulWidget {
 }
 
 class _ProfilePageState extends State<ProfilePage> {
+  final AnalyticsLogger _analytics = AppDI.getIt<AnalyticsLogger>();
+
   final AuthViewModel authViewModel = AppDI.getIt<AuthViewModel>();
   late TextEditingController fullNameController = TextEditingController();
   late TextEditingController schoolController = TextEditingController();
@@ -26,6 +29,7 @@ class _ProfilePageState extends State<ProfilePage> {
   @override
   void initState() {
     super.initState();
+    _analytics.logScreenView(screenName: 'Profile', screenClass: 'ProfilePage');
     final user = authViewModel.currentUser.value;
     fullNameController.text = user?.name ?? '';
     schoolController.text = user?.school ?? '';

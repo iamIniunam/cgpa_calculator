@@ -289,7 +289,7 @@ class _AddSemesterPageState extends State<AddSemesterPage> {
               padding: const EdgeInsets.all(16),
               child: PrimaryButton(
                 onTap: widget.isEditMode ? updateSemester : addSemester,
-                child: Text(widget.isEditMode ? 'Update' : 'Save'),
+                child: Text(widget.isEditMode ? 'Update' : 'Add'),
               ),
             ),
           ],

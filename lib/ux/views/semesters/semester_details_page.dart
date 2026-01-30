@@ -1,5 +1,6 @@
 import 'dart:ui';
 
+import 'package:cgpa_calculator/platform/firebase/analytics_logger.dart';
 import 'package:cgpa_calculator/ux/navigation/navigation.dart';
 import 'package:cgpa_calculator/ux/shared/bottom_sheets/app_confirmation_botttom_sheet.dart';
 import 'package:cgpa_calculator/ux/shared/bottom_sheets/show_app_bottom_sheet.dart';
@@ -9,6 +10,7 @@ import 'package:cgpa_calculator/ux/shared/components/empty_state.dart';
 import 'package:cgpa_calculator/ux/shared/models/semester_model.dart';
 import 'package:cgpa_calculator/ux/shared/resources/app_strings.dart';
 import 'package:cgpa_calculator/ux/shared/utils/utils.dart';
+import 'package:cgpa_calculator/ux/shared/view_models/auth_view_model.dart';
 import 'package:cgpa_calculator/ux/views/semesters/add_course_page.dart';
 import 'package:cgpa_calculator/ux/views/home/components/cgpa_display.dart';
 import 'package:cgpa_calculator/ux/views/semesters/components/course_card.dart';
@@ -27,12 +29,17 @@ class SemesterDetailsPage extends StatefulWidget {
 }
 
 class _SemesterDetailsPageState extends State<SemesterDetailsPage> {
+  final AnalyticsLogger _analytics = AppDI.getIt<AnalyticsLogger>();
+
   late Semester semester;
   final SemesterViewModel semesterViewModel = AppDI.getIt<SemesterViewModel>();
+  final AuthViewModel authViewModel = AppDI.getIt<AuthViewModel>();
 
   @override
   void initState() {
     super.initState();
+    _analytics.logScreenView(
+        screenName: 'Semester Details', screenClass: 'SemesterDetailsPage');
     semester = widget.semester;
     semesterViewModel.semesters.addListener(_onSemestersChanged);
   }
@@ -51,6 +58,21 @@ class _SemesterDetailsPageState extends State<SemesterDetailsPage> {
     await semesterViewModel.updateSemesterStatus(
       semesterId: widget.semester.id ?? '',
       status: SemesterStatus.completed,
+    );
+
+    final userId = authViewModel.currentUser.value?.id;
+    if (userId == null || userId.isEmpty) {
+      debugPrint(
+        'SemesterDetailsPage.updateSemesterStatus: userId is null or empty; skipping analytics logging.',
+      );
+      return;
+    }
+
+    await _analytics.logSemesterCompleted(
+      userId: userId,
+      semesterId: widget.semester.id ?? '',
+      gpa: widget.semester.semesterGPA ?? 0,
+      totalCredits: widget.semester.totalCreditUnits ?? 0,
     );
   }
 

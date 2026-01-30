@@ -1,4 +1,5 @@
 import 'package:cgpa_calculator/platform/di/dependency_injection.dart';
+import 'package:cgpa_calculator/platform/firebase/analytics_logger.dart';
 import 'package:cgpa_calculator/platform/firebase/auth/auth_service.dart';
 import 'package:cgpa_calculator/platform/firebase/course/course_service.dart';
 import 'package:cgpa_calculator/ux/shared/models/course_model.dart';
@@ -10,6 +11,7 @@ import 'package:flutter/cupertino.dart';
 class CourseViewModel extends ChangeNotifier {
   final CourseService _courseService = CourseService();
   final AuthService _authService = AuthService();
+  final AnalyticsLogger _analytics = AppDI.getIt<AnalyticsLogger>();
 
   final SemesterViewModel _semesterViewModel = AppDI.getIt<SemesterViewModel>();
 
@@ -50,6 +52,13 @@ class CourseViewModel extends ChangeNotifier {
       );
 
       await _semesterViewModel.loadSemesters();
+
+      await _analytics.logCourseAdded(
+        userId: userId,
+        semesterId: semesterId,
+        courseCode: course.courseCode ?? '',
+        creditUnits: course.creditUnits ?? 0,
+      );
 
       addCourseResult.value = UIResult.success(
         data: course,

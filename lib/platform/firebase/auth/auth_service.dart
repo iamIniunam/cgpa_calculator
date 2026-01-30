@@ -1,15 +1,16 @@
+import 'package:cgpa_calculator/platform/di/dependency_injection.dart';
+import 'package:cgpa_calculator/platform/firebase/analytics_logger.dart';
 import 'package:cgpa_calculator/ux/shared/resources/app_constants.dart';
 import 'package:cgpa_calculator/ux/shared/view_models/theme_view_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:firebase_analytics/firebase_analytics.dart';
 
 class AuthService {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final GoogleSignIn _googleSignIn = GoogleSignIn();
-  final FirebaseAnalytics _analytics = FirebaseAnalytics.instance;
+  final AnalyticsLogger _analyticsLogger = AppDI.getIt<AnalyticsLogger>();
 
   User? get currentUser => _auth.currentUser;
 
@@ -27,6 +28,7 @@ class AuthService {
       );
 
       if (userCredential.user != null) {
+        final user = userCredential.user!;
         await userCredential.user?.updateDisplayName(fullName);
 
         await _firestore
@@ -47,11 +49,14 @@ class AuthService {
           'lastActiveAt': FieldValue.serverTimestamp(),
         });
 
-        await _analytics.logSignUp(signUpMethod: 'email');
+        await _analyticsLogger.setUser(user);
+        await _analyticsLogger.logSignUp(method: 'email');
       }
 
       return userCredential.user;
     } on FirebaseAuthException catch (e) {
+      await _analyticsLogger.logSignUpFailed(
+          method: 'email', errorCode: e.code);
       throw handleAuthException(e);
     }
   }
@@ -67,6 +72,8 @@ class AuthService {
       );
 
       if (userCredential.user != null) {
+        final user = userCredential.user!;
+
         await _firestore
             .collection(AppConstants.usersCollection)
             .doc(userCredential.user?.uid)
@@ -75,11 +82,13 @@ class AuthService {
           'lastActiveAt': FieldValue.serverTimestamp(),
         });
 
-        await _analytics.logLogin(loginMethod: 'email');
+        await _analyticsLogger.setUser(user);
+        await _analyticsLogger.logLogin(method: 'email');
       }
 
       return userCredential.user;
     } on FirebaseAuthException catch (e) {
+      await _analyticsLogger.logLoginFailed(method: 'email', errorCode: e.code);
       throw handleAuthException(e);
     }
   }
@@ -100,6 +109,7 @@ class AuthService {
       final userCredential = await _auth.signInWithCredential(credential);
 
       if (userCredential.user != null) {
+        final user = userCredential.user!;
         final userDoc = await _firestore
             .collection(AppConstants.usersCollection)
             .doc(userCredential.user?.uid)
@@ -122,7 +132,8 @@ class AuthService {
             'googleImageUrl': userCredential.user?.photoURL,
           });
 
-          await _analytics.logSignUp(signUpMethod: 'google');
+          await _analyticsLogger.setUser(user);
+          await _analyticsLogger.logSignUp(method: 'google');
         } else {
           await _firestore
               .collection(AppConstants.usersCollection)
@@ -134,12 +145,15 @@ class AuthService {
             'googleImageUrl': userCredential.user?.photoURL,
           });
 
-          await _analytics.logLogin(loginMethod: 'google');
+          await _analyticsLogger.setUser(user);
+          await _analyticsLogger.logLogin(method: 'google');
         }
       }
 
       return userCredential.user;
     } catch (e) {
+      await _analyticsLogger.logLoginFailed(
+          method: 'google', errorCode: e.toString());
       throw Exception('Google sign-in failed: ${e.toString()}');
     }
   }
@@ -158,6 +172,12 @@ class AuthService {
         'gradingScale': gradingScale,
         'profileComplete': true,
       });
+
+      await _analyticsLogger.logProfileCompleted(
+        userId: userId,
+        school: school,
+        gradingScale: gradingScale['name'] ?? 'unknown',
+      );
     } catch (e) {
       throw Exception('Failed to complete profile: ${e.toString()}');
     }
@@ -184,6 +204,11 @@ class AuthService {
           .collection(AppConstants.usersCollection)
           .doc(userId)
           .update(updates);
+
+      await _analyticsLogger.logProfileUpdated(
+        userId: userId,
+        fieldsUpdated: updates.keys.toList(),
+      );
     } catch (e) {
       throw Exception('Failed to update profile: ${e.toString()}');
     }
@@ -208,10 +233,17 @@ class AuthService {
   }
 
   Future<void> logout() async {
+    final userId = _auth.currentUser?.uid;
+
+    if (userId != null) {
+      await _analyticsLogger.logLogout(userId: userId);
+    }
     await Future.wait([
       _auth.signOut(),
       _googleSignIn.signOut(),
     ]);
+
+    await _analyticsLogger.clearUser();
   }
 
   Future<void> deleteAccount() async {
@@ -247,6 +279,7 @@ class AuthService {
           .doc(userId)
           .delete();
 
+      await _analyticsLogger.clearUser();
       return await user.delete();
     } catch (e) {
       throw Exception('Failed to delete account: ${e.toString()}');
@@ -256,6 +289,7 @@ class AuthService {
   Future<void> sendPasswordResetEmail(String email) async {
     try {
       await _auth.sendPasswordResetEmail(email: email);
+      await _analyticsLogger.logPasswordResetRequested(email: email);
     } on FirebaseAuthException catch (e) {
       throw handleAuthException(e);
     }

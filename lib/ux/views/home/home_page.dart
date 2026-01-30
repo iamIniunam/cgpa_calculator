@@ -1,4 +1,5 @@
 import 'package:cgpa_calculator/platform/di/dependency_injection.dart';
+import 'package:cgpa_calculator/platform/firebase/analytics_logger.dart';
 import 'package:cgpa_calculator/ux/shared/models/semester_model.dart';
 import 'package:cgpa_calculator/ux/shared/resources/app_colors.dart';
 import 'package:cgpa_calculator/ux/shared/view_models/auth_view_model.dart';
@@ -19,6 +20,13 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   final SemesterViewModel semesterViewModel = AppDI.getIt<SemesterViewModel>();
   final AuthViewModel authViewModel = AppDI.getIt<AuthViewModel>();
+  final AnalyticsLogger _analytics = AppDI.getIt<AnalyticsLogger>();
+
+  @override
+  void initState() {
+    super.initState();
+    _analytics.logScreenView(screenName: 'Home', screenClass: 'HomePage');
+  }
 
   @override
   Widget build(BuildContext context) {

@@ -1,3 +1,4 @@
+import 'package:cgpa_calculator/platform/firebase/analytics_logger.dart';
 import 'package:cgpa_calculator/platform/persistence/preference_manager.dart';
 import 'package:cgpa_calculator/platform/di/dependency_injection.dart';
 import 'package:cgpa_calculator/ux/shared/resources/app_constants.dart';
@@ -6,6 +7,7 @@ import 'package:flutter/material.dart';
 enum AppThemeMode { system, light, dark }
 
 class ThemeViewModel {
+  final AnalyticsLogger _analytics = AppDI.getIt<AnalyticsLogger>();
   final PreferenceManager preferenceManager = AppDI.getIt<PreferenceManager>();
 
   ValueNotifier<AppThemeMode> themeMode =
@@ -18,9 +20,9 @@ class ThemeViewModel {
   void setThemeMode(AppThemeMode mode) {
     themeMode.value = mode;
     preferenceManager.setPreference(
-      key: AppConstants.themeKey,
-      value: mode.name,
-    );
+        key: AppConstants.themeKey, value: mode.name);
+
+    _analytics.logThemeChanged(theme: mode.name);
   }
 
   void loadThemeMode() {

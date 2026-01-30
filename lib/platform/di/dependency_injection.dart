@@ -6,6 +6,7 @@ import 'package:cgpa_calculator/ux/views/semesters/view_models/semester_view_mod
 import 'package:cgpa_calculator/ux/views/settings/view_models/cgpa_view_model.dart';
 import 'package:get_it/get_it.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:cgpa_calculator/platform/firebase/analytics_logger.dart';
 
 class AppDI {
   const AppDI._();
@@ -24,5 +25,6 @@ class AppDI {
     getIt.registerLazySingleton<SemesterViewModel>(() => SemesterViewModel());
     getIt.registerLazySingleton<CourseViewModel>(() => CourseViewModel());
     getIt.registerLazySingleton<CGPAViewModel>(() => CGPAViewModel());
+    getIt.registerLazySingleton<AnalyticsLogger>(() => AnalyticsLogger());
   }
 }
