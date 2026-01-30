@@ -48,14 +48,6 @@ class AuthService {
         });
 
         await _analytics.logSignUp(signUpMethod: 'email');
-        await _analytics.logEvent(
-          name: 'sign_up',
-          parameters: {
-            'method': 'email',
-            'user_id': userCredential.user?.uid,
-            'email': email,
-          },
-        );
       }
 
       return userCredential.user;
@@ -84,14 +76,6 @@ class AuthService {
         });
 
         await _analytics.logLogin(loginMethod: 'email');
-        await _analytics.logEvent(
-          name: 'login',
-          parameters: {
-            'method': 'email',
-            'user_id': userCredential.user?.uid,
-            'email': email,
-          },
-        );
       }
 
       return userCredential.user;
@@ -139,14 +123,6 @@ class AuthService {
           });
 
           await _analytics.logSignUp(signUpMethod: 'google');
-          await _analytics.logEvent(
-            name: 'sign_up',
-            parameters: {
-              'method': 'google',
-              'user_id': userCredential.user?.uid,
-              'email': userCredential.user?.email ?? '',
-            },
-          );
         } else {
           await _firestore
               .collection(AppConstants.usersCollection)
@@ -159,14 +135,6 @@ class AuthService {
           });
 
           await _analytics.logLogin(loginMethod: 'google');
-          await _analytics.logEvent(
-            name: 'login',
-            parameters: {
-              'method': 'google',
-              'user_id': userCredential.user?.uid,
-              'email': userCredential.user?.email ?? '',
-            },
-          );
         }
       }
 
