@@ -7,6 +7,8 @@ class AppStrings {
   static const nameHintText = 'e.g. Alex';
   static const continueText = 'Continue';
 
+  static const emailHint = 'john@example.com';
+
   static const scale = 'Scale';
   static const semesters = 'Semesters';
   static const years = 'Years';
@@ -44,4 +46,9 @@ class AppStrings {
   static const fourPointZeroScale = '4.0 Scale';
   static const fourPointThreeScale = '4.3 Scale';
   static const fivePointZeroScale = '5.0 Scale';
+
+  static const noDataAvailable = 'No data available at the moment.';
+
+  static const uploadFromGallery = 'Upload from gallery';
+  static const takePicture = 'Take picture';
 }

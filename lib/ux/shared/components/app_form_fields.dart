@@ -26,6 +26,7 @@ class SearchTextFormField extends StatelessWidget {
   final bool autofocus;
   final bool enabled;
   final VoidCallback onClear;
+  final VoidCallback? onIconTap;
 
   const SearchTextFormField({
     super.key,
@@ -46,24 +47,44 @@ class SearchTextFormField extends StatelessWidget {
     this.onSubmitted,
     this.enabled = true,
     required this.onClear,
+    this.onIconTap,
   });
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 42,
+      height: 46,
       decoration: BoxDecoration(
-        color: AppColors.field2,
-        borderRadius: BorderRadius.circular(10.0),
+        color: (Theme.of(context).brightness == Brightness.dark
+            ? AppColors.textFieldBackground
+            : AppColors.field2),
+        borderRadius: BorderRadius.circular(
+          AppDimens.defaultBorderRadius,
+        ),
+        border: Border.all(
+          color: Theme.of(context).brightness == Brightness.dark
+              ? AppColors.primaryColor
+              : AppColors.transparentBackgroundLight,
+          width: 1.2,
+        ),
       ),
       child: TextField(
+        style: const TextStyle(
+          fontSize: 16,
+          fontWeight: FontWeight.bold,
+        ),
         autofocus: autofocus,
-        cursorColor: AppColors.primaryColor,
+        cursorColor: Theme.of(context).brightness == Brightness.dark
+            ? AppColors.white
+            : AppColors.primaryColor,
         decoration: InputDecoration(
-          contentPadding: const EdgeInsets.only(top: 4, left: 10, right: 10),
+          contentPadding: EdgeInsets.only(
+              top: (controller?.text.isEmpty ?? false) ? 0 : 6,
+              left: 10,
+              right: 10),
           hintText: hintText ?? 'Search',
           hintStyle: const TextStyle(
-            color: AppColors.greyInputBorder,
+            color: AppColors.textGrey,
             fontSize: 14,
             fontWeight: FontWeight.w500,
           ),
@@ -72,13 +93,21 @@ class SearchTextFormField extends StatelessWidget {
               const BoxConstraints(maxHeight: 36, maxWidth: 36),
           suffixIconConstraints:
               const BoxConstraints(maxHeight: 36, maxWidth: 36),
-          // prefixIcon: Padding(
-          //   padding: const EdgeInsets.all(10),
-          //   child: AppImages.svgSearchIcon,
-          // ),
+          prefixIcon: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 10),
+            child: InkResponse(
+              radius: 8,
+              onTap: onIconTap,
+              child: Icon(
+                Icons.arrow_back_rounded,
+                color: Theme.of(context).appBarTheme.foregroundColor,
+              ),
+            ),
+          ),
           suffixIcon: Visibility(
             visible: controller?.text.isNotEmpty ?? false,
             child: InkWell(
+              borderRadius: BorderRadius.circular(32),
               onTap: onClear,
               child: const Padding(
                 padding: EdgeInsets.all(10.0),

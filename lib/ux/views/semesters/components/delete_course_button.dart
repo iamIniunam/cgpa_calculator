@@ -1,16 +1,11 @@
-import 'package:cgpa_calculator/ux/navigation/navigation.dart';
 import 'package:cgpa_calculator/ux/shared/components/app_material.dart';
 import 'package:cgpa_calculator/ux/shared/resources/app_colors.dart';
-import 'package:cgpa_calculator/ux/views/semesters/add_course_page.dart';
 import 'package:flutter/material.dart';
 
-class DeleteCourseButton extends StatelessWidget {
-  const DeleteCourseButton({
-    super.key,
-    required this.widget,
-  });
+class DeleteActionButton extends StatelessWidget {
+  const DeleteActionButton({super.key, required this.onTap});
 
-  final AddCoursePage widget;
+  final VoidCallback onTap;
 
   @override
   Widget build(BuildContext context) {
@@ -20,9 +15,7 @@ class DeleteCourseButton extends StatelessWidget {
         color: Colors.red,
         borderRadius: BorderRadius.circular(10),
         inkwellBorderRadius: BorderRadius.circular(10),
-        onTap: () {
-          Navigation.back(context: context);
-        },
+        onTap: onTap,
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
           child: Text(
@@ -39,8 +32,10 @@ class DeleteCourseButton extends StatelessWidget {
   }
 }
 
-class CompleteCourseButton extends StatelessWidget {
-  const CompleteCourseButton({super.key});
+class CompleteActionButton extends StatelessWidget {
+  const CompleteActionButton({super.key, required this.onTap});
+
+  final VoidCallback onTap;
 
   @override
   Widget build(BuildContext context) {
@@ -50,9 +45,7 @@ class CompleteCourseButton extends StatelessWidget {
         color: AppColors.primaryColor,
         borderRadius: BorderRadius.circular(10),
         inkwellBorderRadius: BorderRadius.circular(10),
-        onTap: () {
-          Navigation.back(context: context);
-        },
+        onTap: onTap,
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
           child: Text(

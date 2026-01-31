@@ -1,4 +1,5 @@
 import 'package:cgpa_calculator/ux/shared/resources/app_colors.dart';
+import 'package:cgpa_calculator/ux/views/semesters/view_models/semester_view_model.dart';
 import 'package:flutter/material.dart';
 
 class StatsCard extends StatelessWidget {
@@ -82,10 +83,14 @@ class StatsCard extends StatelessWidget {
 }
 
 class StatsCardBig extends StatelessWidget {
-  const StatsCardBig({super.key});
+  const StatsCardBig({super.key, required this.semesterViewModel});
+
+  final SemesterViewModel semesterViewModel;
 
   @override
   Widget build(BuildContext context) {
+    final stats = semesterViewModel.statistics;
+
     return ClipRRect(
       borderRadius: BorderRadius.circular(24),
       child: Material(
@@ -118,20 +123,20 @@ class StatsCardBig extends StatelessWidget {
               Row(
                 children: [
                   StatsDetails(
-                    icon: Icons.school_rounded,
-                    title: 'Required GPA',
-                    value: '4.30',
-                    iconColor: AppColors.red,
+                    icon: Icons.trending_up_rounded,
+                    title: 'Highest GPA',
+                    value: stats['highestGPA']?.toStringAsFixed(2) ?? '',
+                    iconColor: AppColors.green,
                     iconBackgroundColor:
                         Theme.of(context).brightness == Brightness.dark
-                            ? AppColors.redBackground
-                            : AppColors.redLight,
+                            ? AppColors.greenBackground
+                            : AppColors.greenLight,
                     crossAxisAlignment: CrossAxisAlignment.start,
                   ),
                   StatsDetails(
-                    icon: Icons.track_changes_rounded,
-                    title: 'Target',
-                    value: '4.30',
+                    icon: Icons.star_rounded,
+                    title: 'Average GPA',
+                    value: stats['averageGPA']?.toStringAsFixed(2) ?? '',
                     iconColor: AppColors.blue,
                     iconBackgroundColor:
                         Theme.of(context).brightness == Brightness.dark
@@ -139,14 +144,14 @@ class StatsCardBig extends StatelessWidget {
                             : AppColors.blueLight,
                   ),
                   StatsDetails(
-                    icon: Icons.trending_up_rounded,
-                    title: 'Projected',
-                    value: '3.95',
-                    iconColor: AppColors.orange,
+                    icon: Icons.trending_down_rounded,
+                    title: 'Lowest GPA',
+                    value: stats['lowestGPA']?.toStringAsFixed(2) ?? '',
+                    iconColor: AppColors.red,
                     iconBackgroundColor:
                         Theme.of(context).brightness == Brightness.dark
-                            ? AppColors.orangeBackground
-                            : AppColors.orangeLight,
+                            ? AppColors.redBackground
+                            : AppColors.redLight,
                     crossAxisAlignment: CrossAxisAlignment.end,
                   ),
                 ],

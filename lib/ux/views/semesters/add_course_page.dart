@@ -1,101 +1,224 @@
+import 'package:cgpa_calculator/platform/di/dependency_injection.dart';
 import 'package:cgpa_calculator/ux/navigation/navigation.dart';
+import 'package:cgpa_calculator/ux/shared/bottom_sheets/app_confirmation_botttom_sheet.dart';
+import 'package:cgpa_calculator/ux/shared/bottom_sheets/show_app_bottom_sheet.dart';
 import 'package:cgpa_calculator/ux/shared/components/app_buttons.dart';
 import 'package:cgpa_calculator/ux/shared/components/app_form_fields.dart';
 import 'package:cgpa_calculator/ux/shared/components/app_material.dart';
 import 'package:cgpa_calculator/platform/extensions/extensions.dart';
-import 'package:cgpa_calculator/ux/shared/models/ui_models.dart';
+import 'package:cgpa_calculator/ux/shared/models/course_model.dart';
+import 'package:cgpa_calculator/ux/shared/models/grading_scale_models.dart';
+import 'package:cgpa_calculator/ux/shared/models/semester_model.dart';
 import 'package:cgpa_calculator/ux/shared/resources/app_colors.dart';
 import 'package:cgpa_calculator/ux/shared/resources/app_dialogs.dart';
 import 'package:cgpa_calculator/ux/shared/view_models/auth_view_model.dart';
 import 'package:cgpa_calculator/ux/views/semesters/components/delete_course_button.dart';
+import 'package:cgpa_calculator/ux/views/semesters/view_models/course_view_model.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 class AddCoursePage extends StatefulWidget {
   const AddCoursePage({
     super.key,
-    this.existingCourse,
-    this.semesterNumber,
-    this.courseIndex,
+    required this.semester,
+    this.course,
+    this.isEditMode = false,
   });
 
-  final CourseInput? existingCourse;
-  final int? semesterNumber;
-  final int? courseIndex;
+  final Semester semester;
+  final Course? course;
+  final bool isEditMode;
 
   @override
   State<AddCoursePage> createState() => _AddCoursePageState();
 }
 
 class _AddCoursePageState extends State<AddCoursePage> {
-  late int selectedGradeIndex;
-  late int creditHours;
-  late TextEditingController courseCodeController;
+  final CourseViewModel courseViewModel = AppDI.getIt<CourseViewModel>();
+  final AuthViewModel authViewModel = AppDI.getIt<AuthViewModel>();
 
-  bool get isEditMode => widget.existingCourse != null;
+  final TextEditingController courseCodeController = TextEditingController();
+  final TextEditingController scoreController = TextEditingController();
+  int selectedGradeIndex = 0;
+  int creditHours = 3;
+
+  List<GradeMapping> get gradeOptions {
+    final gradingScale =
+        authViewModel.currentUser.value?.gradingScale ?? GradingScale.scale5_0;
+    return gradingScale.gradeMappings;
+  }
+
+  bool get isEditMode => widget.isEditMode;
 
   @override
   void initState() {
     super.initState();
+    if (widget.isEditMode && widget.course != null) {
+      courseCodeController.text = widget.course?.courseCode ?? '';
+      scoreController.text = widget.course?.score?.toString() ?? '';
+      creditHours = widget.course?.creditUnits ?? 3;
 
-    // if (isEditMode) {
-    //   courseCodeController =
-    //       TextEditingController(text: widget.existingCourse?.courseCode);
-    //   creditHours = widget.existingCourse?.creditHours ?? 0;
-
-    //   final authViewModel = Provider.of<AuthViewModel>(context, listen: false);
-    //   final gradeOptions =
-    //       GradeCalculator.getGradeOptions(authViewModel.gradingScale);
-    //   selectedGradeIndex = gradeOptions.indexWhere(
-    //     (option) => option.value == widget.existingCourse?.score,
-    //   );
-    //   if (selectedGradeIndex == -1) selectedGradeIndex = 0;
-    // } else {
-    //   courseCodeController = TextEditingController();
-    //   creditHours = 3;
-    //   selectedGradeIndex = 0;
-    // }
+      // Set selectedGradeIndex based on the grade in the course
+      final grade = widget.course?.grade;
+      final index = gradeOptions.indexWhere((g) => g.grade == grade);
+      if (index != -1) {
+        selectedGradeIndex = index;
+      }
+    }
   }
 
-  // void saveCourse() {
-  //   if (courseCodeController.text.trim().isEmpty) {
-  //     AppDialogs.showErrorDialog(context,
-  //         errorMessage: 'Please enter a course code');
-  //     return;
-  //   }
-  //   final viewModel = Provider.of<AuthViewModel>(context, listen: false);
-  //   // final gradeOptions =
-  //       // GradeCalculator.getGradeOptions(viewModel.gradingScale);
-  //   // final selectedGrade = gradeOptions[selectedGradeIndex];
+  void handleAddCourseResult() {
+    final result = courseViewModel.addCourseResult.value;
+    if (result.isSuccess) {
+      Navigation.back(context: context, result: true);
+    } else if (result.isError) {
+      AppDialogs.showErrorDialog(
+        context,
+        errorMessage: result.message ?? 'Failed to add course.',
+      );
+    }
+  }
 
-  //   final courseInput = CourseInput(
-  //     courseCode: courseCodeController.text.trim(),
-  //     creditHours: creditHours,
-  //     grade: selectedGrade.label,
-  //     score: selectedGrade.value,
-  //   );
+  Future<void> addCourse() async {
+    final courseCode = courseCodeController.text.trim();
+    final gradingScale = authViewModel.currentUser.value?.gradingScale;
 
-  //   Navigation.back(context: context, result: courseInput);
-  // }
+    if (courseCode.isEmpty) {
+      AppDialogs.showErrorDialog(
+        context,
+        errorMessage: 'Please enter a valid course code.',
+      );
+      return;
+    }
+
+    final selectedGrade = gradeOptions[selectedGradeIndex].grade;
+    final gradePoint = gradingScale?.getGradePoint(selectedGrade) ?? 0.0;
+
+    AppDialogs.showLoadingDialog(context);
+    final course = Course.create(
+      courseCode: courseCode,
+      creditUnits: creditHours,
+      score: double.tryParse(scoreController.text.trim()),
+      grade: selectedGrade,
+      gradePoint: gradePoint,
+    );
+
+    await courseViewModel.addCourse(
+        semesterId: widget.semester.id ?? '', course: course);
+    if (!mounted) return;
+    Navigation.back(context: context);
+    handleAddCourseResult();
+  }
+
+  Future<void> updateCourse() async {
+    final courseCode = courseCodeController.text.trim();
+    final gradingScale = authViewModel.currentUser.value?.gradingScale;
+
+    if (courseCode.isEmpty) {
+      AppDialogs.showErrorDialog(
+        context,
+        errorMessage: 'Please enter a valid course code.',
+      );
+      return;
+    }
+
+    final selectedGrade = gradeOptions[selectedGradeIndex].grade;
+    final gradePoint = gradingScale?.getGradePoint(selectedGrade) ?? 0.0;
+
+    AppDialogs.showLoadingDialog(context);
+    final updatedCourse = Course.create(
+      id: widget.course?.id ?? '',
+      courseCode: courseCode,
+      creditUnits: creditHours,
+      score: double.tryParse(scoreController.text.trim()),
+      grade: selectedGrade,
+      gradePoint: gradePoint,
+      createdAt: widget.course?.createdAt,
+    );
+
+    await courseViewModel.updateCourse(
+        semesterId: widget.semester.id ?? '', course: updatedCourse);
+    if (!mounted) return;
+    Navigation.back(context: context);
+    handleUpdateCourseResult();
+  }
+
+  void handleUpdateCourseResult() {
+    final result = courseViewModel.updateCourseResult.value;
+    if (result.isSuccess) {
+      AppDialogs.showSuccessDialog(
+        context,
+        successMessage: result.message ?? 'Course updated successfully.',
+        onDismiss: () {
+          Navigation.back(context: context);
+          Navigation.back(context: context, result: true);
+        },
+      );
+    } else if (result.isError) {
+      AppDialogs.showErrorDialog(
+        context,
+        errorMessage: result.message ?? 'Failed to update course.',
+      );
+    }
+  }
+
+  void deleteCourse() async {
+    AppDialogs.showLoadingDialog(context);
+
+    await courseViewModel.deleteCourse(
+      semesterId: widget.semester.id ?? '',
+      courseId: widget.course?.id ?? '',
+    );
+    if (!context.mounted) return;
+    Navigation.back(context: context);
+    final result = courseViewModel.deleteCourseResult.value;
+    if (result.isSuccess) {
+      AppDialogs.showSuccessDialog(
+        context,
+        successMessage: 'Course deleted successfully',
+        onDismiss: () {
+          Navigation.back(context: context);
+          Navigation.back(context: context);
+        },
+      );
+    } else if (result.isError) {
+      AppDialogs.showErrorDialog(
+        context,
+        errorMessage:
+            result.message ?? 'Failed to delete course. Please try again.',
+      );
+    }
+  }
 
   @override
   void dispose() {
     courseCodeController.dispose();
+    scoreController.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-
     return GestureDetector(
       onTap: () => FocusScope.of(context).unfocus(),
       child: Scaffold(
         appBar: AppBar(
-          title: const Text('Add Course'),
-          actions: isEditMode
+          title: Text(isEditMode ? 'Edit Course' : 'Add Course'),
+          actions: (isEditMode && widget.course?.id != null)
               ? [
-                  DeleteCourseButton(
-                    widget: widget,
+                  DeleteActionButton(
+                    onTap: () async {
+                      bool res = await showAppBottomSheet(
+                        context: context,
+                        showCloseButton: false,
+                        child: const AppConfirmationBotttomSheet(
+                          text: 'Are you sure you want to delete this course?',
+                          title: 'Delete Course',
+                        ),
+                      );
+                      if (res == true) {
+                        deleteCourse();
+                      }
+                    },
                   ),
                 ]
               : null,
@@ -112,18 +235,22 @@ class _AddCoursePageState extends State<AddCoursePage> {
                   PrimaryTextFormField(
                     autofocus: true,
                     hintText: 'e.g. CS101',
-                    // fillColor: Theme.of(context).brightness == Brightness.dark
-                    //     ? AppColors.transparentBackgroundDark
-                    //     : AppColors.transparentBackgroundLight,
-                    // greyedOut: true,
                     controller: courseCodeController,
                     keyboardType: TextInputType.visiblePassword,
-                    textInputAction: TextInputAction.done,
+                    textInputAction: TextInputAction.next,
                     textCapitalization: TextCapitalization.characters,
                   ),
                   const SizedBox(height: 8),
                   sectionHeader(context, 'Performance'),
                   const SizedBox(height: 16),
+                  PrimaryTextFormField(
+                    labelText: 'Score Obtained',
+                    optional: true,
+                    hintText: 'e.g. 75',
+                    controller: scoreController,
+                    keyboardType: TextInputType.number,
+                    textInputAction: TextInputAction.done,
+                  ),
                   Container(
                     padding: const EdgeInsets.symmetric(
                         horizontal: 16, vertical: 24),
@@ -190,7 +317,7 @@ class _AddCoursePageState extends State<AddCoursePage> {
                                         }
                                       },
                                     ),
-                                    Text('$creditHours',
+                                    Text(creditHours.toString(),
                                         style: Theme.of(context)
                                             .textTheme
                                             .titleMedium
@@ -199,11 +326,9 @@ class _AddCoursePageState extends State<AddCoursePage> {
                                       icon: Icons.add_rounded,
                                       color: AppColors.primaryColor,
                                       onTap: () {
-                                        if (creditHours < 3) {
-                                          setState(() {
-                                            creditHours++;
-                                          });
-                                        }
+                                        setState(() {
+                                          creditHours++;
+                                        });
                                       },
                                     ),
                                   ],
@@ -224,31 +349,30 @@ class _AddCoursePageState extends State<AddCoursePage> {
                                       Theme.of(context).textTheme.titleMedium,
                                 ),
                               ),
-                              // if (gradeOptions.isNotEmpty)
-                                Container(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 10, vertical: 8),
-                                  decoration: BoxDecoration(
-                                    color: Theme.of(context).brightness ==
-                                            Brightness.dark
-                                        ? AppColors.transparentBackgroundDark
-                                        : AppColors.transparentBackgroundLight
-                                            .withOpacity(0.4),
-                                    borderRadius: BorderRadius.circular(8),
-                                    border: Border.all(
-                                        color: Colors.white70, width: 0.3),
-                                  ),
-                                  child: Text(
-                                    'gradeOptions[selectedGradeIndex].label',
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .titleMedium
-                                        ?.copyWith(
-                                          color: AppColors.white,
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                  ),
+                              Container(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 10, vertical: 8),
+                                decoration: BoxDecoration(
+                                  color: Theme.of(context).brightness ==
+                                          Brightness.dark
+                                      ? AppColors.transparentBackgroundDark
+                                      : AppColors.transparentBackgroundLight
+                                          .withOpacity(0.4),
+                                  borderRadius: BorderRadius.circular(8),
+                                  border: Border.all(
+                                      color: Colors.white70, width: 0.3),
                                 ),
+                                child: Text(
+                                  gradeOptions[selectedGradeIndex].grade,
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .titleMedium
+                                      ?.copyWith(
+                                        color: AppColors.white,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                ),
+                              ),
                             ],
                           ),
                         ),
@@ -256,12 +380,12 @@ class _AddCoursePageState extends State<AddCoursePage> {
                         SizedBox(
                           height: 74,
                           child: ListView.separated(
-                            itemCount: 5,
+                            itemCount: gradeOptions.length,
                             scrollDirection: Axis.horizontal,
                             separatorBuilder: (context, int index) =>
                                 const SizedBox(width: 10),
                             itemBuilder: (context, int index) {
-                              // final option = gradeOptions[index];
+                              final option = gradeOptions[index];
                               final isSelected = selectedGradeIndex == index;
                               return Column(
                                 children: [
@@ -290,7 +414,7 @@ class _AddCoursePageState extends State<AddCoursePage> {
                                         shape: BoxShape.circle,
                                       ),
                                       child: Text(
-                                        'option.label',
+                                        option.grade,
                                         style: Theme.of(context)
                                             .textTheme
                                             .titleMedium
@@ -304,7 +428,7 @@ class _AddCoursePageState extends State<AddCoursePage> {
                                   ),
                                   const SizedBox(height: 4),
                                   Text(
-                                    'option.gradePoint',
+                                    option.gradePoint.toString(),
                                     style: Theme.of(context)
                                         .textTheme
                                         .titleMedium
@@ -327,8 +451,9 @@ class _AddCoursePageState extends State<AddCoursePage> {
             Padding(
               padding: const EdgeInsets.all(16),
               child: PrimaryButton(
-                onTap: () {},
-                child: const Text('Add Course to Semester'),
+                onTap: isEditMode ? updateCourse : addCourse,
+                child: Text(
+                    isEditMode ? 'Update Course' : 'Add Course to Semester'),
               ),
             ),
           ],

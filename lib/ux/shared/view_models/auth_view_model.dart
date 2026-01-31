@@ -1,5 +1,5 @@
-import 'package:cgpa_calculator/platform/data_source/persistence/preference_manager.dart';
-import 'package:cgpa_calculator/platform/data_source/persistence/preference_manager_extensions.dart';
+import 'package:cgpa_calculator/platform/persistence/preference_manager.dart';
+import 'package:cgpa_calculator/platform/persistence/preference_manager_extensions.dart';
 import 'package:cgpa_calculator/platform/di/dependency_injection.dart';
 import 'package:cgpa_calculator/platform/firebase/auth/auth_service.dart';
 import 'package:cgpa_calculator/platform/firebase/auth/models/auth_request.dart';
@@ -80,7 +80,30 @@ class AuthViewModel extends ChangeNotifier {
     }
   }
 
-  Future<void> signInWithGoogle() async {}
+  Future<void> signInWithGoogle() async {
+    googleSignInResult.value = UIResult.loading();
+    try {
+      final user = await _authService.signInWithGoogle();
+
+      if (user != null) {
+        final userData = await _authService.getUserData(user.uid);
+        if (userData != null) {
+          final appUser = AppUser.fromJson(userData);
+          currentUser.value = appUser;
+          _preferenceManager.userId = user.uid;
+          googleSignInResult.value = UIResult.success(
+            data: appUser,
+            message: 'Google sign-in successful',
+          );
+        }
+      } else {
+        googleSignInResult.value =
+            UIResult.error(message: 'Google sign-in failed');
+      }
+    } catch (e) {
+      googleSignInResult.value = UIResult.error(message: e.toString());
+    }
+  }
 
   Future<void> completeProfile(CompleteProfileRequest request) async {
     completeProfileResult.value = UIResult.loading();
@@ -93,7 +116,7 @@ class AuthViewModel extends ChangeNotifier {
       await _authService.completeProfile(
         userId: userId,
         school: request.school,
-        gradingScale: request.gradingScale.value,
+        gradingScale: request.gradingScale.toMap(),
       );
 
       final userData = await _authService.getUserData(userId);
@@ -122,6 +145,8 @@ class AuthViewModel extends ChangeNotifier {
         userId: userId,
         updates: request.toMap(),
       );
+
+      await updateLastActive(userId);
 
       final userData = await _authService.getUserData(userId);
       if (userData != null) {
@@ -209,6 +234,10 @@ class AuthViewModel extends ChangeNotifier {
     } catch (e) {
       forgotPasswordResult.value = UIResult.error(message: e.toString());
     }
+  }
+
+  Future<void> updateLastActive(String userId) async {
+    await _authService.updateLastActive(userId);
   }
 
   void listenToAuthStateChanges() {

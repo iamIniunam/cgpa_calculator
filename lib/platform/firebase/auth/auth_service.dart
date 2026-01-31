@@ -1,12 +1,16 @@
+import 'package:cgpa_calculator/platform/di/dependency_injection.dart';
+import 'package:cgpa_calculator/platform/firebase/analytics_logger.dart';
+import 'package:cgpa_calculator/ux/shared/resources/app_constants.dart';
 import 'package:cgpa_calculator/ux/shared/view_models/theme_view_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
 class AuthService {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
-
-  static const String usersCollection = 'users';
+  final GoogleSignIn _googleSignIn = GoogleSignIn();
+  final AnalyticsLogger _analyticsLogger = AppDI.getIt<AnalyticsLogger>();
 
   User? get currentUser => _auth.currentUser;
 
@@ -24,10 +28,11 @@ class AuthService {
       );
 
       if (userCredential.user != null) {
+        final user = userCredential.user!;
         await userCredential.user?.updateDisplayName(fullName);
 
         await _firestore
-            .collection(usersCollection)
+            .collection(AppConstants.usersCollection)
             .doc(userCredential.user?.uid)
             .set({
           'uid': userCredential.user?.uid,
@@ -35,20 +40,23 @@ class AuthService {
           'email': email,
           'profileComplete': false,
           'themePreference': AppThemeMode.system.name,
-
           // versioning
-          'appVersion': '1.0.0',
-          'onboardingVersion': 1,
-
+          // 'appVersion': '1.0.0',
+          // 'onboardingVersion': 1,
           //timestamps
           'createdAt': FieldValue.serverTimestamp(),
           'lastLogin': FieldValue.serverTimestamp(),
           'lastActiveAt': FieldValue.serverTimestamp(),
         });
+
+        await _analyticsLogger.setUser(user);
+        await _analyticsLogger.logSignUp(method: 'email');
       }
 
       return userCredential.user;
     } on FirebaseAuthException catch (e) {
+      await _analyticsLogger.logSignUpFailed(
+          method: 'email', errorCode: e.code);
       throw handleAuthException(e);
     }
   }
@@ -64,38 +72,112 @@ class AuthService {
       );
 
       if (userCredential.user != null) {
+        final user = userCredential.user!;
+
         await _firestore
-            .collection(usersCollection)
+            .collection(AppConstants.usersCollection)
             .doc(userCredential.user?.uid)
             .update({
           'lastLogin': FieldValue.serverTimestamp(),
           'lastActiveAt': FieldValue.serverTimestamp(),
         });
+
+        await _analyticsLogger.setUser(user);
+        await _analyticsLogger.logLogin(method: 'email');
       }
 
       return userCredential.user;
     } on FirebaseAuthException catch (e) {
+      await _analyticsLogger.logLoginFailed(method: 'email', errorCode: e.code);
       throw handleAuthException(e);
     }
   }
 
   Future<User?> signInWithGoogle() async {
-    // Implement Google Sign-In logic here
-    // This is a placeholder for the actual implementation
-    throw UnimplementedError('Google Sign-In not implemented yet.');
+    try {
+      final GoogleSignInAccount? googleUser = await _googleSignIn.signIn();
+
+      if (googleUser == null) return null;
+
+      final GoogleSignInAuthentication googleAuth =
+          await googleUser.authentication;
+      final credential = GoogleAuthProvider.credential(
+        accessToken: googleAuth.accessToken,
+        idToken: googleAuth.idToken,
+      );
+
+      final userCredential = await _auth.signInWithCredential(credential);
+
+      if (userCredential.user != null) {
+        final user = userCredential.user!;
+        final userDoc = await _firestore
+            .collection(AppConstants.usersCollection)
+            .doc(userCredential.user?.uid)
+            .get();
+
+        if (!userDoc.exists) {
+          await _firestore
+              .collection(AppConstants.usersCollection)
+              .doc(userCredential.user?.uid)
+              .set({
+            'uid': userCredential.user?.uid,
+            'name': userCredential.user?.displayName ?? '',
+            'email': userCredential.user?.email ?? '',
+            'profileComplete': false,
+            'themePreference': AppThemeMode.system.name,
+            'createdAt': FieldValue.serverTimestamp(),
+            'lastLogin': FieldValue.serverTimestamp(),
+            'lastActiveAt': FieldValue.serverTimestamp(),
+            'profilePicture': userCredential.user?.photoURL,
+            'googleImageUrl': userCredential.user?.photoURL,
+          });
+
+          await _analyticsLogger.setUser(user);
+          await _analyticsLogger.logSignUp(method: 'google');
+        } else {
+          await _firestore
+              .collection(AppConstants.usersCollection)
+              .doc(userCredential.user?.uid)
+              .update({
+            'lastLogin': FieldValue.serverTimestamp(),
+            'lastActiveAt': FieldValue.serverTimestamp(),
+            'profilePicture': userCredential.user?.photoURL,
+            'googleImageUrl': userCredential.user?.photoURL,
+          });
+
+          await _analyticsLogger.setUser(user);
+          await _analyticsLogger.logLogin(method: 'google');
+        }
+      }
+
+      return userCredential.user;
+    } catch (e) {
+      await _analyticsLogger.logLoginFailed(
+          method: 'google', errorCode: e.toString());
+      throw Exception('Google sign-in failed: ${e.toString()}');
+    }
   }
 
   Future<void> completeProfile({
     required String userId,
     required String school,
-    required double gradingScale,
+    required Map<String, dynamic> gradingScale,
   }) async {
     try {
-      await _firestore.collection(usersCollection).doc(userId).update({
+      await _firestore
+          .collection(AppConstants.usersCollection)
+          .doc(userId)
+          .update({
         'school': school,
         'gradingScale': gradingScale,
         'profileComplete': true,
       });
+
+      await _analyticsLogger.logProfileCompleted(
+        userId: userId,
+        school: school,
+        gradingScale: gradingScale['name'] ?? 'unknown',
+      );
     } catch (e) {
       throw Exception('Failed to complete profile: ${e.toString()}');
     }
@@ -103,8 +185,10 @@ class AuthService {
 
   Future<Map<String, dynamic>?> getUserData(String userId) async {
     try {
-      final doc =
-          await _firestore.collection(usersCollection).doc(userId).get();
+      final doc = await _firestore
+          .collection(AppConstants.usersCollection)
+          .doc(userId)
+          .get();
       return doc.data();
     } catch (e) {
       throw Exception('Failed to get user data: ${e.toString()}');
@@ -116,14 +200,25 @@ class AuthService {
     required Map<String, dynamic> updates,
   }) async {
     try {
-      await _firestore.collection(usersCollection).doc(userId).update(updates);
+      await _firestore
+          .collection(AppConstants.usersCollection)
+          .doc(userId)
+          .update(updates);
+
+      await _analyticsLogger.logProfileUpdated(
+        userId: userId,
+        fieldsUpdated: updates.keys.toList(),
+      );
     } catch (e) {
       throw Exception('Failed to update profile: ${e.toString()}');
     }
   }
 
   Future<void> updateLastActive(String userId) async {
-    await _firestore.collection(usersCollection).doc(userId).update({
+    await _firestore
+        .collection(AppConstants.usersCollection)
+        .doc(userId)
+        .update({
       'lastActiveAt': FieldValue.serverTimestamp(),
     });
   }
@@ -138,23 +233,63 @@ class AuthService {
   }
 
   Future<void> logout() async {
+    final userId = _auth.currentUser?.uid;
+
+    if (userId != null) {
+      await _analyticsLogger.logLogout(userId: userId);
+    }
     await Future.wait([
       _auth.signOut(),
-      // _googleSignIn.signOut(),
+      _googleSignIn.signOut(),
     ]);
+
+    await _analyticsLogger.clearUser();
   }
 
   Future<void> deleteAccount() async {
     final user = _auth.currentUser;
-    if (user != null) {
-      await user.delete();
-      await _firestore.collection(usersCollection).doc(user.uid).delete();
+    if (user == null) return;
+
+    final userId = user.uid;
+
+    try {
+      final semesterSnapshot = await _firestore
+          .collection(AppConstants.usersCollection)
+          .doc(userId)
+          .collection(AppConstants.semestersCollection)
+          .get();
+      for (var semesterDoc in semesterSnapshot.docs) {
+        final coursesSnapshot = await _firestore
+            .collection(AppConstants.usersCollection)
+            .doc(userId)
+            .collection(AppConstants.semestersCollection)
+            .doc(semesterDoc.id)
+            .collection(AppConstants.coursesCollection)
+            .get();
+
+        for (var courseDoc in coursesSnapshot.docs) {
+          await courseDoc.reference.delete();
+        }
+
+        await semesterDoc.reference.delete();
+      }
+
+      await _firestore
+          .collection(AppConstants.usersCollection)
+          .doc(userId)
+          .delete();
+
+      await _analyticsLogger.clearUser();
+      return await user.delete();
+    } catch (e) {
+      throw Exception('Failed to delete account: ${e.toString()}');
     }
   }
 
   Future<void> sendPasswordResetEmail(String email) async {
     try {
       await _auth.sendPasswordResetEmail(email: email);
+      await _analyticsLogger.logPasswordResetRequested(email: email);
     } on FirebaseAuthException catch (e) {
       throw handleAuthException(e);
     }

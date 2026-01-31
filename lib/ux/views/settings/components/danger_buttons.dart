@@ -87,25 +87,30 @@ class _DangerButtonsState extends State<DangerButtons> {
                   }
                 },
               ),
-              const SizedBox(width: 16),
-              DangerButton(
-                context: context,
-                title: 'Delete Account',
-                icon: Icons.delete_forever_rounded,
-                onTap: () async {
-                  final result = await showAppBottomSheet(
+              Visibility(
+                visible: false,
+                child: Padding(
+                  padding: const EdgeInsets.only(left: 16),
+                  child: DangerButton(
                     context: context,
-                    showCloseButton: false,
-                    child: const AppConfirmationBotttomSheet(
-                      text:
-                          'Are you sure you want to delete your account?\nThis action cannot be undone.',
-                      title: 'Delete Account',
-                    ),
-                  );
-                  if (result == true) {
-                    handleDeleteAccount();
-                  }
-                },
+                    title: 'Delete Account',
+                    icon: Icons.delete_forever_rounded,
+                    onTap: () async {
+                      final result = await showAppBottomSheet(
+                        context: context,
+                        showCloseButton: false,
+                        child: const AppConfirmationBotttomSheet(
+                          text:
+                              'Are you sure you want to delete your account?\nThis action cannot be undone.',
+                          title: 'Delete Account',
+                        ),
+                      );
+                      if (result == true) {
+                        handleDeleteAccount();
+                      }
+                    },
+                  ),
+                ),
               ),
             ],
           ),

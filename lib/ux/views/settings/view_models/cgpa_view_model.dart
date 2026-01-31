@@ -1,4 +1,5 @@
 import 'package:cgpa_calculator/platform/di/dependency_injection.dart';
+import 'package:cgpa_calculator/platform/firebase/analytics_logger.dart';
 import 'package:cgpa_calculator/platform/firebase/auth/auth_service.dart';
 import 'package:cgpa_calculator/platform/firebase/auth/models/auth_response.dart';
 import 'package:cgpa_calculator/platform/firebase/cgpa/cgpa_service.dart';
@@ -9,14 +10,14 @@ import 'package:flutter/foundation.dart';
 class CGPAViewModel {
   final CGPAService _cgpaService = CGPAService();
   final AuthService _authService = AuthService();
+  final AnalyticsLogger _analytics = AppDI.getIt<AnalyticsLogger>();
 
   final AuthViewModel _authViewModel = AppDI.getIt<AuthViewModel>();
 
   ValueNotifier<UIResult<AppUser>> setTargetCGPAResult =
       ValueNotifier(UIResult.empty());
 
-  Future<void> setTargetCGPA(
-      {required double targetCGPA, required double currentCGPA}) async {
+  Future<void> setTargetCGPA({required double targetCGPA}) async {
     setTargetCGPAResult.value = UIResult.loading();
     try {
       final userId = _authService.currentUser?.uid;
@@ -27,13 +28,16 @@ class CGPAViewModel {
       await _cgpaService.setTargetCGPA(
         userId: userId,
         targetCGPA: targetCGPA,
-        currentCGPA: currentCGPA,
       );
 
       final userData = await _authService.getUserData(userId);
       if (userData != null) {
         final appUser = AppUser.fromJson(userData);
         _authViewModel.currentUser.value = appUser;
+
+        await _analytics.logTargetCGPASet(
+            userId: userId, targetCGPA: targetCGPA);
+
         setTargetCGPAResult.value = UIResult.success(
           data: appUser,
           message: 'Target CGPA set successfully',
@@ -50,14 +54,11 @@ class CGPAViewModel {
       required double targetCGPA,
       required int completedCredits,
       required int upcomingCredits}) {
-    // Formula: Required GPA = [(Target CGPA × Total Credits) - (Current CGPA × Completed Credits)] / Upcoming Credits
-    final totalCredits = completedCredits + upcomingCredits;
-    final requiredGPA =
-        ((targetCGPA * totalCredits) - (currentCGPA * completedCredits)) /
-            upcomingCredits;
-
-    // Cap at max scale (adjust this based on your grading scale)
-    final maxScale = _authViewModel.currentUser.value?.gradingScale ?? 5.0;
-    return requiredGPA.clamp(0.0, maxScale);
+    return CGPACalculator.calculateRequiredSemesterGPA(
+      currentCGPA: currentCGPA,
+      targetCGPA: targetCGPA,
+      completedCredits: completedCredits,
+      upcomingCredits: upcomingCredits,
+    );
   }
 }

@@ -27,7 +27,7 @@ class PrimaryButton extends StatelessWidget {
     this.contentPadding,
   });
 
-  ButtonStyle getStyle() {
+  ButtonStyle getStyle(BuildContext context) {
     return ButtonStyle(
       fixedSize: MaterialStateProperty.all(
         const Size.fromHeight(55),
@@ -62,14 +62,18 @@ class PrimaryButton extends StatelessWidget {
       backgroundColor: MaterialStateProperty.resolveWith<Color?>(
           (Set<MaterialState> states) {
         if (states.contains(MaterialState.disabled)) {
-          return AppColors.disabledButton;
+          return Theme.of(context).brightness == Brightness.dark
+              ? AppColors.disabledButtonBgDark
+              : AppColors.disabledButtonBgLight;
         }
         return backgroundColor; // Defer to the widget's default.
       }),
       foregroundColor: MaterialStateProperty.resolveWith<Color?>(
           (Set<MaterialState> states) {
         if (states.contains(MaterialState.disabled)) {
-          return Colors.grey;
+          return Theme.of(context).brightness == Brightness.dark
+              ? AppColors.disabledButtonFgDark
+              : AppColors.disabledButtonFgLight;
         }
         return foregroundColor; // Defer to the widget's default.
       }),
@@ -84,7 +88,7 @@ class PrimaryButton extends StatelessWidget {
         expand
             ? Expanded(
                 child: TextButton(
-                style: getStyle(),
+                style: getStyle(context),
                 onPressed: enabled
                     ? () {
                         onTap?.call();
@@ -93,7 +97,7 @@ class PrimaryButton extends StatelessWidget {
                 child: child,
               ))
             : TextButton(
-                style: getStyle(),
+                style: getStyle(context),
                 onPressed: enabled
                     ? () {
                         onTap?.call();

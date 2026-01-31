@@ -12,7 +12,20 @@
           "package_name": "com.iniunamid.scholr"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "101914574231-pj2all3e9kbrf7g7p9o2c9odthseqrv8.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.iniunamid.scholr",
+            "certificate_hash": "87475f8eb9247ffd5dee73c218a4647f45cf4a1e"
+          }
+        },
+        {
+          "client_id": "101914574231-004oif1ijs29nd8rjblqauct5v1ocrb1.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyBVyqIJw-N-s5VeLbaOy2h4NcY3AmuuA_Y"
@@ -20,7 +33,19 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "101914574231-004oif1ijs29nd8rjblqauct5v1ocrb1.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "101914574231-4ioi7trjckss0fnes689l314bta4kciv.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.iniunamid.scholr"
+              }
+            }
+          ]
         }
       }
     }

@@ -4,9 +4,11 @@ import 'package:cgpa_calculator/ux/shared/bottom_sheets/app_confirmation_botttom
 import 'package:cgpa_calculator/ux/shared/bottom_sheets/show_app_bottom_sheet.dart';
 import 'package:cgpa_calculator/ux/shared/components/app_buttons.dart';
 import 'package:cgpa_calculator/platform/extensions/extensions.dart';
+import 'package:cgpa_calculator/ux/shared/models/ui_models.dart';
 import 'package:cgpa_calculator/ux/shared/resources/app_colors.dart';
 import 'package:cgpa_calculator/ux/shared/resources/app_dialogs.dart';
 import 'package:cgpa_calculator/ux/shared/view_models/auth_view_model.dart';
+import 'package:cgpa_calculator/ux/views/semesters/view_models/semester_view_model.dart';
 import 'package:cgpa_calculator/ux/views/settings/view_models/cgpa_view_model.dart';
 import 'package:flutter/material.dart';
 
@@ -20,15 +22,14 @@ class TargetCGPAPage extends StatefulWidget {
 class _TargetCGPAPageState extends State<TargetCGPAPage> {
   final CGPAViewModel _cgpaViewModel = AppDI.getIt<CGPAViewModel>();
   final AuthViewModel _authViewModel = AppDI.getIt<AuthViewModel>();
+  final SemesterViewModel _semesterViewModel = AppDI.getIt<SemesterViewModel>();
 
   late double _currentSliderValue;
   late double _currentCGPA;
   late double _minCgpa;
   late double _maxCgpa;
-
-  // For calculation (you can make these dynamic from user's course data)
-  final int _completedCredits = 60; // Example: completed credits
-  final int _upcomingCredits = 15; // Example: credits for next semester
+  late int _completedCredits;
+  late int _upcomingCredits;
 
   @override
   void initState() {
@@ -39,21 +40,34 @@ class _TargetCGPAPageState extends State<TargetCGPAPage> {
 
   void initializeValues() {
     final user = _authViewModel.currentUser.value;
-    final gradingScale = user?.gradingScale ?? 5.0;
-    _currentCGPA = user?.currentCGPA ?? 3.45;
-    _currentSliderValue = user?.targetCGPA ?? 3.60;
-    _minCgpa = gradingScale == 4.0 ? 2.5 : 3.25;
-    _maxCgpa = gradingScale == 4.0 ? 4.0 : 4.30;
+    final maxPoint = user?.maxGradePoint ?? 5.0;
+
+    _currentCGPA = _semesterViewModel.currentCGPA;
+    _currentSliderValue =
+        user?.targetCGPA ?? (_currentCGPA + 0.15).clamp(0.0, maxPoint);
+    _minCgpa = (_currentCGPA - 0.5).clamp(0.0, maxPoint);
+    _maxCgpa = maxPoint;
+    _completedCredits = _semesterViewModel.totalCredits;
+    _upcomingCredits = estimateUpcomingCredits();
   }
 
-  void handleSetTargetResult() {
+  int estimateUpcomingCredits() {
+    if (_semesterViewModel.completedSemestersCount == 0) return 15;
+
+    final avgCreditsPerSemester =
+        _completedCredits / _semesterViewModel.completedSemestersCount;
+    return avgCreditsPerSemester.round();
+  }
+
+  void handleSetTargetResult() async {
     final result = _cgpaViewModel.setTargetCGPAResult.value;
     if (result.isLoading) {
       AppDialogs.showLoadingDialog(context);
     } else if (result.isSuccess) {
       Navigation.back(context: context);
-      AppDialogs.showSuccessDialog(context,
+      await AppDialogs.showSuccessDialog(context,
           successMessage: result.message ?? '');
+      setState(() {});
     } else if (result.isError) {
       Navigation.back(context: context);
       AppDialogs.showErrorDialog(context, errorMessage: result.message ?? '');
@@ -69,24 +83,40 @@ class _TargetCGPAPageState extends State<TargetCGPAPage> {
     );
   }
 
-  Future<void> handleSetTarget() async {
-    await _cgpaViewModel.setTargetCGPA(
+  bool isTargetAchievable() {
+    final maxPoint = _authViewModel.currentUser.value?.maxGradePoint ?? 5.0;
+    return CGPACalculator.isTargetAchievable(
       currentCGPA: _currentCGPA,
       targetCGPA: _currentSliderValue,
+      completedCredits: _completedCredits,
+      upcomingCredits: _upcomingCredits,
+      maxGradePoint: maxPoint,
     );
+  }
+
+  Future<void> handleSetTarget() async {
+    await _cgpaViewModel.setTargetCGPA(targetCGPA: _currentSliderValue);
+  }
+
+  bool isButtonDisabled() {
+    final user = _authViewModel.currentUser.value;
+    final targetCGPA = user?.targetCGPA;
+
+    // Disable button if target is set and matches current slider value
+    return targetCGPA != null &&
+        (_currentSliderValue - targetCGPA).abs() < 0.01;
   }
 
   @override
   void dispose() {
-    _cgpaViewModel.setTargetCGPAResult.removeListener(handleSetTarget);
+    _cgpaViewModel.setTargetCGPAResult.removeListener(handleSetTargetResult);
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     final requiredGPA = calculateRequiredGPA();
-    final isAchievable =
-        requiredGPA <= (_authViewModel.currentUser.value?.gradingScale ?? 5.0);
+    final isAchievable = isTargetAchievable();
 
     return GestureDetector(
       onTap: () => FocusScope.of(context).unfocus(),
@@ -309,30 +339,23 @@ class _TargetCGPAPageState extends State<TargetCGPAPage> {
                   Container(
                     padding: const EdgeInsets.all(16),
                     decoration: BoxDecoration(
-                      color: Colors.blue.withOpacity(0.1),
+                      color: Theme.of(context).brightness == Brightness.dark
+                          ? AppColors.transparentBackgroundDark
+                          : AppColors.transparentBackgroundLight,
                       borderRadius: BorderRadius.circular(16),
-                      border: Border.all(
-                        color: Colors.blue.withOpacity(0.3),
-                        width: 1,
-                      ),
+                      border: Border.all(color: Theme.of(context).dividerColor),
                     ),
                     child: Row(
                       children: [
-                        const Icon(
-                          Icons.info_outline,
-                          color: Colors.blue,
-                          size: 24,
-                        ),
+                        const Icon(Icons.info_outline, size: 24),
                         const SizedBox(width: 12),
                         Expanded(
                           child: Text(
-                            'This calculation assumes $_completedCredits completed credits and $_upcomingCredits upcoming credits.',
+                            'Based on $_completedCredits completed credits and estimated $_upcomingCredits upcoming credits.',
                             style: Theme.of(context)
                                 .textTheme
                                 .bodyMedium
-                                ?.copyWith(
-                                  color: Colors.blue,
-                                ),
+                                ?.copyWith(fontWeight: FontWeight.w600),
                           ),
                         ),
                       ],
@@ -341,10 +364,11 @@ class _TargetCGPAPageState extends State<TargetCGPAPage> {
                 ],
               ),
             ),
-            // TODO: disable button after target is set and matches current
+            // Disable button after target is set and matches current
             Padding(
               padding: const EdgeInsets.all(16),
               child: PrimaryButton(
+                enabled: !isButtonDisabled(),
                 onTap: () async {
                   bool res = await showAppBottomSheet(
                     context: context,
