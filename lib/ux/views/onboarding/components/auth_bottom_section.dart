@@ -46,6 +46,7 @@ class AuthBottomSection extends StatelessWidget {
         );
       }
     } else if (result.isError) {
+      Navigation.back(context: context);
       AppDialogs.showErrorDialog(
         context,
         errorMessage:

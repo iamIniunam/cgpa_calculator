@@ -340,6 +340,7 @@ class PrimaryTextFormField extends StatelessWidget {
               onChanged: onChanged,
               textInputAction: textInputAction,
               textCapitalization: textCapitalization ?? TextCapitalization.none,
+              obscureText: obscureText ?? false,
             ),
           ),
         ],
@@ -438,10 +439,8 @@ class LongTextFormField extends StatelessWidget {
             ),
             cursorColor: AppColors.primaryColor,
             decoration: InputDecoration(
-              contentPadding: const EdgeInsets.symmetric(
-                horizontal: 14,
-                vertical: 16,
-              ),
+              contentPadding:
+                  const EdgeInsets.symmetric(horizontal: 14, vertical: 16),
               filled: greyedOut,
               fillColor: enabled
                   ? (greyedOut ? AppColors.field2 : AppColors.transparent)
@@ -480,6 +479,7 @@ class LongTextFormField extends StatelessWidget {
             onChanged: onChanged,
             textCapitalization: textCapitalization ?? TextCapitalization.none,
             textInputAction: textInputAction,
+            obscureText: obscureText ?? false,
           ),
         ],
       ),

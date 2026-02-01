@@ -1,7 +1,9 @@
 import 'package:cgpa_calculator/platform/extensions/string_extensions.dart';
 import 'package:cgpa_calculator/platform/extensions/extensions.dart';
+import 'package:cgpa_calculator/platform/firebase/auth/auth_result_status.dart';
 import 'package:cgpa_calculator/ux/shared/models/grading_scale_models.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class AppUser implements Serializable {
   final String id;
@@ -148,22 +150,18 @@ class AppUser implements Serializable {
   bool get hasTargetCGPA => targetCGPA != null && targetCGPA! > 0;
 }
 
-class AuthResponse {
-  final AppUser? user;
+class AuthResult {
+  final AuthResultStatus status;
+  final User? user;
   final String? message;
 
-  AuthResponse({
+  AuthResult({
+    required this.status,
     this.user,
     this.message,
   });
 
-  factory AuthResponse.fromJson(Map<String, dynamic> json) => AuthResponse(
-        user: json['user'] != null ? AppUser.fromJson(json['user']) : null,
-        message: json['message'],
-      );
-
-  Map<String, dynamic> toMap() => {
-        'user': user?.toMap(),
-        'message': message,
-      };
+  bool get isSuccessful => status.isSuccessful;
+  bool get isError => status.isError;
+  String get errorMessage => message ?? status.message;
 }

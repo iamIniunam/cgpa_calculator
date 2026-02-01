@@ -40,8 +40,10 @@ class _LoginPageState extends State<LoginPage> {
     if (result.isSuccess) {
       await _semesterViewModel.loadSemesters();
       if (!mounted) return;
+      Navigation.back(context: context);
       Navigation.navigateToHomePage(context: context);
     } else if (result.isError) {
+      Navigation.back(context: context);
       AppDialogs.showErrorDialog(
         context,
         errorMessage: result.message ?? 'Login failed. Please try again.',
@@ -70,7 +72,6 @@ class _LoginPageState extends State<LoginPage> {
 
     await _authViewModel.login(request);
     if (!mounted) return;
-    Navigation.back(context: context);
     handleLoginResult();
   }
 

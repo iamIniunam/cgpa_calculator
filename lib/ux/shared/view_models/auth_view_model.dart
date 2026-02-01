@@ -31,77 +31,83 @@ class AuthViewModel extends ChangeNotifier {
 
   Future<void> signUp(SignUpRequest request) async {
     signUpResult.value = UIResult.loading();
-    try {
-      final user = await _authService.signUp(
-        email: request.email,
-        password: request.password,
-        fullName: request.fullName,
-      );
 
-      if (user != null) {
-        final userData = await _authService.getUserData(user.uid);
-        if (userData != null) {
-          final appUser = AppUser.fromJson(userData);
-          currentUser.value = appUser;
-          _preferenceManager.userId = user.uid;
-          signUpResult.value = UIResult.success(
-            data: appUser,
-            message: 'Sign up successful',
-          );
-        }
+    final authResult = await _authService.signUp(
+      email: request.email,
+      password: request.password,
+      fullName: request.fullName,
+    );
+
+    if (authResult.isSuccessful && authResult.user != null) {
+      final userData =
+          await _authService.getUserData(authResult.user?.uid ?? '');
+      if (userData != null) {
+        final appUser = AppUser.fromJson(userData);
+        currentUser.value = appUser;
+        _preferenceManager.userId = authResult.user?.uid;
+
+        signUpResult.value = UIResult.success(
+          data: appUser,
+          message: authResult.message ?? 'Sign-up successful',
+        );
       }
-    } catch (e) {
-      signUpResult.value = UIResult.error(message: e.toString());
+    } else {
+      signUpResult.value = UIResult.error(
+        message: authResult.message ?? 'Sign-up failed',
+      );
     }
   }
 
   Future<void> login(LoginRequest request) async {
     loginResult.value = UIResult.loading();
-    try {
-      final user = await _authService.login(
-        email: request.email,
-        password: request.password,
-      );
 
-      if (user != null) {
-        final userData = await _authService.getUserData(user.uid);
-        if (userData != null) {
-          final appUser = AppUser.fromJson(userData);
-          currentUser.value = appUser;
-          _preferenceManager.userId = user.uid;
-          loginResult.value = UIResult.success(
-            data: appUser,
-            message: 'Login successful',
-          );
-        }
+    final authResult = await _authService.login(
+      email: request.email,
+      password: request.password,
+    );
+
+    if (authResult.isSuccessful && authResult.user != null) {
+      final userData =
+          await _authService.getUserData(authResult.user?.uid ?? '');
+      if (userData != null) {
+        final appUser = AppUser.fromJson(userData);
+        currentUser.value = appUser;
+        _preferenceManager.userId = authResult.user?.uid;
+
+        loginResult.value = UIResult.success(
+          data: appUser,
+          message: authResult.message ?? 'Login successful',
+        );
       }
-    } catch (e) {
-      loginResult.value = UIResult.error(message: e.toString());
+    } else {
+      loginResult.value = UIResult.error(
+        message: authResult.message ?? 'Login failed',
+      );
     }
   }
 
   Future<void> signInWithGoogle() async {
     googleSignInResult.value = UIResult.loading();
-    try {
-      final user = await _authService.signInWithGoogle();
 
-      if (user != null) {
-        final userData = await _authService.getUserData(user.uid);
-        if (userData != null) {
-          final appUser = AppUser.fromJson(userData);
-          currentUser.value = appUser;
-          _preferenceManager.userId = user.uid;
-          googleSignInResult.value = UIResult.success(
-            data: appUser,
-            message: 'Google sign-in successful',
-          );
-        }
-      } else {
-        googleSignInResult.value =
-            UIResult.error(message: 'Google sign-in failed');
+    final authResult = await _authService.signInWithGoogle();
+
+    if (authResult.isSuccessful && authResult.user != null) {
+      final userData =
+          await _authService.getUserData(authResult.user?.uid ?? '');
+      if (userData != null) {
+        final appUser = AppUser.fromJson(userData);
+        currentUser.value = appUser;
+        _preferenceManager.userId = authResult.user?.uid;
+
+        googleSignInResult.value = UIResult.success(
+          data: appUser,
+          message: authResult.message ?? 'Google sign-in successful',
+        );
       }
-    } catch (e) {
-      googleSignInResult.value = UIResult.error(message: e.toString());
+    } else {
+      googleSignInResult.value = UIResult.error(
+        message: authResult.message ?? 'Google sign-in failed',
+      );
     }
   }
 

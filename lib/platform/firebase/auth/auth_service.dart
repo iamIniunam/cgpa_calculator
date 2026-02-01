@@ -1,5 +1,8 @@
 import 'package:cgpa_calculator/platform/di/dependency_injection.dart';
 import 'package:cgpa_calculator/platform/firebase/analytics_logger.dart';
+import 'package:cgpa_calculator/platform/firebase/auth/auth_exception_handler.dart';
+import 'package:cgpa_calculator/platform/firebase/auth/auth_result_status.dart';
+import 'package:cgpa_calculator/platform/firebase/auth/models/auth_response.dart';
 import 'package:cgpa_calculator/ux/shared/resources/app_constants.dart';
 import 'package:cgpa_calculator/ux/shared/view_models/theme_view_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -16,7 +19,7 @@ class AuthService {
 
   Stream<User?> get authStateChanges => _auth.authStateChanges();
 
-  Future<User?> signUp({
+  Future<AuthResult> signUp({
     required String email,
     required String password,
     required String fullName,
@@ -27,41 +30,53 @@ class AuthService {
         password: password,
       );
 
-      if (userCredential.user != null) {
-        final user = userCredential.user!;
-        await userCredential.user?.updateDisplayName(fullName);
-
-        await _firestore
-            .collection(AppConstants.usersCollection)
-            .doc(userCredential.user?.uid)
-            .set({
-          'uid': userCredential.user?.uid,
-          'name': fullName,
-          'email': email,
-          'profileComplete': false,
-          'themePreference': AppThemeMode.system.name,
-          // versioning
-          // 'appVersion': '1.0.0',
-          // 'onboardingVersion': 1,
-          //timestamps
-          'createdAt': FieldValue.serverTimestamp(),
-          'lastLogin': FieldValue.serverTimestamp(),
-          'lastActiveAt': FieldValue.serverTimestamp(),
-        });
-
-        await _analyticsLogger.setUser(user);
-        await _analyticsLogger.logSignUp(method: 'email');
+      final user = userCredential.user;
+      if (user == null) {
+        return AuthResult(status: AuthResultStatus.unknown);
       }
 
-      return userCredential.user;
+      await userCredential.user?.updateDisplayName(fullName);
+
+      await _firestore
+          .collection(AppConstants.usersCollection)
+          .doc(userCredential.user?.uid)
+          .set({
+        'uid': userCredential.user?.uid,
+        'name': fullName,
+        'email': email,
+        'profileComplete': false,
+        'themePreference': AppThemeMode.system.name,
+        'createdAt': FieldValue.serverTimestamp(),
+        'lastLogin': FieldValue.serverTimestamp(),
+        'lastActiveAt': FieldValue.serverTimestamp(),
+      });
+
+      await _analyticsLogger.setUser(user);
+      await _analyticsLogger.logSignUp(method: 'email');
+
+      return AuthResult(
+        status: AuthResultStatus.successful,
+        user: user,
+        message: 'Account created successfully',
+      );
     } on FirebaseAuthException catch (e) {
+      final status = AuthExceptionHandler.handleException(e);
       await _analyticsLogger.logSignUpFailed(
           method: 'email', errorCode: e.code);
-      throw handleAuthException(e);
+
+      return AuthResult(
+        status: status,
+        message: status.message,
+      );
+    } catch (e) {
+      return AuthResult(
+        status: AuthResultStatus.unknown,
+        message: 'An unexpected error occurred: ${e.toString()}',
+      );
     }
   }
 
-  Future<User?> login({
+  Future<AuthResult> login({
     required String email,
     required String password,
   }) async {
@@ -71,33 +86,54 @@ class AuthService {
         password: password,
       );
 
-      if (userCredential.user != null) {
-        final user = userCredential.user!;
-
-        await _firestore
-            .collection(AppConstants.usersCollection)
-            .doc(userCredential.user?.uid)
-            .update({
-          'lastLogin': FieldValue.serverTimestamp(),
-          'lastActiveAt': FieldValue.serverTimestamp(),
-        });
-
-        await _analyticsLogger.setUser(user);
-        await _analyticsLogger.logLogin(method: 'email');
+      final user = userCredential.user;
+      if (user == null) {
+        return AuthResult(status: AuthResultStatus.unknown);
       }
 
-      return userCredential.user;
+      await _firestore
+          .collection(AppConstants.usersCollection)
+          .doc(userCredential.user?.uid)
+          .update({
+        'lastLogin': FieldValue.serverTimestamp(),
+        'lastActiveAt': FieldValue.serverTimestamp(),
+      });
+
+      await _analyticsLogger.setUser(user);
+      await _analyticsLogger.logLogin(method: 'email');
+
+      return AuthResult(
+        status: AuthResultStatus.successful,
+        user: user,
+        message: 'Login successful',
+      );
     } on FirebaseAuthException catch (e) {
+      final status = AuthExceptionHandler.handleException(e);
       await _analyticsLogger.logLoginFailed(method: 'email', errorCode: e.code);
-      throw handleAuthException(e);
+
+      return AuthResult(
+        status: status,
+        message: status.message,
+      );
+    } catch (e) {
+      return AuthResult(
+        status: AuthResultStatus.unknown,
+        message: 'An unexpected error occurred: ${e.toString()}',
+      );
     }
   }
 
-  Future<User?> signInWithGoogle() async {
+  Future<AuthResult> signInWithGoogle() async {
     try {
       final GoogleSignInAccount? googleUser = await _googleSignIn.signIn();
 
-      if (googleUser == null) return null;
+      if (googleUser == null) {
+        await _analyticsLogger.logGoogleSignInCancelled();
+        return AuthResult(
+          status: AuthResultStatus.cancelled,
+          message: 'Google sign-in cancelled',
+        );
+      }
 
       final GoogleSignInAuthentication googleAuth =
           await googleUser.authentication;
@@ -107,54 +143,74 @@ class AuthService {
       );
 
       final userCredential = await _auth.signInWithCredential(credential);
+      final user = userCredential.user;
 
-      if (userCredential.user != null) {
-        final user = userCredential.user!;
-        final userDoc = await _firestore
-            .collection(AppConstants.usersCollection)
-            .doc(userCredential.user?.uid)
-            .get();
-
-        if (!userDoc.exists) {
-          await _firestore
-              .collection(AppConstants.usersCollection)
-              .doc(userCredential.user?.uid)
-              .set({
-            'uid': userCredential.user?.uid,
-            'name': userCredential.user?.displayName ?? '',
-            'email': userCredential.user?.email ?? '',
-            'profileComplete': false,
-            'themePreference': AppThemeMode.system.name,
-            'createdAt': FieldValue.serverTimestamp(),
-            'lastLogin': FieldValue.serverTimestamp(),
-            'lastActiveAt': FieldValue.serverTimestamp(),
-            'profilePicture': userCredential.user?.photoURL,
-            'googleImageUrl': userCredential.user?.photoURL,
-          });
-
-          await _analyticsLogger.setUser(user);
-          await _analyticsLogger.logSignUp(method: 'google');
-        } else {
-          await _firestore
-              .collection(AppConstants.usersCollection)
-              .doc(userCredential.user?.uid)
-              .update({
-            'lastLogin': FieldValue.serverTimestamp(),
-            'lastActiveAt': FieldValue.serverTimestamp(),
-            'profilePicture': userCredential.user?.photoURL,
-            'googleImageUrl': userCredential.user?.photoURL,
-          });
-
-          await _analyticsLogger.setUser(user);
-          await _analyticsLogger.logLogin(method: 'google');
-        }
+      if (user == null) {
+        return AuthResult(status: AuthResultStatus.unknown);
       }
 
-      return userCredential.user;
+      final userDoc = await _firestore
+          .collection(AppConstants.usersCollection)
+          .doc(userCredential.user?.uid)
+          .get();
+
+      final isNewUser = !userDoc.exists;
+
+      if (isNewUser) {
+        await _firestore
+            .collection(AppConstants.usersCollection)
+            .doc(userCredential.user?.uid)
+            .set({
+          'uid': userCredential.user?.uid,
+          'name': userCredential.user?.displayName ?? '',
+          'email': userCredential.user?.email ?? '',
+          'profileComplete': false,
+          'themePreference': AppThemeMode.system.name,
+          'createdAt': FieldValue.serverTimestamp(),
+          'lastLogin': FieldValue.serverTimestamp(),
+          'lastActiveAt': FieldValue.serverTimestamp(),
+          'profilePicture': userCredential.user?.photoURL,
+          'googleImageUrl': userCredential.user?.photoURL,
+        });
+
+        await _analyticsLogger.setUser(user);
+        await _analyticsLogger.logSignUp(method: 'google');
+      } else {
+        await _firestore
+            .collection(AppConstants.usersCollection)
+            .doc(userCredential.user?.uid)
+            .update({
+          'lastLogin': FieldValue.serverTimestamp(),
+          'lastActiveAt': FieldValue.serverTimestamp(),
+          'profilePicture': userCredential.user?.photoURL,
+          'googleImageUrl': userCredential.user?.photoURL,
+        });
+
+        await _analyticsLogger.setUser(user);
+        await _analyticsLogger.logLogin(method: 'google');
+      }
+
+      return AuthResult(
+        status: AuthResultStatus.successful,
+        user: user,
+        message: 'Google sign-in successful',
+      );
+    } on FirebaseAuthException catch (e) {
+      final status = AuthExceptionHandler.handleException(e);
+      await _analyticsLogger.logLoginFailed(
+          method: 'google', errorCode: e.toString());
+
+      return AuthResult(
+        status: status,
+        message: status.message,
+      );
     } catch (e) {
       await _analyticsLogger.logLoginFailed(
           method: 'google', errorCode: e.toString());
-      throw Exception('Google sign-in failed: ${e.toString()}');
+      return AuthResult(
+        status: AuthResultStatus.unknown,
+        message: 'An unexpected error occurred: ${e.toString()}',
+      );
     }
   }
 
