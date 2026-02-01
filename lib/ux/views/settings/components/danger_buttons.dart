@@ -5,6 +5,7 @@ import 'package:cgpa_calculator/ux/shared/bottom_sheets/show_app_bottom_sheet.da
 import 'package:cgpa_calculator/ux/shared/components/app_material.dart';
 import 'package:cgpa_calculator/ux/shared/resources/app_colors.dart';
 import 'package:cgpa_calculator/ux/shared/resources/app_dialogs.dart';
+import 'package:cgpa_calculator/ux/shared/resources/app_strings.dart';
 import 'package:cgpa_calculator/ux/shared/view_models/auth_view_model.dart';
 import 'package:cgpa_calculator/ux/views/onboarding/login_page.dart';
 import 'package:cgpa_calculator/ux/views/onboarding/sign_up_page.dart';
@@ -60,7 +61,7 @@ class _DangerButtonsState extends State<DangerButtons> {
           Padding(
             padding: const EdgeInsets.only(left: 8),
             child: Text(
-              'Danger Zone',
+              AppStrings.dangerZone,
               style: Theme.of(context).textTheme.titleLarge?.copyWith(
                     color: AppColors.transparentRed.withOpacity(0.9),
                   ),
@@ -71,15 +72,15 @@ class _DangerButtonsState extends State<DangerButtons> {
             children: [
               DangerButton(
                 context: context,
-                title: 'Log Out',
+                title: AppStrings.logOut,
                 icon: Icons.logout_rounded,
                 onTap: () async {
                   final result = await showAppBottomSheet(
                     context: context,
                     showCloseButton: false,
                     child: const AppConfirmationBotttomSheet(
-                      text: 'Are you sure you want to log out?',
-                      title: 'Log Out',
+                      text: AppStrings.areYouSureYouWantToLogOut,
+                      title: AppStrings.yesLogOut,
                     ),
                   );
                   if (result == true) {
@@ -93,16 +94,16 @@ class _DangerButtonsState extends State<DangerButtons> {
                   padding: const EdgeInsets.only(left: 16),
                   child: DangerButton(
                     context: context,
-                    title: 'Delete Account',
+                    title: AppStrings.deleteAccount,
                     icon: Icons.delete_forever_rounded,
                     onTap: () async {
                       final result = await showAppBottomSheet(
                         context: context,
                         showCloseButton: false,
                         child: const AppConfirmationBotttomSheet(
-                          text:
-                              'Are you sure you want to delete your account?\nThis action cannot be undone.',
-                          title: 'Delete Account',
+                          text: AppStrings
+                              .areYouSureYouWantToDeleteYourAccountThisActionCannotBeUndone,
+                          title: AppStrings.yesDelete,
                         ),
                       );
                       if (result == true) {

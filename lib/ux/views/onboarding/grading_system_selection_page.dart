@@ -141,12 +141,12 @@ class _GradingSystemSelectionPageState
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          'Institution Name (optional)',
+                          AppStrings.institutionNameOptional,
                           style: Theme.of(context).textTheme.headlineLarge,
                         ),
                         const SizedBox(height: 16),
                         PrimaryTextFormField(
-                          hintText: 'e.g.Accra Institute of Technology',
+                          hintText: AppStrings.institutionNameHintText,
                           keyboardType: TextInputType.text,
                           textInputAction: TextInputAction.done,
                           controller: institutionController,
@@ -158,12 +158,12 @@ class _GradingSystemSelectionPageState
                     ),
                   ),
                   Text(
-                    'Grading System',
+                    AppStrings.gradingSystem,
                     style: Theme.of(context).textTheme.headlineLarge,
                   ),
                   const SizedBox(height: 2),
                   Text(
-                    'This determines how your CGPA is calculated.',
+                    AppStrings.thisDeterminesHowYourCGPAIsCalculated,
                     style: Theme.of(context).textTheme.headlineSmall?.copyWith(
                           color: AppColors.textGrey,
                           fontSize: 18,
@@ -187,29 +187,6 @@ class _GradingSystemSelectionPageState
                           },
                         ),
                       ),
-                  // GradeSystemCard(
-                  //   title: 'Custom Scale',
-                  //   gradeName: 'My scale is not listed',
-                  //   selected: scaleNotListed,
-                  //   onTap: () {
-                  //     setState(() {
-                  //       scaleNotListed = !scaleNotListed;
-                  //       if (scaleNotListed) {
-                  //         selectedScale = null;
-                  //       }
-                  //     });
-                  //   },
-                  // ),
-                  // Visibility(
-                  //   visible: scaleNotListed,
-                  //   child: PrimaryTextFormField(
-                  //     hintText: 'Enter grade scale',
-                  //     keyboardType: TextInputType.visiblePassword,
-                  //     textInputAction: TextInputAction.done,
-                  //     controller: customScaleController,
-                  //     onChanged: (value) {},
-                  //   ),
-                  // ),
                 ],
               ),
             ),
@@ -218,7 +195,7 @@ class _GradingSystemSelectionPageState
               child: PrimaryButton(
                 onTap: handleCompleteProfile,
                 child:
-                    Text(widget.isEditMode ? 'Save' : AppStrings.continueText),
+                    Text(widget.isEditMode ? AppStrings.save : AppStrings.continueText),
               ),
             ),
           ],

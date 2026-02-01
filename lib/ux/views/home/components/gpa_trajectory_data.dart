@@ -1,5 +1,6 @@
 import 'package:cgpa_calculator/ux/shared/models/semester_model.dart';
 import 'package:cgpa_calculator/ux/shared/resources/app_colors.dart';
+import 'package:cgpa_calculator/ux/shared/resources/app_strings.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 
@@ -30,7 +31,7 @@ class GpaTrajectoryData extends StatelessWidget {
         height: 200,
         child: Center(
           child: Text(
-            'Add courses to see your trajectory',
+            AppStrings.addCoursesToSeeYourTrajectory,
             style: TextStyle(color: AppColors.textGrey),
           ),
         ),

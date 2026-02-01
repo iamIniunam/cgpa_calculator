@@ -2,6 +2,7 @@ import 'dart:ui';
 
 import 'package:cgpa_calculator/ux/shared/components/app_material.dart';
 import 'package:cgpa_calculator/ux/shared/resources/app_colors.dart';
+import 'package:cgpa_calculator/ux/shared/resources/app_strings.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:flutter/material.dart';
 
@@ -43,7 +44,11 @@ class CustomBottomNav extends StatelessWidget {
                     Iconsax.setting_45,
                   ][index];
 
-                  final label = ['Home', 'Semesters', 'Settings'][index];
+                  final label = [
+                    AppStrings.home,
+                    AppStrings.semesters,
+                    AppStrings.settings
+                  ][index];
 
                   return AppMaterial(
                     inkwellBorderRadius: BorderRadius.circular(32),
@@ -53,9 +58,7 @@ class CustomBottomNav extends StatelessWidget {
                     child: isActive
                         ? Container(
                             padding: const EdgeInsets.symmetric(
-                              horizontal: 30,
-                              vertical: 16,
-                            ),
+                                horizontal: 30, vertical: 16),
                             decoration: BoxDecoration(
                               gradient: Theme.of(context).brightness ==
                                       Brightness.dark

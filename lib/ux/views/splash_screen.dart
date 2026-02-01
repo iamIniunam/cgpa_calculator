@@ -44,7 +44,7 @@ class SplashScreen extends StatelessWidget {
                   ),
                   const SizedBox(height: 4),
                   Text(
-                    'Academic Tracker'.toUpperCase(),
+                    AppStrings.academicTracker.toUpperCase(),
                     style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                           color: AppColors.textGrey,
                           fontSize: 12,

@@ -12,9 +12,9 @@ import 'package:cgpa_calculator/ux/shared/resources/app_strings.dart';
 import 'package:cgpa_calculator/ux/shared/utils/utils.dart';
 import 'package:cgpa_calculator/ux/shared/view_models/auth_view_model.dart';
 import 'package:cgpa_calculator/ux/views/semesters/add_course_page.dart';
-import 'package:cgpa_calculator/ux/views/home/components/cgpa_display.dart';
+import 'package:cgpa_calculator/ux/views/semesters/components/gpa_display.dart';
 import 'package:cgpa_calculator/ux/views/semesters/components/course_card.dart';
-import 'package:cgpa_calculator/ux/views/semesters/components/delete_course_button.dart';
+import 'package:cgpa_calculator/ux/views/semesters/components/action_buttons.dart';
 import 'package:flutter/material.dart';
 import 'package:cgpa_calculator/platform/di/dependency_injection.dart';
 import 'package:cgpa_calculator/ux/views/semesters/view_models/semester_view_model.dart';
@@ -39,7 +39,8 @@ class _SemesterDetailsPageState extends State<SemesterDetailsPage> {
   void initState() {
     super.initState();
     _analytics.logScreenView(
-        screenName: 'Semester Details', screenClass: 'SemesterDetailsPage');
+        screenName: AppStrings.semesterDetails,
+        screenClass: AppStrings.semesterDetailsClassName);
     semester = widget.semester;
     semesterViewModel.semesters.addListener(_onSemestersChanged);
   }
@@ -97,15 +98,17 @@ class _SemesterDetailsPageState extends State<SemesterDetailsPage> {
                         context: context,
                         showCloseButton: false,
                         child: const AppConfirmationBotttomSheet(
-                          text:
-                              'Are you sure you want to mark this semester as completed?',
-                          title: 'Complete Semester',
+                          text: AppStrings
+                              .areYouSureYouWantToMarkThisSemesterAsCompleted,
+                          title: AppStrings.completeSemester,
                         ),
                       );
                       if (res == true) {
-                        UiUtils.showToast(message: "Updating status...");
+                        UiUtils.showToast(
+                            message: AppStrings.updatingStatusWithEllipsis);
                         await updateSemesterStatus();
-                        UiUtils.showToast(message: "Semester status updated");
+                        UiUtils.showToast(
+                            message: AppStrings.semesterStatusUpdated);
                         await Future.delayed(const Duration(milliseconds: 800));
                         if (!mounted) return;
                         Navigation.back(context: context);
@@ -184,7 +187,7 @@ class _SemesterDetailsPageState extends State<SemesterDetailsPage> {
                               screen: AddCoursePage(semester: semester),
                             );
                           },
-                          child: const Text('Add Course'),
+                          child: const Text(AppStrings.addCourse),
                         ),
                       ],
                     ),

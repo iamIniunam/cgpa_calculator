@@ -1,6 +1,7 @@
 import 'package:cgpa_calculator/ux/navigation/navigation.dart';
 import 'package:cgpa_calculator/ux/shared/components/app_material.dart';
 import 'package:cgpa_calculator/ux/shared/resources/app_colors.dart';
+import 'package:cgpa_calculator/ux/shared/resources/app_strings.dart';
 import 'package:cgpa_calculator/ux/views/semesters/add_semester_page.dart';
 import 'package:cgpa_calculator/ux/views/settings/target_cpga_page.dart';
 import 'package:flutter/material.dart';
@@ -23,7 +24,7 @@ class _ActionButtonsState extends State<ActionButtons> {
           Padding(
             padding: const EdgeInsets.only(left: 8),
             child: Text(
-              'Quick Actions',
+              AppStrings.quickActions,
               style: Theme.of(context).textTheme.titleLarge,
             ),
           ),
@@ -32,7 +33,7 @@ class _ActionButtonsState extends State<ActionButtons> {
             children: [
               ActionButton(
                 context: context,
-                title: 'Add Semester',
+                title: AppStrings.addSemester,
                 icon: Icons.add_rounded,
                 onTap: () {
                   Navigation.navigateToScreen(
@@ -44,7 +45,7 @@ class _ActionButtonsState extends State<ActionButtons> {
               const SizedBox(width: 16),
               ActionButton(
                 context: context,
-                title: 'Set Target CGPA',
+                title: AppStrings.setTargetCGPA,
                 icon: Icons.track_changes_rounded,
                 onTap: () {
                   Navigation.navigateToScreen(

@@ -5,6 +5,7 @@ import 'package:cgpa_calculator/ux/shared/resources/app_colors.dart';
 import 'package:cgpa_calculator/ux/shared/resources/app_dialogs.dart';
 import 'package:cgpa_calculator/ux/shared/resources/app_dimens.dart';
 import 'package:cgpa_calculator/ux/shared/resources/app_images.dart';
+import 'package:cgpa_calculator/ux/shared/resources/app_strings.dart';
 import 'package:cgpa_calculator/ux/shared/view_models/auth_view_model.dart';
 import 'package:cgpa_calculator/ux/views/onboarding/grading_system_selection_page.dart';
 import 'package:cgpa_calculator/ux/views/onboarding/login_page.dart';
@@ -74,7 +75,7 @@ class AuthBottomSection extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 12),
               child: Text(
-                'Or continue with',
+                AppStrings.orContinueWith,
                 style: Theme.of(context)
                     .textTheme
                     .bodyMedium
@@ -116,7 +117,9 @@ class AuthBottomSection extends StatelessWidget {
                 AppImages.svgGoogleLogo,
                 const SizedBox(width: 10),
                 Text(
-                  isLogin ? 'Sign in with Google' : 'Sign up with Google',
+                  isLogin
+                      ? AppStrings.signInWithGoogle
+                      : AppStrings.signUpWithGoogle,
                   style: Theme.of(context).textTheme.titleLarge?.copyWith(
                         fontSize: 16,
                         fontWeight: FontWeight.w600,
@@ -130,14 +133,15 @@ class AuthBottomSection extends StatelessWidget {
         RichText(
           textAlign: TextAlign.center,
           text: TextSpan(
-            text: isLogin ? 'New here? ' : 'Already have an account? ',
+            text:
+                isLogin ? AppStrings.newHere : AppStrings.alreadyHaveAnAccount,
             style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                   color: AppColors.textGrey,
                   fontSize: 13.5,
                 ),
             children: <TextSpan>[
               TextSpan(
-                text: isLogin ? 'Create an account' : 'Sign In',
+                text: isLogin ? AppStrings.createAnAccount : AppStrings.signIn,
                 style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                       color: AppColors.primaryColor,
                       fontSize: 14,

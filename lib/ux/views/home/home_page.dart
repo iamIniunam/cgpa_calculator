@@ -2,6 +2,7 @@ import 'package:cgpa_calculator/platform/di/dependency_injection.dart';
 import 'package:cgpa_calculator/platform/firebase/analytics_logger.dart';
 import 'package:cgpa_calculator/ux/shared/models/semester_model.dart';
 import 'package:cgpa_calculator/ux/shared/resources/app_colors.dart';
+import 'package:cgpa_calculator/ux/shared/resources/app_strings.dart';
 import 'package:cgpa_calculator/ux/shared/view_models/auth_view_model.dart';
 import 'package:cgpa_calculator/ux/views/home/components/action_buttons.dart';
 import 'package:cgpa_calculator/ux/views/home/components/cgpa_display.dart';
@@ -25,7 +26,8 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
-    _analytics.logScreenView(screenName: 'Home', screenClass: 'HomePage');
+    _analytics.logScreenView(
+        screenName: AppStrings.home, screenClass: AppStrings.homeClassName);
   }
 
   @override
@@ -54,7 +56,7 @@ class _HomePageState extends State<HomePage> {
                 Padding(
                   padding: const EdgeInsets.only(left: 8),
                   child: Text(
-                    'Statistics',
+                    AppStrings.statistics,
                     style: Theme.of(context).textTheme.titleLarge,
                   ),
                 ),
@@ -66,7 +68,7 @@ class _HomePageState extends State<HomePage> {
                         Expanded(
                           child: StatsCard(
                             icon: Icons.school_rounded,
-                            title: 'Total Credits',
+                            title: AppStrings.totalCredits,
                             value: semesterViewModel.totalCredits.toString(),
                             iconColor: AppColors.purple,
                             iconBackgroundColor:
@@ -79,7 +81,7 @@ class _HomePageState extends State<HomePage> {
                         Expanded(
                           child: StatsCard(
                             icon: Icons.track_changes_rounded,
-                            title: 'Total Semesters',
+                            title: AppStrings.totalSemesters,
                             value: semesterViewModel.totalSemesters.toString(),
                             iconColor: AppColors.orange,
                             iconBackgroundColor:

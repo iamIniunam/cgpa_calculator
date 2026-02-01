@@ -1,5 +1,6 @@
 import 'package:cgpa_calculator/ux/shared/components/app_material.dart';
 import 'package:cgpa_calculator/ux/shared/resources/app_colors.dart';
+import 'package:cgpa_calculator/ux/shared/resources/app_strings.dart';
 import 'package:flutter/material.dart';
 
 class DeleteActionButton extends StatelessWidget {
@@ -19,7 +20,7 @@ class DeleteActionButton extends StatelessWidget {
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
           child: Text(
-            'Delete',
+            AppStrings.delete,
             style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                   color: AppColors.white,
                   fontSize: 16,
@@ -49,7 +50,7 @@ class CompleteActionButton extends StatelessWidget {
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
           child: Text(
-            'Complete',
+            AppStrings.complete,
             style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                   color: AppColors.white,
                   fontSize: 16,

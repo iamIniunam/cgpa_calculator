@@ -1,6 +1,7 @@
 import 'package:cgpa_calculator/ux/shared/components/status_dot.dart';
 import 'package:cgpa_calculator/ux/shared/models/semester_model.dart';
 import 'package:cgpa_calculator/ux/shared/resources/app_colors.dart';
+import 'package:cgpa_calculator/ux/shared/resources/app_strings.dart';
 import 'package:cgpa_calculator/ux/views/home/components/gpa_trajectory_data.dart';
 import 'package:flutter/material.dart';
 
@@ -36,11 +37,12 @@ class GpaTrajectory extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          'GPA Trajectory',
-                          style: Theme.of(context)
-                              .textTheme
-                              .titleMedium
-                              ?.copyWith(fontWeight: FontWeight.bold),
+                          AppStrings.gpaTrajectory.toUpperCase(),
+                          style:
+                              Theme.of(context).textTheme.titleMedium?.copyWith(
+                                    fontWeight: FontWeight.bold,
+                                    letterSpacing: 1.2,
+                                  ),
                         ),
                         Text(
                           '$totalSemesters semester(s)',
@@ -66,7 +68,7 @@ class GpaTrajectory extends StatelessWidget {
                       children: [
                         const StatusDot(),
                         Text(
-                          'Live'.toUpperCase(),
+                          AppStrings.live.toUpperCase(),
                           style:
                               Theme.of(context).textTheme.bodyMedium?.copyWith(
                                     fontWeight: FontWeight.w600,

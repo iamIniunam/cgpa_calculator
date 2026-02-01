@@ -8,6 +8,7 @@ import 'package:cgpa_calculator/ux/shared/components/app_form_fields.dart';
 import 'package:cgpa_calculator/platform/extensions/extensions.dart';
 import 'package:cgpa_calculator/ux/shared/components/user_profile_picture.dart';
 import 'package:cgpa_calculator/ux/shared/resources/app_dialogs.dart';
+import 'package:cgpa_calculator/ux/shared/resources/app_strings.dart';
 import 'package:cgpa_calculator/ux/shared/utils/utils.dart';
 import 'package:cgpa_calculator/ux/shared/view_models/auth_view_model.dart';
 import 'package:flutter/material.dart';
@@ -29,7 +30,9 @@ class _ProfilePageState extends State<ProfilePage> {
   @override
   void initState() {
     super.initState();
-    _analytics.logScreenView(screenName: 'Profile', screenClass: 'ProfilePage');
+    _analytics.logScreenView(
+        screenName: AppStrings.profile,
+        screenClass: AppStrings.profileClassName);
     final user = authViewModel.currentUser.value;
     fullNameController.text = user?.name ?? '';
     schoolController.text = user?.school ?? '';
@@ -92,7 +95,7 @@ class _ProfilePageState extends State<ProfilePage> {
       onTap: () => FocusScope.of(context).unfocus(),
       child: Scaffold(
         appBar: AppBar(
-          title: const Text('Profile'),
+          title: const Text(AppStrings.profile),
           bottom: const Divider(height: 2).asPreferredSize(height: 1),
         ),
         body: ValueListenableBuilder<AppUser?>(
@@ -111,7 +114,7 @@ class _ProfilePageState extends State<ProfilePage> {
                       ),
                       const SizedBox(height: 28),
                       PrimaryTextFormField(
-                        labelText: 'Full Name',
+                        labelText: AppStrings.fullName,
                         controller: fullNameController,
                         keyboardType: TextInputType.name,
                         textInputAction: TextInputAction.done,
@@ -119,7 +122,7 @@ class _ProfilePageState extends State<ProfilePage> {
                         onChanged: (_) => setState(() {}),
                       ),
                       PrimaryTextFormField(
-                        labelText: 'Institution Name',
+                        labelText: AppStrings.institutionName,
                         controller: schoolController,
                         keyboardType: TextInputType.name,
                         textInputAction: TextInputAction.done,
@@ -134,7 +137,7 @@ class _ProfilePageState extends State<ProfilePage> {
                   child: PrimaryButton(
                     enabled: isButtonEnabled(),
                     onTap: updateProfile,
-                    child: const Text('Save changes'),
+                    child: const Text(AppStrings.saveChanges),
                   ),
                 ),
               ],

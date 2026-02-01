@@ -46,7 +46,7 @@ class _LoginPageState extends State<LoginPage> {
       Navigation.back(context: context);
       AppDialogs.showErrorDialog(
         context,
-        errorMessage: result.message ?? 'Login failed. Please try again.',
+        errorMessage: result.message ?? '',
       );
     }
   }
@@ -59,7 +59,7 @@ class _LoginPageState extends State<LoginPage> {
     if (email.isEmpty || password.isEmpty) {
       AppDialogs.showErrorDialog(
         context,
-        errorMessage: 'Please fill in all the fields to continue.',
+        errorMessage: AppStrings.pleaseFillInAllTheFieldsToContinue,
       );
       return;
     }
@@ -95,12 +95,12 @@ class _LoginPageState extends State<LoginPage> {
                     const AppLogoBox(),
                     const SizedBox(height: 20),
                     Text(
-                      'Hello! 👋',
+                      AppStrings.helloWithEmoji,
                       style: Theme.of(context).textTheme.displayLarge,
                     ),
                     const SizedBox(height: 2),
                     Text(
-                      'Please sign in to access your dashboard',
+                      AppStrings.pleaseSignInToAccessYourDashboard,
                       style:
                           Theme.of(context).textTheme.headlineSmall?.copyWith(
                                 color: AppColors.textGrey,
@@ -110,8 +110,8 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                     const SizedBox(height: 36),
                     PrimaryTextFormField(
-                      labelText: 'Email',
-                      hintText: AppStrings.emailHint,
+                      labelText: AppStrings.emailAddress,
+                      hintText: AppStrings.emailAddressHintText,
                       controller: emailController,
                       keyboardType: TextInputType.emailAddress,
                       textInputAction: TextInputAction.next,
@@ -122,8 +122,8 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                     const SizedBox(height: 8),
                     PrimaryTextFormField(
-                      labelText: 'Password',
-                      hintText: '∗∗∗∗∗∗∗∗∗',
+                      labelText: AppStrings.password,
+                      hintText: AppStrings.passwordHintText,
                       obscureText: isPasswordObscured,
                       controller: passwordController,
                       keyboardType: TextInputType.visiblePassword,
@@ -153,7 +153,7 @@ class _LoginPageState extends State<LoginPage> {
                           );
                         },
                         child: Text(
-                          'Forgot Password?',
+                          AppStrings.forgotPassword,
                           textAlign: TextAlign.end,
                           style:
                               Theme.of(context).textTheme.bodyMedium?.copyWith(
@@ -167,7 +167,7 @@ class _LoginPageState extends State<LoginPage> {
                     const SizedBox(height: 16),
                     PrimaryButton(
                       onTap: handleLogin,
-                      child: const Text('Sign In'),
+                      child: const Text(AppStrings.signIn),
                     ),
                   ],
                 ),

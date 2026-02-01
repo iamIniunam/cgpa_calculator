@@ -7,6 +7,7 @@ import 'package:cgpa_calculator/platform/extensions/extensions.dart';
 import 'package:cgpa_calculator/ux/shared/models/ui_models.dart';
 import 'package:cgpa_calculator/ux/shared/resources/app_colors.dart';
 import 'package:cgpa_calculator/ux/shared/resources/app_dialogs.dart';
+import 'package:cgpa_calculator/ux/shared/resources/app_strings.dart';
 import 'package:cgpa_calculator/ux/shared/view_models/auth_view_model.dart';
 import 'package:cgpa_calculator/ux/views/semesters/view_models/semester_view_model.dart';
 import 'package:cgpa_calculator/ux/views/settings/view_models/cgpa_view_model.dart';
@@ -122,7 +123,7 @@ class _TargetCGPAPageState extends State<TargetCGPAPage> {
       onTap: () => FocusScope.of(context).unfocus(),
       child: Scaffold(
         appBar: AppBar(
-          title: const Text('Target CGPA'),
+          title: const Text(AppStrings.targetCGPA),
           bottom: const Divider(height: 2).asPreferredSize(height: 1),
         ),
         body: Column(
@@ -152,7 +153,7 @@ class _TargetCGPAPageState extends State<TargetCGPAPage> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              'Current CGPA'.toUpperCase(),
+                              AppStrings.currentCGPA.toUpperCase(),
                               style: Theme.of(context)
                                   .textTheme
                                   .titleMedium
@@ -213,7 +214,7 @@ class _TargetCGPAPageState extends State<TargetCGPAPage> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
-                                  'Set Target CGPA'.toUpperCase(),
+                                  AppStrings.setTargetCGPA.toUpperCase(),
                                   style: Theme.of(context)
                                       .textTheme
                                       .titleMedium
@@ -223,7 +224,7 @@ class _TargetCGPAPageState extends State<TargetCGPAPage> {
                                 ),
                                 const SizedBox(height: 4),
                                 Text(
-                                  'Adjust based on graduation plans',
+                                  AppStrings.adjustBasedOnGraduationPlans,
                                   style: Theme.of(context).textTheme.bodyLarge,
                                 ),
                               ],
@@ -298,7 +299,7 @@ class _TargetCGPAPageState extends State<TargetCGPAPage> {
                     child: Column(
                       children: [
                         Text(
-                          'Required semester gpa'.toUpperCase(),
+                          AppStrings.requiredSemesterGPA.toUpperCase(),
                           style:
                               Theme.of(context).textTheme.bodyLarge?.copyWith(
                                     fontSize: 18,
@@ -374,16 +375,15 @@ class _TargetCGPAPageState extends State<TargetCGPAPage> {
                     context: context,
                     showCloseButton: false,
                     child: const AppConfirmationBotttomSheet(
-                      text:
-                          'Are you sure you want to set this as your target CGPA?',
-                      title: 'Confirm Target CGPA',
+                      text: AppStrings.areYouSureYouWantToSetThisAsTargetCGPA,
+                      title: AppStrings.confirmTargetGPA,
                     ),
                   );
                   if (res == true) {
                     handleSetTarget();
                   }
                 },
-                child: const Text('Set target CGPA'),
+                child: const Text(AppStrings.setTargetCGPA),
               ),
             ),
           ],

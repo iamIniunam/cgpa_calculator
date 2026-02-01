@@ -2,6 +2,7 @@ import 'package:cgpa_calculator/ux/navigation/navigation.dart';
 import 'package:cgpa_calculator/ux/shared/models/course_model.dart';
 import 'package:cgpa_calculator/ux/shared/models/semester_model.dart';
 import 'package:cgpa_calculator/ux/shared/resources/app_colors.dart';
+import 'package:cgpa_calculator/ux/shared/resources/app_strings.dart';
 import 'package:cgpa_calculator/ux/views/semesters/add_course_page.dart';
 import 'package:flutter/material.dart';
 
@@ -36,7 +37,7 @@ class CourseCard extends StatelessWidget {
                     fontWeight: FontWeight.bold,
                   ),
             ),
-            Text('${course.creditUnits} Credits',
+            Text('${course.creditUnits} ${AppStrings.credits}',
                 style: Theme.of(context).textTheme.bodySmall),
           ],
         ),

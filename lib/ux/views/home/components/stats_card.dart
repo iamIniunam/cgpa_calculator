@@ -1,4 +1,5 @@
 import 'package:cgpa_calculator/ux/shared/resources/app_colors.dart';
+import 'package:cgpa_calculator/ux/shared/resources/app_strings.dart';
 import 'package:cgpa_calculator/ux/views/semesters/view_models/semester_view_model.dart';
 import 'package:flutter/material.dart';
 
@@ -124,7 +125,7 @@ class StatsCardBig extends StatelessWidget {
                 children: [
                   StatsDetails(
                     icon: Icons.trending_up_rounded,
-                    title: 'Highest GPA',
+                    title: AppStrings.highestGPA,
                     value: stats['highestGPA']?.toStringAsFixed(2) ?? '',
                     iconColor: AppColors.green,
                     iconBackgroundColor:
@@ -135,7 +136,7 @@ class StatsCardBig extends StatelessWidget {
                   ),
                   StatsDetails(
                     icon: Icons.star_rounded,
-                    title: 'Average GPA',
+                    title: AppStrings.averageGPA,
                     value: stats['averageGPA']?.toStringAsFixed(2) ?? '',
                     iconColor: AppColors.blue,
                     iconBackgroundColor:
@@ -145,7 +146,7 @@ class StatsCardBig extends StatelessWidget {
                   ),
                   StatsDetails(
                     icon: Icons.trending_down_rounded,
-                    title: 'Lowest GPA',
+                    title: AppStrings.lowestGPA,
                     value: stats['lowestGPA']?.toStringAsFixed(2) ?? '',
                     iconColor: AppColors.red,
                     iconBackgroundColor:

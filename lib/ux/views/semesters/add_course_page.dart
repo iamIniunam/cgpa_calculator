@@ -11,8 +11,9 @@ import 'package:cgpa_calculator/ux/shared/models/grading_scale_models.dart';
 import 'package:cgpa_calculator/ux/shared/models/semester_model.dart';
 import 'package:cgpa_calculator/ux/shared/resources/app_colors.dart';
 import 'package:cgpa_calculator/ux/shared/resources/app_dialogs.dart';
+import 'package:cgpa_calculator/ux/shared/resources/app_strings.dart';
 import 'package:cgpa_calculator/ux/shared/view_models/auth_view_model.dart';
-import 'package:cgpa_calculator/ux/views/semesters/components/delete_course_button.dart';
+import 'package:cgpa_calculator/ux/views/semesters/components/action_buttons.dart';
 import 'package:cgpa_calculator/ux/views/semesters/view_models/course_view_model.dart';
 import 'package:flutter/material.dart';
 
@@ -202,7 +203,8 @@ class _AddCoursePageState extends State<AddCoursePage> {
       onTap: () => FocusScope.of(context).unfocus(),
       child: Scaffold(
         appBar: AppBar(
-          title: Text(isEditMode ? 'Edit Course' : 'Add Course'),
+          title:
+              Text(isEditMode ? AppStrings.editCourse : AppStrings.addCourse),
           actions: (isEditMode && widget.course?.id != null)
               ? [
                   DeleteActionButton(
@@ -211,8 +213,8 @@ class _AddCoursePageState extends State<AddCoursePage> {
                         context: context,
                         showCloseButton: false,
                         child: const AppConfirmationBotttomSheet(
-                          text: 'Are you sure you want to delete this course?',
-                          title: 'Delete Course',
+                          text: AppStrings.areYouSureYouWantToDeleteThisCourse,
+                          title: AppStrings.deleteCourse,
                         ),
                       );
                       if (res == true) {
@@ -230,23 +232,22 @@ class _AddCoursePageState extends State<AddCoursePage> {
               child: ListView(
                 padding: const EdgeInsets.all(16),
                 children: [
-                  sectionHeader(context, 'Course code'),
+                  sectionHeader(context, AppStrings.courseCode),
                   const SizedBox(height: 8),
                   PrimaryTextFormField(
                     autofocus: true,
-                    hintText: 'e.g. CS101',
+                    hintText: AppStrings.courseCodeHintText,
                     controller: courseCodeController,
                     keyboardType: TextInputType.visiblePassword,
                     textInputAction: TextInputAction.next,
                     textCapitalization: TextCapitalization.characters,
                   ),
                   const SizedBox(height: 8),
-                  sectionHeader(context, 'Performance'),
+                  sectionHeader(context, AppStrings.performance),
                   const SizedBox(height: 16),
                   PrimaryTextFormField(
-                    labelText: 'Score Obtained',
-                    optional: true,
-                    hintText: 'e.g. 75',
+                    labelText: AppStrings.scoreObtained,
+                    hintText: AppStrings.scoreObtainedHintText,
                     controller: scoreController,
                     keyboardType: TextInputType.number,
                     textInputAction: TextInputAction.done,
@@ -272,13 +273,13 @@ class _AddCoursePageState extends State<AddCoursePage> {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Text(
-                                      'Credit Hours',
+                                      AppStrings.creditHours,
                                       style: Theme.of(context)
                                           .textTheme
                                           .titleMedium,
                                     ),
                                     Text(
-                                      'Weight of the course',
+                                      AppStrings.weightOfTheCourse,
                                       style: Theme.of(context)
                                           .textTheme
                                           .bodyMedium
@@ -344,7 +345,7 @@ class _AddCoursePageState extends State<AddCoursePage> {
                             children: [
                               Expanded(
                                 child: Text(
-                                  'Grade Achieved',
+                                  AppStrings.gradeAchieved,
                                   style:
                                       Theme.of(context).textTheme.titleMedium,
                                 ),
@@ -453,7 +454,10 @@ class _AddCoursePageState extends State<AddCoursePage> {
               child: PrimaryButton(
                 onTap: isEditMode ? updateCourse : addCourse,
                 child: Text(
-                    isEditMode ? 'Update Course' : 'Add Course to Semester'),
+                  isEditMode
+                      ? AppStrings.updateCourse
+                      : AppStrings.addCourseToSemester,
+                ),
               ),
             ),
           ],

@@ -8,8 +8,9 @@ import 'package:cgpa_calculator/platform/extensions/extensions.dart';
 import 'package:cgpa_calculator/ux/shared/models/semester_model.dart';
 import 'package:cgpa_calculator/ux/shared/resources/app_colors.dart';
 import 'package:cgpa_calculator/ux/shared/resources/app_dialogs.dart';
+import 'package:cgpa_calculator/ux/shared/resources/app_strings.dart';
 import 'package:cgpa_calculator/ux/shared/utils/utils.dart';
-import 'package:cgpa_calculator/ux/views/semesters/components/delete_course_button.dart';
+import 'package:cgpa_calculator/ux/views/semesters/components/action_buttons.dart';
 import 'package:cgpa_calculator/ux/views/semesters/semester_details_page.dart';
 import 'package:cgpa_calculator/ux/views/semesters/view_models/semester_view_model.dart';
 import 'package:cgpa_calculator/ux/views/settings/components/settings_group.dart';
@@ -211,7 +212,9 @@ class _AddSemesterPageState extends State<AddSemesterPage> {
       onTap: () => FocusScope.of(context).unfocus(),
       child: Scaffold(
         appBar: AppBar(
-          title: Text(widget.isEditMode ? 'Update Semester' : 'Add Semester'),
+          title: Text(widget.isEditMode
+              ? AppStrings.updateSemester
+              : AppStrings.addSemester),
           actions: widget.isEditMode
               ? [
                   DeleteActionButton(
@@ -221,8 +224,8 @@ class _AddSemesterPageState extends State<AddSemesterPage> {
                         showCloseButton: false,
                         child: const AppConfirmationBotttomSheet(
                           text:
-                              'Are you sure you want to delete this semester?',
-                          title: 'Delete Semester',
+                              AppStrings.areYouSureYouWantToDeleteThisSemester,
+                          title: AppStrings.deleteSemester,
                         ),
                       );
                       if (res == true) {
@@ -241,8 +244,8 @@ class _AddSemesterPageState extends State<AddSemesterPage> {
                 padding: const EdgeInsets.all(16),
                 children: [
                   PrimaryTextFormField(
-                    labelText: 'Semester Title',
-                    hintText: 'e.g. Year 1, Semester 1',
+                    labelText: AppStrings.semesterTitle,
+                    hintText: AppStrings.semesterTitleHintText,
                     controller: titleController,
                     keyboardType: TextInputType.text,
                     textInputAction: TextInputAction.next,
@@ -250,8 +253,8 @@ class _AddSemesterPageState extends State<AddSemesterPage> {
                   ),
                   const SizedBox(height: 8),
                   PrimaryTextFormField(
-                    labelText: 'Academic Year',
-                    hintText: 'e.g. 2023/2024',
+                    labelText: AppStrings.academicYear,
+                    hintText: AppStrings.academicYearHintText,
                     controller: academicYearController,
                     keyboardType: TextInputType.text,
                     textInputAction: TextInputAction.next,
@@ -259,8 +262,8 @@ class _AddSemesterPageState extends State<AddSemesterPage> {
                   ),
                   const SizedBox(height: 8),
                   PrimaryTextFormField(
-                    labelText: 'Target GPA',
-                    hintText: 'e.g. 3.50',
+                    labelText: AppStrings.targetGPA,
+                    hintText: AppStrings.targetGPAHintText,
                     optional: true,
                     controller: targetGPAController,
                     keyboardType: const TextInputType.numberWithOptions(),
@@ -270,7 +273,7 @@ class _AddSemesterPageState extends State<AddSemesterPage> {
                   SettingsGroup(
                     settingTiles: [
                       SettingTile(
-                        title: 'Mark as current semester',
+                        title: AppStrings.markAsCurrentSemester,
                         icon: Icons.check_circle_outline_rounded,
                         trailing: CupertinoSwitch(
                           value: status == SemesterStatus.inProgress,
@@ -289,7 +292,8 @@ class _AddSemesterPageState extends State<AddSemesterPage> {
               padding: const EdgeInsets.all(16),
               child: PrimaryButton(
                 onTap: widget.isEditMode ? updateSemester : addSemester,
-                child: Text(widget.isEditMode ? 'Update' : 'Add'),
+                child: Text(
+                    widget.isEditMode ? AppStrings.update : AppStrings.add),
               ),
             ),
           ],

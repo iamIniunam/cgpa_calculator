@@ -3,6 +3,7 @@ import 'package:cgpa_calculator/ux/shared/components/app_bar.dart';
 import 'package:cgpa_calculator/ux/shared/components/app_form_fields.dart';
 import 'package:cgpa_calculator/ux/shared/components/bottom_dark_gradient.dart';
 import 'package:cgpa_calculator/platform/extensions/extensions.dart';
+import 'package:cgpa_calculator/ux/shared/resources/app_strings.dart';
 import 'package:cgpa_calculator/ux/views/home/home_page.dart';
 import 'package:cgpa_calculator/ux/views/semesters/components/semester_search.dart';
 import 'package:cgpa_calculator/ux/views/semesters/semesters_page.dart';
@@ -43,7 +44,7 @@ class _NavigationHostPageState extends State<NavigationHostPage> {
                           automaticallyImplyLeading: false,
                           title: SearchTextFormField(
                             autofocus: true,
-                            hintText: 'Search semesters or courses',
+                            hintText: AppStrings.searchSemesterOrCourses,
                             controller: searchController,
                             onChanged: (v) => setState(() {}),
                             onClear: () {

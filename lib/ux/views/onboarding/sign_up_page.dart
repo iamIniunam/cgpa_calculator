@@ -44,8 +44,7 @@ class _SignUpPageState extends State<SignUpPage> {
     } else if (result.isError) {
       AppDialogs.showErrorDialog(
         context,
-        errorMessage:
-            result.message ?? 'Failed to create account. Please try again.',
+        errorMessage: result.message ?? '',
       );
     }
   }
@@ -59,7 +58,7 @@ class _SignUpPageState extends State<SignUpPage> {
     if (fullName.isEmpty || email.isEmpty || password.isEmpty) {
       AppDialogs.showErrorDialog(
         context,
-        errorMessage: 'Please fill in all the fields to continue.',
+        errorMessage: AppStrings.pleaseFillInAllTheFieldsToContinue,
       );
       return;
     }
@@ -106,12 +105,12 @@ class _SignUpPageState extends State<SignUpPage> {
                       const AppLogoBox(),
                       const SizedBox(height: 20),
                       Text(
-                        'Start tracking your progress.',
+                        AppStrings.startTrackingYourProgress,
                         style: Theme.of(context).textTheme.displayLarge,
                       ),
                       const SizedBox(height: 2),
                       Text(
-                        'Create an account to get started',
+                        AppStrings.createAnAccountToGetStarted,
                         style:
                             Theme.of(context).textTheme.headlineSmall?.copyWith(
                                   color: AppColors.textGrey,
@@ -121,8 +120,8 @@ class _SignUpPageState extends State<SignUpPage> {
                       ),
                       const SizedBox(height: 36),
                       PrimaryTextFormField(
-                        labelText: 'Full Name',
-                        hintText: 'John Doe',
+                        labelText: AppStrings.fullName,
+                        hintText: AppStrings.fullNameHintText,
                         controller: fullNameController,
                         keyboardType: TextInputType.name,
                         textInputAction: TextInputAction.next,
@@ -132,8 +131,8 @@ class _SignUpPageState extends State<SignUpPage> {
                         },
                       ),
                       PrimaryTextFormField(
-                        labelText: 'Email',
-                        hintText: AppStrings.emailHint,
+                        labelText: AppStrings.emailAddress,
+                        hintText: AppStrings.emailAddressHintText,
                         controller: emailController,
                         keyboardType: TextInputType.emailAddress,
                         textInputAction: TextInputAction.next,
@@ -143,8 +142,8 @@ class _SignUpPageState extends State<SignUpPage> {
                         },
                       ),
                       PrimaryTextFormField(
-                        labelText: 'Password',
-                        hintText: '∗∗∗∗∗∗∗∗∗',
+                        labelText: AppStrings.password,
+                        hintText: AppStrings.passwordHintText,
                         obscureText: isPasswordObscured,
                         controller: passwordController,
                         keyboardType: TextInputType.visiblePassword,
@@ -167,7 +166,7 @@ class _SignUpPageState extends State<SignUpPage> {
                       const SizedBox(height: 16),
                       PrimaryButton(
                         onTap: handleSignUp,
-                        child: const Text('Create Account'),
+                        child: const Text(AppStrings.createAccount),
                       ),
                     ],
                   ),

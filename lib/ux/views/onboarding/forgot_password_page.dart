@@ -6,6 +6,7 @@ import 'package:cgpa_calculator/ux/shared/components/app_form_fields.dart';
 import 'package:cgpa_calculator/ux/shared/components/app_logo_box.dart';
 import 'package:cgpa_calculator/ux/shared/resources/app_colors.dart';
 import 'package:cgpa_calculator/ux/shared/resources/app_dialogs.dart';
+import 'package:cgpa_calculator/ux/shared/resources/app_strings.dart';
 import 'package:cgpa_calculator/ux/shared/view_models/auth_view_model.dart';
 import 'package:flutter/material.dart';
 
@@ -25,8 +26,8 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
     if (result.isSuccess) {
       AppDialogs.showSuccessDialog(
         context,
-        successMessage: 'Check your email for password reset instructions.',
-        title: 'Email Sent',
+        successMessage: AppStrings.checkYourEmailForResetInstructions,
+        title: AppStrings.emailSent,
         onDismiss: () {
           Navigation.back(context: context);
           Navigation.back(context: context);
@@ -35,7 +36,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
     } else if (result.isError) {
       AppDialogs.showErrorDialog(
         context,
-        errorMessage: result.message ?? 'An unexpected error occurred.',
+        errorMessage: result.message ?? AppStrings.anUnexpectedErrorOccured,
       );
     }
   }
@@ -47,7 +48,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
     if (email.isEmpty) {
       AppDialogs.showErrorDialog(
         context,
-        errorMessage: 'Please fill in all the fields to continue.',
+        errorMessage: AppStrings.pleaseFillInAllTheFieldsToContinue,
       );
       return;
     }
@@ -74,12 +75,12 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
               const AppLogoBox(),
               const SizedBox(height: 20),
               Text(
-                'Forgot your password?',
+                AppStrings.forgotYourPassword,
                 style: Theme.of(context).textTheme.displayLarge,
               ),
               const SizedBox(height: 6),
               Text(
-                'No worries! Enter your email address below and we\'ll send you a link to reset your password.',
+                AppStrings.enterYourEmailToReceivePasswordResetInstructions,
                 style: Theme.of(context).textTheme.headlineSmall?.copyWith(
                       color: AppColors.textGrey,
                       fontSize: 18,
@@ -88,8 +89,8 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
               ),
               const SizedBox(height: 36),
               PrimaryTextFormField(
-                labelText: 'Email Address',
-                hintText: 'student@university.edu',
+                labelText: AppStrings.emailAddress,
+                hintText: AppStrings.emailAddressHintText,
                 controller: emailController,
                 keyboardType: TextInputType.emailAddress,
                 textInputAction: TextInputAction.next,
@@ -101,7 +102,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
               const SizedBox(height: 66),
               PrimaryButton(
                 onTap: handleForgotPassword,
-                child: const Text('Submit'),
+                child: const Text(AppStrings.submit),
               ),
             ],
           ),

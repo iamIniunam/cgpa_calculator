@@ -7,6 +7,7 @@ import 'package:cgpa_calculator/platform/firebase/auth/models/auth_response.dart
 import 'package:cgpa_calculator/ux/navigation/navigation.dart';
 import 'package:cgpa_calculator/ux/shared/components/app_material.dart';
 import 'package:cgpa_calculator/ux/shared/resources/app_colors.dart';
+import 'package:cgpa_calculator/ux/shared/resources/app_strings.dart';
 import 'package:cgpa_calculator/ux/shared/view_models/auth_view_model.dart';
 import 'package:cgpa_calculator/ux/shared/view_models/theme_view_model.dart';
 import 'package:cgpa_calculator/ux/views/onboarding/grading_system_selection_page.dart';
@@ -41,7 +42,7 @@ class _SettingsPageState extends State<SettingsPage> {
               return SettingsGroup(
                 settingTiles: [
                   SettingTile(
-                    title: 'Grading Scale',
+                    title: AppStrings.gradingScale,
                     icon: Icons.scale_rounded,
                     trailing: Text(
                       user?.gradingScale?.name ?? '',
@@ -62,7 +63,7 @@ class _SettingsPageState extends State<SettingsPage> {
                     },
                   ),
                   SettingTile(
-                    title: 'Target CGPA',
+                    title: AppStrings.targetCGPA,
                     icon: Icons.track_changes_rounded,
                     trailing: Text(
                       targetCGPAText(user?.targetCGPA),
@@ -91,7 +92,7 @@ class _SettingsPageState extends State<SettingsPage> {
               valueListenable: themeViewModel.themeMode,
               builder: (context, mode, _) {
                 return SettingTile(
-                  title: 'Appearance',
+                  title: AppStrings.appearance,
                   icon: mode == AppThemeMode.light
                       ? Icons.wb_sunny_rounded
                       : Icons.nights_stay_rounded,
@@ -107,12 +108,12 @@ class _SettingsPageState extends State<SettingsPage> {
                       children: [
                         themeToggleWidget(
                           context: context,
-                          theme: 'Light',
+                          theme: AppStrings.light,
                           isActive: themeViewModel.isLightActive(context),
                         ),
                         themeToggleWidget(
                           context: context,
-                          theme: 'Dark',
+                          theme: AppStrings.dark,
                           isActive: themeViewModel.isDarkActive(context),
                         ),
                       ],
@@ -126,7 +127,7 @@ class _SettingsPageState extends State<SettingsPage> {
               valueListenable: themeViewModel.themeMode,
               builder: (context, mode, _) {
                 return SettingTile(
-                  title: 'Use System Theme',
+                  title: AppStrings.useSystemTheme,
                   icon: Platform.isAndroid
                       ? Icons.phone_android_rounded
                       : Icons.phone_iphone_rounded,
@@ -190,11 +191,11 @@ class _SettingsPageState extends State<SettingsPage> {
       inkwellBorderRadius: BorderRadius.circular(20),
       onTap: () {
         themeViewModel.setThemeMode(
-          theme == 'Light' ? AppThemeMode.light : AppThemeMode.dark,
+          theme == AppStrings.light ? AppThemeMode.light : AppThemeMode.dark,
         );
         authViewModel.updateProfile(
           UpdateUserProfileRequest(
-            themePreference: theme == 'Light'
+            themePreference: theme == AppStrings.light
                 ? AppThemeMode.light.name
                 : AppThemeMode.dark.name,
           ),

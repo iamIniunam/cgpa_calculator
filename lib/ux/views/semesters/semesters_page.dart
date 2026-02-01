@@ -47,7 +47,7 @@ class SemestersPage extends StatelessWidget {
                       Expanded(
                         child: SemesterStats(
                           icon: Icons.bar_chart_rounded,
-                          title: 'CGPA',
+                          title: AppStrings.cgpa,
                           value:
                               semesterViewModel.currentCGPA.toStringAsFixed(2),
                           iconColor: AppColors.green,
@@ -58,7 +58,7 @@ class SemestersPage extends StatelessWidget {
                       Expanded(
                         child: SemesterStats(
                           icon: Icons.school_rounded,
-                          title: 'Credits',
+                          title: AppStrings.credits,
                           value: semesterViewModel.totalCredits.toString(),
                           iconColor: AppColors.purple,
                           iconBackgroundColor: AppColors.purpleBackground,
@@ -86,7 +86,7 @@ class SemestersPage extends StatelessWidget {
                               );
                             },
                             icon: const Icon(Icons.add_rounded, size: 18),
-                            label: const Text('Add Semester'),
+                            label: const Text(AppStrings.addSemester),
                             style: TextButton.styleFrom(
                               foregroundColor: Theme.of(context)
                                       .appBarTheme
